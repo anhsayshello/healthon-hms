@@ -3,6 +3,8 @@ import config from '@/constants/config'
 
 import { useAuthStore } from '@/stores/useAuthStore'
 import { toast } from 'sonner'
+import { getToken } from 'firebase/app-check'
+import { appCheck } from '@/lib/firebase'
 
 class Http {
   instance: AxiosInstance
@@ -16,10 +18,13 @@ class Http {
     })
     this.instance.interceptors.request.use(
       async (config) => {
+        const appCheckToken = await getToken(appCheck, false)
+        config.headers['X-Firebase-AppCheck'] = appCheckToken.token
+
         await useAuthStore.persist.rehydrate()
-        const access_token = useAuthStore.getState().access_token
-        if (access_token) {
-          config.headers.Authorization = `Bearer ${access_token}`
+        const idTokten = useAuthStore.getState().idToken
+        if (idTokten) {
+          config.headers.Authorization = `Bearer ${idTokten}`
         }
         return config
       },

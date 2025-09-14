@@ -3,36 +3,36 @@ import { create } from 'zustand'
 import type { User as FirebaseUser } from 'firebase/auth'
 import type { Role } from '@/types/role'
 
-type User = Pick<FirebaseUser, 'uid' | 'email' | 'phoneNumber' | 'displayName' | 'photoURL'> | null
+type User = Pick<FirebaseUser, 'uid' | 'email'> | null
 
 type AuthStore = {
-  access_token: string | null
+  idToken: string | null
   isAuthenticated: boolean
   user: User
   role: Role
-  setAuth: (token: string | null, user: User, role: Role) => void
+  setAuth: (idToken: string | null, user: User, role: Role) => void
   clearAuth: () => void
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      access_token: null,
+      idToken: null,
       isAuthenticated: false,
       user: null,
       role: null,
 
-      setAuth: (token, user, role) =>
+      setAuth: (idToken, user, role) =>
         set({
-          access_token: token,
-          isAuthenticated: Boolean(token),
+          idToken: idToken,
+          isAuthenticated: Boolean(idToken),
           user,
           role: role
         }),
 
       clearAuth: () =>
         set({
-          access_token: null,
+          idToken: null,
           isAuthenticated: false,
           user: null,
           role: null
