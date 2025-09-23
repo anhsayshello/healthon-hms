@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore } from '@/stores/useAuthStore'
-import type { Role } from '@/types/role'
+import type { Role } from '@/types/role.type'
 
 export function useRequireAuth(requiredRole?: Role) {
   const navigate = useNavigate()

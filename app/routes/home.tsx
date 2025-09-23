@@ -1,8 +1,6 @@
 import path from '@/constants/path'
 import type { Route } from './+types/home'
-import { Link, useNavigate } from 'react-router'
-import { useAuthStore } from '@/stores/useAuthStore'
-import { useEffect } from 'react'
+import { Link } from 'react-router'
 import Dither from '@/components/Dither'
 import { Button } from '@/components/ui/button'
 
@@ -11,14 +9,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { isAuthenticated, role } = useAuthStore()
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (isAuthenticated && role) {
-      navigate(`/${role}`)
-    }
-  }, [isAuthenticated, role])
-
   return (
     <div className=''>
       <div className='w-full h-screen relative'>

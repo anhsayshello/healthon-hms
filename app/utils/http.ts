@@ -18,8 +18,8 @@ class Http {
     })
     this.instance.interceptors.request.use(
       async (config) => {
-        const appCheckToken = await getToken(appCheck, false)
-        config.headers['X-Firebase-AppCheck'] = appCheckToken.token
+        const appCheckTokenResponse = await getToken(appCheck, false)
+        config.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
 
         await useAuthStore.persist.rehydrate()
         const idTokten = useAuthStore.getState().idToken

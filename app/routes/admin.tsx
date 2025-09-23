@@ -6,7 +6,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Admin() {
-  const { isAuthorized } = useRequireAuth('admin')
+  const { isAuthorized } = useRequireAuth('ADMIN')
 
   if (!isAuthorized) {
     return <div>Redirecting...</div>
