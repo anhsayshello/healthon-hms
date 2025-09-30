@@ -3,13 +3,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/lib/firebase'
+import { auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
-import finalizeSignIn from '@/helpers/finalizeSignIn'
+import useVerifyUser from './useVerifyUser'
 
 export default function useCreateUserWithEmailAndPassword() {
   const [isPending, setIsPending] = useState(false)
+  const verifyUser = useVerifyUser()
 
   const formSchema = z
     .object({
@@ -36,7 +37,7 @@ export default function useCreateUserWithEmailAndPassword() {
     console.log(values)
     try {
       const userCred = await createUserWithEmailAndPassword(auth, values.email, values.password)
-      finalizeSignIn(userCred)
+      verifyUser(userCred)
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
@@ -44,12 +45,11 @@ export default function useCreateUserWithEmailAndPassword() {
         switch (error.code) {
           case 'auth/email-already-in-use':
             form.setError('email', {
-              type: 'manual',
               message: 'Email already exists'
             })
             break
           default:
-            form.setError('password', { type: 'manual', message: error.message })
+            form.setError('password', { message: error.message })
         }
         console.log(errorCode)
         console.log(errorMessage)
