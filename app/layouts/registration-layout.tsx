@@ -4,15 +4,15 @@ import path from '@/constants/path'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { Navigate, Outlet } from 'react-router'
 
-export default function ProtectedLayout() {
+export default function RegistrationLayout() {
   const { isAuthenticated, role } = useAuthStore()
 
   if (!isAuthenticated) {
     return <Navigate to={path.signIn} replace />
   }
 
-  if (!role) {
-    return <Navigate to={path.patient.register} replace />
+  if (role) {
+    return <Navigate to={path.dashboard} replace />
   }
 
   return (
