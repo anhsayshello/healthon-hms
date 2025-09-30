@@ -10,7 +10,10 @@ export default [
     route('/sign-up', 'routes/auth/sign-up.tsx')
   ]),
 
-  layout('./layouts/protected-layout.tsx', [route(path.dashboard, 'routes/dashboard.tsx')]),
+  layout('./layouts/protected-layout.tsx', [
+    route(path.dashboard, 'routes/dashboard.tsx'),
+    route(path.patient.profile, 'routes/patient/profile.tsx')
+  ]),
 
   layout('./layouts/registration-layout.tsx', [route(path.patient.register, 'routes/patient/registration.tsx')])
 ] satisfies RouteConfig
