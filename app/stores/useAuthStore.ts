@@ -8,7 +8,9 @@ type AuthStore = {
   isAuthenticated: boolean
   user: Patient | null
   role: Role | null
-  setAuth: (idToken: string | null, user: Patient | null, role: Role | null) => void
+  setIdToken: (idToken: string | null) => void
+  setUser: (user: Patient | null) => void
+  setRole: (role: Role | null) => void
   clearAuth: () => void
 }
 
@@ -20,20 +22,25 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       role: null,
 
-      setAuth: (idToken, user, role) =>
+      setIdToken: (idToken) =>
         set({
-          idToken: idToken,
-          isAuthenticated: Boolean(idToken),
-          user,
-          role: role
+          idToken,
+          isAuthenticated: Boolean(idToken)
+        }),
+      setUser: (user) =>
+        set({
+          user
+        }),
+      setRole: (role) =>
+        set({
+          role
         }),
 
       clearAuth: () =>
         set({
           idToken: null,
           isAuthenticated: false,
-          user: null,
-          role: null
+          user: null
         })
     }),
     {
