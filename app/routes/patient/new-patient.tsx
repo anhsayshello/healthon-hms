@@ -15,6 +15,7 @@ import { toast } from 'sonner'
 import patientApi from '@/apis/patient.api'
 import Spinner from '@/components/shared/spinner'
 import { useAuthStore } from '@/stores/useAuthStore'
+import type { AxiosError } from 'axios'
 
 interface Props {
   data: Patient | null
@@ -34,7 +35,7 @@ export default function NewPatient({ data, type }: Props) {
     resolver: zodResolver(PatientFormSchema),
     defaultValues: {
       ...userData,
-      date_of_birth: new Date(),
+      date_of_birth: new Date().toISOString().split('T')[0],
       gender: 'MALE',
       phone: '',
       marital_status: 'SINGLE',
@@ -54,21 +55,22 @@ export default function NewPatient({ data, type }: Props) {
     }
   })
 
-  const setAuth = useAuthStore((state) => state.setAuth)
-  const idToken = useAuthStore((state) => state.idToken)
+  const { setUser, setRole } = useAuthStore()
   const queryClient = useQueryClient()
 
   const { isPending, mutate } = useMutation({
     mutationKey: ['patient', ['upsert']],
     mutationFn: patientApi.upsertPatient,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log(data)
-      setAuth(idToken, data.data.user, data.data.role)
+      const role = data.data.role
+      setRole(role)
+      setUser(data.data.user)
       queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
       toast.success(`${type === 'create' ? 'Patient created successfully' : 'Patient updated successfully'}`)
     },
-    onError: (error) => {
-      toast.error(error.message)
+    onError: (error: AxiosError) => {
+      toast.error(error?.response?.data?.error ?? error.message)
       console.log(error)
     }
   })
@@ -219,9 +221,9 @@ export default function NewPatient({ data, type }: Props) {
                 isRequired={false}
               />
             </div>
-            <div className='text-xl font-semibold mt-5 mb-4'>Consent</div>
             {type === 'create' && (
               <>
+                <div className='text-xl font-semibold mt-5 mb-4'>Consent</div>
                 <CustomField
                   control={form.control}
                   label='Privacy Policy Agreement'
