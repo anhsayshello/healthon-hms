@@ -1,10 +1,10 @@
 export type Role = 'ADMIN' | 'PATIENT' | 'DOCTOR' | 'NURSE' | 'LAB_TECHNICIAN' | 'CASHIER'
 
 export enum RoleEnum {
-  admin = 'ADMIN',
-  patient = 'PATIENT',
-  doctor = 'DOCTOR',
-  nurse = 'NURSE',
-  labTechnician = 'LAB_TENCHNICIAN',
-  cashier = 'CASHIER'
+  ADMIN = 'ADMIN',
+  PATIENT = 'PATIENT',
+  DOCTOR = 'DOCTOR',
+  NURSE = 'NURSE',
+  LAB_TECHNICIAN = 'LAB_TENCHNICIAN',
+  CASHIER = 'CASHIER'
 }

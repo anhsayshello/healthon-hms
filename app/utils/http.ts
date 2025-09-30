@@ -4,7 +4,7 @@ import config from '@/constants/config'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { toast } from 'sonner'
 import { getToken } from 'firebase/app-check'
-import { appCheck } from '@/lib/firebase'
+import { appCheck } from '@/lib/firebase/client'
 
 class Http {
   instance: AxiosInstance

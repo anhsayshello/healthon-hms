@@ -1,28 +1,31 @@
 export type Gender = 'MALE' | 'FEMALE'
+export type Marital_Status = 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'SEPARATED'
+export type Relation = 'FATHER' | 'MOTHER' | 'WIFE' | 'HUSBAND' | 'OTHER'
+export type Blood_Group = 'A' | 'B' | 'AB' | 'O'
 
 export interface Patient {
   uid: string
+  email: string
   first_name: string
   last_name: string
-  date_of_birth: string | null
+  date_of_birth: string
   gender: Gender
-  email: string
-  phone: string | null
-  marital_status: string
-  address: string | null
+  phone: string
+  marital_status: Marital_Status
+  address: string
   emergency_contact_name: string
   emergency_contact_number: string
-  relation: string
-  blood_group: string | null
-  allergies: string | null
-  medical_conditions: string | null
-  medical_history: string | null
-  insurance_provider: string | null
-  insurance_number: string | null
+  relation: Relation
+  blood_group?: Blood_Group
+  allergies?: string
+  medical_conditions?: string
+  medical_history?: string
+  insurance_provider?: string
+  insurance_number?: string
   privacy_consent: boolean
   service_consent: boolean
   medical_consent: boolean
-  photo_url: string | null
+  photo_url?: string
   createdAt: string
   updatedAt: string
 }
