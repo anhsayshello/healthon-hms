@@ -3,6 +3,6 @@ import type { Patient } from '@/types/patient.type'
 import http from '@/utils/http'
 
 const authApi = {
-  verifyUser: (body: { idToken: string }) => http.post<AuthResponse<Patient>>('auth', body)
+  verifyUser: (idToken: string) => http.post<AuthResponse<Patient>>('auth', { idToken })
 }
 export default authApi

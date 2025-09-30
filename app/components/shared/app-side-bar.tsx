@@ -8,7 +8,16 @@ import {
   UserIcon,
   UserRound,
   User,
-  type LucideProps
+  type LucideProps,
+  ListOrdered,
+  SquareActivity,
+  Receipt,
+  Users,
+  Pill,
+  Bell,
+  Logs,
+  Settings,
+  SquareLibrary
 } from 'lucide-react'
 
 import {
@@ -22,19 +31,31 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   useSidebar
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Link, useLocation, useNavigate } from 'react-router'
 import path from '@/constants/path'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import classNames from 'classnames'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Button } from '../ui/button'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { authService } from '@/services/authService'
-import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
+import { useMemo, type ForwardRefExoticComponent, type RefAttributes } from 'react'
+import useSignOut from '@/hooks/useSignOut'
+import { cn } from '@/lib/utils'
+import { RoleEnum } from '@/types/role.type'
+import Spinner from './spinner'
+
+const ALL_ROLE = [
+  RoleEnum.ADMIN,
+  RoleEnum.DOCTOR,
+  RoleEnum.PATIENT,
+  RoleEnum.NURSE,
+  RoleEnum.CASHIER,
+  RoleEnum.LAB_TECHNICIAN
+]
 
 const SIDEBAR_LINKS = [
   {
@@ -42,15 +63,15 @@ const SIDEBAR_LINKS = [
     links: [
       {
         name: 'Dashboard',
-        path: '/',
-        access: 'ALL',
+        path: path.dashboard,
+        access: ALL_ROLE,
         icon: LayoutDashboard,
-        tooltip: 'Dashboard'
+        tooltip: 'dashboard'
       },
       {
         name: 'Profile',
         path: '/patient/info',
-        access: ['patient'],
+        access: [RoleEnum.PATIENT],
         icon: User,
         tooltip: 'profile'
       }
@@ -61,37 +82,120 @@ const SIDEBAR_LINKS = [
     links: [
       {
         name: 'Users',
-        path: '/record/users',
-        access: ['admin'],
+        path: path.admin.users,
+        access: [RoleEnum.ADMIN],
         icon: UserIcon,
         tooltip: 'users'
       },
       {
         name: 'Doctors',
-        path: '/record/doctors',
-        access: ['admin', 'doctor'],
+        path: path.record.doctors,
+        access: [RoleEnum.ADMIN],
         icon: UserIcon,
         tooltip: 'doctors'
       },
       {
-        name: 'Patient',
-        path: '/record/patients',
-        access: ['admin', 'doctor', 'nurse'],
+        name: 'Patients',
+        path: path.record.patients,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
         icon: UserRound,
         tooltip: 'patients'
       },
       {
         name: 'Staffs',
-        path: '/record/staffs',
-        access: ['admin', 'doctor'],
-        icon: UserIcon,
+        path: path.record.staffs,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR],
+        icon: UserRound,
         tooltip: 'staffs'
+      },
+      {
+        name: 'Appointments',
+        path: path.record.appointments,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.PATIENT],
+        icon: ListOrdered,
+        tooltip: 'appointments'
+      },
+      {
+        name: 'Medical Records',
+        path: path.record.medicalRecords,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
+        icon: SquareActivity,
+        tooltip: 'medical records'
+      },
+      {
+        name: 'Billing Overview',
+        path: path.record.billingOverview,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR],
+        icon: Receipt,
+        tooltip: 'billing overview'
+      },
+      {
+        name: 'Patient Management',
+        path: path.nurse.patientManagement,
+        access: [RoleEnum.NURSE],
+        icon: Users,
+        tooltip: 'patient management'
+      },
+      {
+        name: 'Administer Medications',
+        path: path.nurse.administerMedications,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
+        icon: Pill,
+        tooltip: 'adminster medications'
+      },
+      {
+        name: 'Records',
+        path: path.patient.records,
+        access: [RoleEnum.PATIENT],
+        icon: SquareLibrary,
+        tooltip: 'records'
+      },
+      {
+        name: 'Prescriptions',
+        path: path.patient.prescriptions,
+        access: [RoleEnum.PATIENT],
+        icon: Pill,
+        tooltip: 'prescriptions'
+      },
+      {
+        name: 'Billing',
+        path: path.patient.billing,
+        access: [RoleEnum.PATIENT],
+        icon: Receipt,
+        tooltip: 'billing'
+      }
+    ]
+  },
+  {
+    label: 'System',
+    links: [
+      {
+        name: 'Notifications',
+        path: path.notifications,
+        access: ALL_ROLE,
+        icon: Bell,
+        tooltip: 'notifications'
+      },
+      {
+        name: 'Audit Logs',
+        path: path.admin.auditLogs,
+        access: [RoleEnum.ADMIN],
+        icon: Logs,
+        tooltip: 'audit logs'
+      },
+      {
+        name: 'Settings',
+        path: path.admin.settings,
+        access: [RoleEnum.ADMIN],
+        icon: Settings,
+        tooltip: 'settings'
       }
     ]
   }
 ]
 
 export default function AppSidebar() {
+  const { handleSignOut } = useSignOut()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const profile = useAuthStore((state) => state.user)
 
@@ -119,6 +223,11 @@ export default function AppSidebar() {
           </SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* {Array.from({ length: 5 }).map((_, index) => (
+                <SidebarMenuItem className='h-8' key={index}>
+                  <SidebarMenuSkeleton showIcon />
+                </SidebarMenuItem>
+              ))} */}
               {SIDEBAR_LINKS.map((el, index) => (
                 <SidebarLink key={index} el={el} />
               ))}
@@ -133,15 +242,18 @@ export default function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    {profile?.photoURL ? (
+                    {profile?.photo_url ? (
                       <Avatar className='size-6'>
-                        <AvatarImage src={profile?.photoURL} />
+                        <AvatarImage src={profile?.photo_url} />
                         <AvatarFallback>{profile?.email}</AvatarFallback>
                       </Avatar>
                     ) : (
                       <User2 />
                     )}
-                    <p>{profile?.displayName}</p>
+                    <p className='space-x-1'>
+                      <span>{profile?.first_name}</span>
+                      <span>{profile?.last_name}</span>
+                    </p>
                     <ChevronUp className='ml-auto' />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -152,7 +264,7 @@ export default function AppSidebar() {
                       <div>Account</div>
                     </DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem onClick={authService.handleSignOut} className='flex items-end gap-2.5'>
+                  <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>
                     <LogOut />
                     <span>Log out</span>
                   </DropdownMenuItem>
@@ -172,15 +284,16 @@ export default function AppSidebar() {
   )
 }
 
+interface Link {
+  name: string
+  path: string
+  access: string[]
+  icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>
+  tooltip: string
+}
 interface Props {
   label: string
-  links: {
-    name: string
-    path: string
-    access: string | string[]
-    icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>
-    tooltip: string
-  }[]
+  links: Link[]
 }
 
 function SidebarLink({ el }: { el: Props }) {
@@ -190,12 +303,19 @@ function SidebarLink({ el }: { el: Props }) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
+  const hasAccessibleLinks = useMemo(() => {
+    if (!role) return false
+    return el.links.some((link) => link.access.includes(role))
+  }, [el.links, role])
+
   return (
     <div>
-      <div className='text-sm px-2 mb-2'>{open && <div>{el.label}</div>}</div>
+      {!hasAccessibleLinks && <Spinner />}
+      {open && hasAccessibleLinks && <div className='text-sm px-2 mb-2'>{el.label}</div>}
       {el.links.map((item) => {
-        return item.access.includes(role?.toLowerCase() ?? '') ? (
-          <SidebarMenuItem key={item.name} className='my-1'>
+        if (!role) return
+        return item.access.includes(role) ? (
+          <SidebarMenuItem key={item.name} className='my-2'>
             <SidebarMenuButton
               className='cursor-pointer'
               asChild
@@ -205,17 +325,18 @@ function SidebarLink({ el }: { el: Props }) {
               <div>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div className='text-foreground/30'>
-                      <item.icon size={20} />
+                    <div className='text-muted-foreground'>
+                      <item.icon size={17} />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent
-                    className={classNames('hidden', {
+                    className={cn('hidden', {
                       block: state === 'collapsed'
                     })}
                     side='right'
+                    sideOffset={10}
                   >
-                    <p>{item.tooltip}</p>
+                    <p className='capitalize'>{item.tooltip}</p>
                   </TooltipContent>
                 </Tooltip>
                 <span className='text-foreground'>{item.name}</span>
