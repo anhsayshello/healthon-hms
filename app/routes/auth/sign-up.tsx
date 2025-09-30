@@ -14,7 +14,6 @@ import { AuthSwitch } from '@/components/auth/auth-switch'
 import AuthSubmitButton from '@/components/auth/auth-submit-button'
 import useCreateUserWithEmailAndPassword from '@/hooks/useCreateUserWithEmailAndPassword'
 import { useState } from 'react'
-import useHandleMagicLinkRedirect from '@/hooks/useHandleMagicLinkRedirect'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Sign up' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -23,7 +22,6 @@ export function meta({}: Route.MetaArgs) {
 export default function SignUp() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const { form, onSubmit, isPending } = useCreateUserWithEmailAndPassword()
-  const { isVerifying } = useHandleMagicLinkRedirect()
 
   return (
     <div className='relative'>
@@ -32,7 +30,7 @@ export default function SignUp() {
         {!isSubmitted && (
           <AuthWrapper>
             <AuthHeader mode='sign-up' />
-            <Tabs defaultValue={isVerifying ? 'magic-link' : 'password'} className='gap-4.5'>
+            <Tabs defaultValue='password' className='gap-4.5'>
               <TabsList className='w-full'>
                 <TabsTrigger value='password'>Password</TabsTrigger>
                 <TabsTrigger value='magic-link'>Magic Link</TabsTrigger>
@@ -40,16 +38,21 @@ export default function SignUp() {
               <TabsContent value='password'>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-                    <AuthFormField form={form} fieldName='email' placeholder='name@example.com' label='Email' />
                     <AuthFormField
-                      form={form}
+                      control={form.control}
+                      fieldName='email'
+                      placeholder='name@example.com'
+                      label='Email'
+                    />
+                    <AuthFormField
+                      control={form.control}
                       type='password'
                       fieldName='password'
                       placeholder='password'
                       label='Password'
                     />
                     <AuthFormField
-                      form={form}
+                      control={form.control}
                       type='password'
                       fieldName='confirm'
                       placeholder='password'

@@ -13,8 +13,9 @@ import useSignInWithEmailAndPassword from '@/hooks/useSignInWithEmailAndPassword
 import AuthHeader from '@/components/auth/auth-header'
 import { AuthSwitch } from '@/components/auth/auth-switch'
 import AuthSubmitButton from '@/components/auth/auth-submit-button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useHandleMagicLinkRedirect from '@/hooks/useHandleMagicLinkRedirect'
+import Spinner from '@/components/shared/spinner'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Sign in' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -23,7 +24,11 @@ export function meta({}: Route.MetaArgs) {
 export default function SignIn() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const { form, onSubmit, isPending } = useSignInWithEmailAndPassword()
-  const { isVerifying } = useHandleMagicLinkRedirect()
+  const { isVerifying, handleMagicLinkRedirect } = useHandleMagicLinkRedirect()
+
+  useEffect(() => {
+    handleMagicLinkRedirect()
+  }, [])
 
   return (
     <div className='relative'>
@@ -31,8 +36,13 @@ export default function SignIn() {
       <div className='flex items-center justify-center h-screen'>
         {!isSubmitted && (
           <AuthWrapper>
+            {isVerifying && (
+              <div className='absolute inset-0 bg-primary-foreground/40 flex items-center justify-center'>
+                <Spinner />
+              </div>
+            )}
             <AuthHeader mode='sign-in' />
-            <Tabs defaultValue={isVerifying ? 'magic-link' : 'password'} className='gap-4.5'>
+            <Tabs defaultValue='password' className='gap-4.5'>
               <TabsList className='w-full'>
                 <TabsTrigger value='password'>Password</TabsTrigger>
                 <TabsTrigger value='magic-link'>Magic Link</TabsTrigger>
@@ -40,9 +50,14 @@ export default function SignIn() {
               <TabsContent value='password'>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-                    <AuthFormField form={form} fieldName='email' placeholder='name@example.com' label='Email' />
                     <AuthFormField
-                      form={form}
+                      control={form.control}
+                      fieldName='email'
+                      placeholder='name@example.com'
+                      label='Email'
+                    />
+                    <AuthFormField
+                      control={form.control}
                       type='password'
                       fieldName='password'
                       placeholder='password'
