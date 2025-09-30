@@ -3,10 +3,10 @@ import { Button } from '../ui/button'
 import useSignInWithGoogle from '@/hooks/useSignInWithGoogle'
 
 export default function GoogleAuthButton() {
-  const { handleSignInWithGoogle, isPending } = useSignInWithGoogle()
+  const { signInWithGoogle, isPending } = useSignInWithGoogle()
 
   return (
-    <Button onClick={handleSignInWithGoogle} className='gap-3 rounded-2xl py-5' disabled={isPending}>
+    <Button onClick={signInWithGoogle} className='gap-3 rounded-2xl py-5' disabled={isPending}>
       {isPending && <Spinner />}
       {!isPending && (
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' id='google'>
