@@ -10,32 +10,35 @@ import { useNavigate } from 'react-router'
 
 export default function useVerifyUser() {
   const navigate = useNavigate()
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const { setIdToken, setUser, setRole } = useAuthStore()
   const setUserCred = useUserCredential((state) => state.setUserCred)
 
   const verifyUser = async (userCred: UserCredential) => {
     const idToken = await userCred.user.getIdToken()
-    const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
-    console.log(tokenRes, 'tokenRes')
     const res = await authApi.verifyUser(idToken)
     console.log(res, 'res')
 
     if (res.status === HttpStatusCode.Ok) {
-      const tokenResult = await userCred.user.getIdTokenResult()
-      console.log(tokenResult)
+      const idTokenResult = await userCred.user.getIdTokenResult()
+      console.log(idTokenResult)
       //
       const userData = res.data.user
-      const role = res.data.role as Role
+      const role = idTokenResult.claims?.role as Role
       //
+      const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
+      console.log(tokenRes, 'tokenRes')
       const email = tokenRes.email
       const firstName = tokenRes.firstName
       const lastName = tokenRes.lastName
       const photoUrl = tokenRes.photoUrl
       setUserCred({ email, firstName, lastName, photoUrl })
+      //
       if (role) {
-        setAuth(idToken, userData, role)
+        setIdToken(idToken)
+        setUser(userData)
+        setRole(role)
       } else {
-        setAuth(idToken, null, null)
+        setIdToken(idToken)
         navigate({ pathname: path.patient.register })
       }
     }

@@ -1,11 +1,13 @@
-import finalizeSignIn from '@/helpers/finalizeSignIn'
-import { auth } from '@/lib/firebase'
+import { auth } from '@/lib/firebase/client'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useCallback, useState } from 'react'
+import useVerifyUser from './useVerifyUser'
 
 export default function useSignInWithGoogle() {
   const [isPending, setIsPending] = useState(false)
-  const handleSignInWithGoogle = useCallback(async () => {
+  const verifyUser = useVerifyUser()
+
+  const signInWithGoogle = useCallback(async () => {
     try {
       setIsPending(true)
       const provider = new GoogleAuthProvider()
@@ -13,13 +15,13 @@ export default function useSignInWithGoogle() {
         prompt: 'select_account'
       })
       const userCred = await signInWithPopup(auth, provider)
-      finalizeSignIn(userCred)
+      verifyUser(userCred)
     } catch (error) {
       console.log(error)
     } finally {
-      setIsPending(false)
+      setTimeout(() => setIsPending(false), 2500)
     }
   }, [])
 
-  return { handleSignInWithGoogle, isPending }
+  return { signInWithGoogle, isPending }
 }

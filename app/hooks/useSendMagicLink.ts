@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { sendSignInLinkToEmail } from 'firebase/auth'
-import { actionCodeSettings, auth } from '@/lib/firebase'
+import { actionCodeSettings, auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
 
@@ -36,12 +36,10 @@ export default function useSendMagicLink({ onSuccess }: { onSuccess?: () => void
 
         if (errorCode === 'auth/quota-exceeded') {
           form.setError('email', {
-            type: 'manual',
-            message: 'Sign-in limit exceeded. Please try again later.'
+            message: 'Sign in limit exceeded. Please try again later.'
           })
         } else {
           form.setError('email', {
-            type: 'manual',
             message: errorMessage
           })
         }
