@@ -1,16 +1,14 @@
 import { persist } from 'zustand/middleware'
 import { create } from 'zustand'
-import type { User as FirebaseUser } from 'firebase/auth'
+import type { Patient } from '@/types/patient.type'
 import type { Role } from '@/types/role.type'
-
-// type User = Pick<FirebaseUser, 'uid' | 'email' | 'photoURL' | 'displayName'> | null
 
 type AuthStore = {
   idToken: string | null
   isAuthenticated: boolean
-  user: FirebaseUser | null
+  user: Patient | null
   role: Role | null
-  setAuth: (idToken: string | null, user: FirebaseUser | null, role: Role) => void
+  setAuth: (idToken: string | null, user: Patient | null, role: Role | null) => void
   clearAuth: () => void
 }
 
