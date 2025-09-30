@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .container {
+    padding: 16px 24px;
+    max-width: 160rem;
+  }
+}
+
 @theme {
   --font-sans:
     'Figtree', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
