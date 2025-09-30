@@ -31,7 +31,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
   useSidebar
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -70,7 +69,7 @@ const SIDEBAR_LINKS = [
       },
       {
         name: 'Profile',
-        path: '/patient/info',
+        path: path.patient.profile,
         access: [RoleEnum.PATIENT],
         icon: User,
         tooltip: 'profile'
@@ -310,7 +309,6 @@ function SidebarLink({ el }: { el: Props }) {
 
   return (
     <div>
-      {!hasAccessibleLinks && <Spinner />}
       {open && hasAccessibleLinks && <div className='text-sm px-2 mb-2'>{el.label}</div>}
       {el.links.map((item) => {
         if (!role) return
