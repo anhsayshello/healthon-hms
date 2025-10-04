@@ -26,6 +26,6 @@ export interface Patient {
   service_consent: boolean
   medical_consent: boolean
   photo_url?: string
-  createdAt: string
-  updatedAt: string
+  created_at: string
+  updated_at: string
 }
