@@ -26,8 +26,8 @@ export default function NewPatient({ data, type }: Props) {
   const userCred = useUserCredential((state) => state.userCred)
 
   const userData = {
-    firstName: userCred?.firstName ?? '',
-    lastName: userCred?.lastName ?? '',
+    first_name: userCred?.firstName ?? '',
+    last_name: userCred?.lastName ?? '',
     email: userCred?.email ?? ''
   }
 
@@ -36,14 +36,10 @@ export default function NewPatient({ data, type }: Props) {
     defaultValues: {
       ...userData,
       date_of_birth: new Date().toISOString().split('T')[0],
-      gender: 'MALE',
       phone: '',
-      marital_status: 'SINGLE',
       address: '',
       emergency_contact_name: '',
       emergency_contact_number: '',
-      relation: 'FATHER',
-      blood_group: 'A',
       allergies: '',
       medical_conditions: '',
       medical_history: '',
@@ -59,14 +55,14 @@ export default function NewPatient({ data, type }: Props) {
   const queryClient = useQueryClient()
 
   const { isPending, mutate } = useMutation({
-    mutationKey: ['patient', ['upsert']],
+    mutationKey: ['patient', 'upsert'],
     mutationFn: patientApi.upsertPatient,
     onSuccess: async (data) => {
       console.log(data)
       const role = data.data.role
       setRole(role)
-      setUser(data.data.user)
-      queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
+      setUser(data.data.data)
+      await queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
       toast.success(`${type === 'create' ? 'Patient created successfully' : 'Patient updated successfully'}`)
     },
     onError: (error: AxiosError) => {
@@ -88,7 +84,7 @@ export default function NewPatient({ data, type }: Props) {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
-        date_of_birth: new Date(data.date_of_birth),
+        date_of_birth: new Date(data.date_of_birth).toISOString().split('T')[0],
         gender: data.gender,
         phone: data.phone,
         marital_status: data.marital_status,
@@ -110,7 +106,7 @@ export default function NewPatient({ data, type }: Props) {
   }, [data, type])
 
   return (
-    <Card className='w-full max-w-6xl gap-5 lg:px-3 lg:py-8 rounded-sm'>
+    <Card className='w-full gap-2 lg:px-3 lg:py-6 rounded-lg'>
       <CardHeader>
         <CardTitle className='text-2xl'>Patient Registration</CardTitle>
         <CardDescription>
@@ -121,7 +117,7 @@ export default function NewPatient({ data, type }: Props) {
         <div className='text-xl font-semibold mt-5 mb-4'>Personal Information</div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <div className='flex items-center gap-6 lg:gap-8'>
+            <div className='flex items-start gap-6 lg:gap-8'>
               <CustomField control={form.control} label='First Name' name='first_name' placeholder='First Name' />
               <CustomField control={form.control} label='Last Name' name='last_name' placeholder='Last Name' />
             </div>
@@ -258,7 +254,7 @@ export default function NewPatient({ data, type }: Props) {
   )
 }
 
-export function CreatePatient() {
+export function CreateNewPatient() {
   return <NewPatient data={null} type='create' />
 }
 
