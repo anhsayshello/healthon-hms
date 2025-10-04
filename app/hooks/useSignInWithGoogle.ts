@@ -19,7 +19,7 @@ export default function useSignInWithGoogle() {
     } catch (error) {
       console.log(error)
     } finally {
-      setTimeout(() => setIsPending(false), 2500)
+      setTimeout(() => setIsPending(false), 5000)
     }
   }, [])
 

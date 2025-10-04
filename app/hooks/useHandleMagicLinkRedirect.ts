@@ -33,7 +33,7 @@ export default function useHandleMagicLinkRedirect() {
           console.log('Unknown error:', error)
         }
       } finally {
-        setTimeout(() => setVerifying(false), 2500)
+        setTimeout(() => setVerifying(false), 5000)
       }
     }
   }, [])
