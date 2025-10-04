@@ -40,7 +40,8 @@ export const useAuthStore = create<AuthStore>()(
         set({
           idToken: null,
           isAuthenticated: false,
-          user: null
+          user: null,
+          role: null
         })
     }),
     {
