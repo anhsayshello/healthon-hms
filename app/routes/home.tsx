@@ -3,12 +3,15 @@ import type { Route } from './+types/home'
 import { Link } from 'react-router'
 import Dither from '@/components/Dither'
 import { Button } from '@/components/ui/button'
+import { useAuthStore } from '@/stores/useAuthStore'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export default function Home() {
+  const role = useAuthStore((state) => state.role)
+
   return (
     <div className=''>
       <div className='w-full h-screen relative'>
@@ -27,8 +30,8 @@ export default function Home() {
           <div className='absolute top-10 w-full h-15'>
             <div className='mx-auto w-[90%] md:w-[60%] h-full rounded-full py-4 px-6 flex items-center justify-between text-white bg-white/5 backdrop-blur-[10px] border border-white/20'>
               <p className='pointer-events-auto'>Healthon</p>
-              <Link to={path.signIn} className='pointer-events-auto'>
-                Sign in
+              <Link to={!role ? path.signIn : path.dashboard} className='pointer-events-auto'>
+                {!role ? 'Get started' : 'Dashboard'}
               </Link>
             </div>
           </div>
