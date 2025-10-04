@@ -15,14 +15,15 @@ export default function Profile() {
   const { data } = useQuery({
     queryKey: ['patient', 'information'],
     queryFn: () => patientApi.getPatientInformation(),
-    enabled: Boolean(role)
+    enabled: Boolean(role),
+    staleTime: Infinity
   })
 
-  const dataPatient = useMemo(() => data?.data.user, [data])
+  const dataPatient = useMemo(() => data?.data.data, [data])
   console.log(data)
 
   return (
-    <div className='lg:py-6 lg:px-4 flex justify-center'>
+    <div className='pt-3 pb-2 flex justify-center'>
       <UpdatePatient data={dataPatient} />
     </div>
   )
