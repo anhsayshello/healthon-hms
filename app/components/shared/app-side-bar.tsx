@@ -46,6 +46,7 @@ import useSignOut from '@/hooks/useSignOut'
 import { cn } from '@/lib/utils'
 import { RoleEnum } from '@/types/role.type'
 import Spinner from './spinner'
+import { useUserCredential } from '@/stores/useUserCredentialStore'
 
 const ALL_ROLE = [
   RoleEnum.ADMIN,
@@ -197,6 +198,7 @@ export default function AppSidebar() {
   const { handleSignOut } = useSignOut()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const profile = useAuthStore((state) => state.user)
+  const userCred = useUserCredential((state) => state.userCred)
 
   return (
     <Sidebar collapsible='icon' variant='floating'>
@@ -250,8 +252,8 @@ export default function AppSidebar() {
                       <User2 />
                     )}
                     <p className='space-x-1'>
-                      <span>{profile?.first_name}</span>
-                      <span>{profile?.last_name}</span>
+                      <span>{profile?.first_name ?? userCred?.firstName}</span>
+                      <span>{profile?.last_name ?? userCred?.lastName}</span>
                     </p>
                     <ChevronUp className='ml-auto' />
                   </SidebarMenuButton>
