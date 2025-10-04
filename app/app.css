@@ -4,12 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer utilities {
+/* @layer utilities {
   .container {
     padding: 16px 24px;
     max-width: 160rem;
   }
-}
+} */
 
 @theme {
   --font-sans:

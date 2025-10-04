@@ -18,11 +18,13 @@ export default function RegistrationLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className='container flex flex-col h-screen'>
+      <div className='p-4 sm:px-6 w-full'>
         <main>
           <SidebarTrigger />
         </main>
-        <Outlet />
+        <div className='max-w-7xl mx-auto flex flex-col h-screen'>
+          <Outlet />
+        </div>
       </div>
     </SidebarProvider>
   )
