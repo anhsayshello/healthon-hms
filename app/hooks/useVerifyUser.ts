@@ -22,7 +22,8 @@ export default function useVerifyUser() {
       const idTokenResult = await userCred.user.getIdTokenResult()
       console.log(idTokenResult)
       //
-      const userData = res.data.user
+      const userData = res.data.data
+      console.log(userData)
       const role = idTokenResult.claims?.role as Role
       //
       const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
@@ -33,13 +34,13 @@ export default function useVerifyUser() {
       const photoUrl = tokenRes.photoUrl
       setUserCred({ email, firstName, lastName, photoUrl })
       //
-      if (role) {
+      if (!role) {
+        setIdToken(idToken)
+        navigate({ pathname: path.patient.register })
+      } else {
         setIdToken(idToken)
         setUser(userData)
         setRole(role)
-      } else {
-        setIdToken(idToken)
-        navigate({ pathname: path.patient.register })
       }
     }
   }
