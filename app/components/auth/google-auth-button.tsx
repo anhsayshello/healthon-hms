@@ -1,6 +1,6 @@
-import Spinner from '../shared/spinner'
 import { Button } from '../ui/button'
 import useSignInWithGoogle from '@/hooks/useSignInWithGoogle'
+import { Spinner } from '../ui/spinner'
 
 export default function GoogleAuthButton() {
   const { signInWithGoogle, isPending } = useSignInWithGoogle()

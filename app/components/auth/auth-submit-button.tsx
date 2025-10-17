@@ -1,5 +1,5 @@
 import { Button } from '../ui/button'
-import Spinner from '../shared/spinner'
+import { Spinner } from '../ui/spinner'
 
 export default function AuthSubmitButton({ isPending, label }: { isPending: boolean; label: string }) {
   return (
