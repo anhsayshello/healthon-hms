@@ -1,9 +1,4 @@
 import {
-  ChevronUp,
-  User2,
-  OctagonAlert,
-  LogOut,
-  BadgeCheck,
   LayoutDashboard,
   UserIcon,
   UserRound,
@@ -17,13 +12,15 @@ import {
   Bell,
   Logs,
   Settings,
-  SquareLibrary
+  SquareLibrary,
+  Pin,
+  PinOff,
+  X
 } from 'lucide-react'
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupAction,
   SidebarGroupContent,
@@ -33,20 +30,15 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Link, useLocation, useNavigate } from 'react-router'
 import path from '@/constants/path'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Button } from '../ui/button'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { useMemo, type ForwardRefExoticComponent, type RefAttributes } from 'react'
-import useSignOut from '@/hooks/useSignOut'
+import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
 import { cn } from '@/lib/utils'
 import { RoleEnum } from '@/types/role.type'
-import Spinner from './spinner'
-import { useUserCredential } from '@/stores/useUserCredentialStore'
+import { useSidebarPinnedStore } from '@/stores/useSidebarPinnedStore'
 
 const ALL_ROLE = [
   RoleEnum.ADMIN,
@@ -195,40 +187,61 @@ const SIDEBAR_LINKS = [
 ]
 
 export default function AppSidebar() {
-  const { handleSignOut } = useSignOut()
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const profile = useAuthStore((state) => state.user)
-  const userCred = useUserCredential((state) => state.userCred)
+  const role = useAuthStore((state) => state.role)
+  const { isPinned, setIsPinned } = useSidebarPinnedStore()
+  const { isMobile, setOpen, setOpenMobile } = useSidebar()
+
+  if (!role) return null
 
   return (
-    <Sidebar collapsible='icon' variant='floating'>
+    <Sidebar
+      collapsible='icon'
+      variant='floating'
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => !isPinned && setOpen(false)}
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroup>
             <SidebarGroupLabel>Healthon</SidebarGroupLabel>
-            <SidebarGroupAction>
-              <HoverCard openDelay={200}>
-                <HoverCardTrigger>
-                  <OctagonAlert size={18} className='text-sidebar-foreground/70' />
-                </HoverCardTrigger>
-                <HoverCardContent>
-                  <div className='space-y-1'>
-                    <h4 className='text-sm font-semibold'>@anhsayshello</h4>
-                    <p className='text-[13px]'>...</p>
-                    <div className='text-muted-foreground text-xs'>...</div>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
+
+            <SidebarGroupAction asChild>
+              <div>
+                {!isMobile &&
+                  (isPinned ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant='ghost' className='!rounded-full' onClick={() => setIsPinned(false)}>
+                          <PinOff />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side='right' sideOffset={2}>
+                        <p>Unpin Sidebar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant='ghost' className='!rounded-full' onClick={() => setIsPinned(true)}>
+                          <Pin />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side='right' sideOffset={2}>
+                        <p>Pin Sidebar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                {isMobile && (
+                  <Button className='z-10' variant='ghost' onClick={() => setOpenMobile(false)}>
+                    <X />
+                  </Button>
+                )}
+              </div>
             </SidebarGroupAction>
             <SidebarGroupContent />
           </SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* {Array.from({ length: 5 }).map((_, index) => (
-                <SidebarMenuItem className='h-8' key={index}>
-                  <SidebarMenuSkeleton showIcon />
-                </SidebarMenuItem>
-              ))} */}
               {SIDEBAR_LINKS.map((el, index) => (
                 <SidebarLink key={index} el={el} />
               ))}
@@ -236,51 +249,6 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        {isAuthenticated ? (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    {profile?.photo_url ? (
-                      <Avatar className='size-6'>
-                        <AvatarImage src={profile?.photo_url} />
-                        <AvatarFallback>{profile?.email}</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <User2 />
-                    )}
-                    <p className='space-x-1'>
-                      <span>{profile?.first_name ?? userCred?.firstName}</span>
-                      <span>{profile?.last_name ?? userCred?.lastName}</span>
-                    </p>
-                    <ChevronUp className='ml-auto' />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
-                  <Link to=''>
-                    <DropdownMenuItem className='flex items-end gap-2.5'>
-                      <BadgeCheck />
-                      <div>Account</div>
-                    </DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>
-                    <LogOut />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        ) : (
-          <Link to=''>
-            <Button variant='outline' className='w-full py-2 cursor-pointer'>
-              Login
-            </Button>
-          </Link>
-        )}
-      </SidebarFooter>
     </Sidebar>
   )
 }
@@ -298,22 +266,17 @@ interface Props {
 }
 
 function SidebarLink({ el }: { el: Props }) {
-  const { state, open } = useSidebar()
+  const { state, open, openMobile } = useSidebar()
   const role = useAuthStore((state) => state.role)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const hasAccessibleLinks = useMemo(() => {
-    if (!role) return false
-    return el.links.some((link) => link.access.includes(role))
-  }, [el.links, role])
-
   return (
     <div>
-      {open && hasAccessibleLinks && <div className='text-sm px-2 mb-2'>{el.label}</div>}
+      {(open || openMobile) && <div className='text-sm px-2 mb-2'>{el.label}</div>}
       {el.links.map((item) => {
-        if (!role) return
+        if (!role) return null
         return item.access.includes(role) ? (
           <SidebarMenuItem key={item.name} className='my-2'>
             <SidebarMenuButton
