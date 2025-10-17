@@ -2,11 +2,11 @@ import axios, { type AxiosInstance, HttpStatusCode } from 'axios'
 import config from '@/constants/config'
 
 import { useAuthStore } from '@/stores/useAuthStore'
-import { toast } from 'sonner'
 import { getToken } from 'firebase/app-check'
 import { appCheck, auth } from '@/lib/firebase/client'
 import { signOut } from 'firebase/auth'
 import { useUserCredential } from '@/stores/useUserCredentialStore'
+import handleApiError from '@/helpers/handleApiError'
 
 class Http {
   instance: AxiosInstance
@@ -43,11 +43,7 @@ class Http {
       },
       async function (error) {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const data: any | undefined = error.response?.data
-          console.log(error)
-          const message = data?.message || error.message
-          toast.error(data.error || message)
+          handleApiError(error)
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {
           await signOut(auth)
