@@ -22,11 +22,12 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       role: null,
 
-      setIdToken: (idToken) =>
+      setIdToken: (idToken) => {
         set({
           idToken,
           isAuthenticated: Boolean(idToken)
-        }),
+        })
+      },
       setUser: (user) =>
         set({
           user
