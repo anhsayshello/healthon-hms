@@ -15,7 +15,7 @@ import { AuthSwitch } from '@/components/auth/auth-switch'
 import AuthSubmitButton from '@/components/auth/auth-submit-button'
 import { useEffect, useState } from 'react'
 import useHandleMagicLinkRedirect from '@/hooks/useHandleMagicLinkRedirect'
-import Spinner from '@/components/shared/spinner'
+import { Spinner } from '@/components/ui/spinner'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Sign in' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -53,14 +53,14 @@ export default function SignIn() {
                     <AuthFormField
                       control={form.control}
                       fieldName='email'
-                      placeholder='name@example.com'
+                      placeholder='Enter your email'
                       label='Email'
                     />
                     <AuthFormField
                       control={form.control}
                       type='password'
                       fieldName='password'
-                      placeholder='password'
+                      placeholder='Enter your password'
                       label='Password'
                     />
                     <AuthSubmitButton isPending={isPending} label='Sign in' />

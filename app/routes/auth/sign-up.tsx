@@ -41,22 +41,22 @@ export default function SignUp() {
                     <AuthFormField
                       control={form.control}
                       fieldName='email'
-                      placeholder='name@example.com'
+                      placeholder='Enter your email'
                       label='Email'
                     />
                     <AuthFormField
                       control={form.control}
                       type='password'
                       fieldName='password'
-                      placeholder='password'
+                      placeholder='Enter your password'
                       label='Password'
                     />
                     <AuthFormField
                       control={form.control}
                       type='password'
                       fieldName='confirm'
-                      placeholder='password'
-                      label='Confirm Password'
+                      placeholder='Enter your password'
+                      label='Confirm'
                     />
                     <AuthSubmitButton isPending={isPending} label='Sign up' />
                   </form>
