@@ -1,6 +1,7 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import type { Control } from 'react-hook-form'
+import { KeyRound, MailIcon } from 'lucide-react'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,7 +21,19 @@ export default function AuthFormField({ control, fieldName, placeholder, label, 
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input type={type} id={fieldName} placeholder={placeholder} {...field} />
+            <InputGroup>
+              <InputGroupInput
+                className='text-sm placeholder:text-sm'
+                type={type}
+                id={fieldName}
+                placeholder={placeholder}
+                {...field}
+              />
+              <InputGroupAddon>
+                {fieldName === 'email' && <MailIcon />}
+                {(fieldName === 'password' || fieldName === 'confirm') && <KeyRound />}
+              </InputGroupAddon>
+            </InputGroup>
           </FormControl>
           <FormMessage />
         </FormItem>
