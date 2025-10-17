@@ -12,7 +12,8 @@ export default [
 
   layout('./layouts/protected-layout.tsx', [
     route(path.dashboard, 'routes/dashboard.tsx'),
-    route(path.patient.profile, 'routes/patient/profile.tsx')
+    route(path.patient.profile, 'routes/patient/profile.tsx'),
+    route(path.record.appointments, 'routes/patient/appointments.tsx')
   ]),
 
   layout('./layouts/registration-layout.tsx', [route(path.patient.register, 'routes/patient/registration.tsx')])
