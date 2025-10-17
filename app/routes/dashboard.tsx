@@ -8,9 +8,11 @@ import StatCard from '@/components/shared/stat-card'
 import StatSummary from '@/components/shared/stat-summary'
 import AppointmentChart from '@/components/shared/appointment-chart'
 import type { Appointment, AppointmentsChart, AppointmentStatusCount } from '@/types/appointment.type'
-import RecentAppointments from '@/components/shared/recent-appoinments'
 import CardWrapper from '@/components/shared/card-wrapper'
 import usePatientStatistic from '@/hooks/usePatientStatistic'
+import AvailableDoctor from '@/components/shared/available-doctor'
+import type { Doctor } from '@/types/doctor.type'
+import AppointmentRecords from '@/components/shared/appointment-records'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Dashboard' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -18,7 +20,8 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { dataPatient, appointmentsCounts, totalAppointments, monthlyData, last5Records } = usePatientStatistic()
+  const { dataPatient, appointmentsCounts, totalAppointments, monthlyData, last5Records, availableDoctor } =
+    usePatientStatistic()
 
   const cardData = useMemo(
     () => [
@@ -57,6 +60,7 @@ export default function Dashboard() {
     ],
     [totalAppointments, appointmentsCounts]
   )
+  console.log(availableDoctor)
 
   return (
     <div className='flex flex-col xl:flex-row gap-6'>
@@ -82,16 +86,17 @@ export default function Dashboard() {
             ))}
           </div>
         </CardWrapper>
-        <CardWrapper className='h-125'>
-          <AppointmentChart data={monthlyData as AppointmentsChart} />
-        </CardWrapper>
+        <AppointmentChart chartData={monthlyData as AppointmentsChart} />
         <div>
-          <RecentAppointments data={last5Records as Appointment[]} />
+          <AppointmentRecords isDashboard data={last5Records as Appointment[]} />
         </div>
       </div>
       {/* Right */}
       <div className='w-full xl:basis-3/10'>
-        <StatSummary data={appointmentsCounts as AppointmentStatusCount} total={totalAppointments} />
+        <div className='space-y-6'>
+          <StatSummary data={appointmentsCounts as AppointmentStatusCount} total={totalAppointments} />
+          <AvailableDoctor data={availableDoctor as Doctor[]} />
+        </div>
       </div>
     </div>
   )

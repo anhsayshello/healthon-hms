@@ -1,34 +1,41 @@
 import type { AppointmentsChart } from '@/types/appointment.type'
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import CardWrapper from './card-wrapper'
 
-export default function AppointmentChart({ data }: { data: AppointmentsChart }) {
-  console.log(data)
+export default function AppointmentChart({ chartData }: { chartData: AppointmentsChart }) {
+  console.log(chartData)
+  const chartConfig = {
+    appointment: {
+      label: 'Appointment',
+      color: 'var(--chart-3)'
+    },
+    completed: {
+      label: 'Completed',
+      color: 'var(--chart-4)'
+    }
+  } satisfies ChartConfig
   return (
-    <div className='bg-background rounded-lg p-4 h-full'>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-xl font-semibold'>Appointments</h1>
+    <CardWrapper>
+      <h1 className='text-xl font-semibold mb-4'>Appointments</h1>
+      <div className='bg-background rounded-lg p-4'>
+        <ChartContainer config={chartConfig}>
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis tickLine={false} tickMargin={10} axisLine={false} />
+            <XAxis
+              dataKey='month'
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dashed' />} />
+            <Bar dataKey='appointment' fill='var(--color-appointment)' radius={4} />
+            <Bar dataKey='completed' fill='var(--color-completed)' radius={4} />
+          </BarChart>
+        </ChartContainer>
       </div>
-      <ResponsiveContainer width='100%' height='90%'>
-        <BarChart width={100} height={300} data={data} barSize={25}>
-          <CartesianGrid strokeDasharray='3 3' vertical={false} stroke='#ddd' />
-
-          <XAxis dataKey='name' axisLine={false} tick={{ fill: '#9ca3af', fontSize: 13 }} tickLine={false} />
-          <YAxis axisLine={false} tick={{ fill: '#9ca3af', fontSize: 13 }} tickLine={false} />
-          <Tooltip contentStyle={{ borderRadius: '8px', borderColor: '#fff', fontSize: 13 }} />
-          <Legend
-            align='left'
-            verticalAlign='top'
-            wrapperStyle={{
-              paddingTop: '20px',
-              paddingBottom: '40px',
-              textTransform: 'capitalize',
-              fontSize: 13
-            }}
-          />
-          <Bar dataKey='appointment' name='Appointment' fill='#000000' legendType='circle' radius={[10, 10, 0, 0]} />
-          <Bar dataKey='completed' name='Completed' fill='#2563eb' legendType='circle' radius={[10, 10, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    </CardWrapper>
   )
 }

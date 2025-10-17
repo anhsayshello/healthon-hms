@@ -1,11 +1,14 @@
 import AppSidebar from '@/components/shared/app-side-bar'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import Navbar from '@/components/shared/nav-bar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import path from '@/constants/path'
 import { useAuthStore } from '@/stores/useAuthStore'
+import { useSidebarPinnedStore } from '@/stores/useSidebarPinnedStore'
 import { Navigate, Outlet } from 'react-router'
 
 export default function RegistrationLayout() {
   const { isAuthenticated, role } = useAuthStore()
+  const isPinned = useSidebarPinnedStore((state) => state.isPinned)
 
   if (!isAuthenticated) {
     return <Navigate to={path.signIn} replace />
@@ -16,13 +19,11 @@ export default function RegistrationLayout() {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={isPinned}>
       <AppSidebar />
-      <div className='p-4 sm:px-6 w-full'>
-        <main>
-          <SidebarTrigger />
-        </main>
-        <div className='max-w-7xl mx-auto flex flex-col h-screen'>
+      <div className='pt-2 w-full'>
+        <Navbar />
+        <div className='max-w-7xl mx-auto flex flex-col p-4 sm:px-6'>
           <Outlet />
         </div>
       </div>

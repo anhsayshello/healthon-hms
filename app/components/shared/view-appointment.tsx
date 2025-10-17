@@ -1,15 +1,32 @@
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import appointmentApi from '@/apis/appointment.api'
-import { Calendar, Clock, User, FileText, Stethoscope } from 'lucide-react'
-import Spinner from './spinner'
+import {
+  Calendar,
+  Clock,
+  User,
+  FileText,
+  Stethoscope,
+  SquareActivity,
+  SquarePen,
+  Vault,
+  ScanSearch
+} from 'lucide-react'
 import formatDate from '@/helpers/formatDate'
 import AppointmentStatusIndicator from './appointment-status-indicator'
-import Avatar from './avatar'
 import { Separator } from '../ui/separator'
-import { Badge } from '../ui/badge'
+import { AppointmentStatusEnum, type AppointmentStatus } from '@/types/appointment.type'
+import { Spinner } from '../ui/spinner'
+import { Button } from '@/components/ui/button'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { Textarea } from '../ui/textarea'
+import useIsAdmin from '@/hooks/use-admin'
+import { toast } from 'sonner'
+import { AxiosError } from 'axios'
+import handleApiError from '@/helpers/handleApiError'
+import ProfileAvatar from './profile-avatar'
+import { cn } from '@/lib/utils'
 
 export default function ViewAppointment({ id }: { id: string }) {
   const [open, setOpen] = useState(false)
@@ -25,14 +42,19 @@ export default function ViewAppointment({ id }: { id: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='text-xs' size='sm'>
-          View
+        <Button variant='ghost' className='w-full !py-1 !justify-start'>
+          <ScanSearch />
+          <div className='text-sm'>View</div>
         </Button>
       </DialogTrigger>
       <DialogContent className='w-full md:max-w-2xl md:max-h-[90vh] overflow-y-auto'>
-        <DialogHeader>
-          <DialogTitle className='text-xl font-semibold'>Appointment Details</DialogTitle>
-        </DialogHeader>
+        {dataAppointment ? (
+          <DialogHeader>
+            <DialogTitle className='text-xl font-semibold'>Appointment Details</DialogTitle>
+          </DialogHeader>
+        ) : (
+          <DialogTitle></DialogTitle>
+        )}
 
         {isPending ? (
           <div className='flex items-center justify-center py-8'>
@@ -40,37 +62,14 @@ export default function ViewAppointment({ id }: { id: string }) {
           </div>
         ) : dataAppointment ? (
           <div className='space-y-5'>
-            {/* Status & Type */}
-            <div className='flex items-center gap-2'>
-              <AppointmentStatusIndicator status={dataAppointment.status} />
-              <Badge variant='secondary' className='py-1 px-2 capitalize bg-purple-600/15 text-purple-600'>
-                {dataAppointment.type}
-              </Badge>
-            </div>
-
             {/* Appointment Info */}
-            <div className='space-y-3'>
-              <h3 className='text-sm font-semibold'>Appointment Information</h3>
-              <div className='space-y-2.5 text-sm'>
-                <div className='flex items-center gap-2'>
-                  <Calendar className='w-4 h-4 text-muted-foreground' />
-                  <span className='text-muted-foreground'>Date:</span>
-                  <span className='font-medium'>{formatDate(dataAppointment?.appointment_date)}</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <Clock className='w-4 h-4 text-muted-foreground' />
-                  <span className='text-muted-foreground'>Time:</span>
-                  <span className='font-medium'>{dataAppointment?.time}</span>
-                </div>
-                {dataAppointment?.reason && (
-                  <div className='flex items-start gap-2'>
-                    <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
-                    <span className='text-muted-foreground'>Reason:</span>
-                    <span className='font-medium flex-1'>{dataAppointment?.reason}</span>
-                  </div>
-                )}
-              </div>
-            </div>
+            <AppointmentInformation
+              id={dataAppointment.id}
+              appointmentDate={dataAppointment.appointment_date}
+              appointmentTime={dataAppointment.time}
+              appointmentStatus={dataAppointment.status}
+              appointmentReason={dataAppointment.reason}
+            />
 
             <Separator />
 
@@ -81,9 +80,12 @@ export default function ViewAppointment({ id }: { id: string }) {
                 Doctor
               </h3>
               <div className='flex items-start gap-3'>
-                <Avatar url={dataAppointment?.doctor?.photo_url} name={dataAppointment?.doctor?.last_name} />
+                <ProfileAvatar
+                  photoUrl={dataAppointment?.doctor?.photo_url}
+                  name={dataAppointment?.doctor?.last_name}
+                />
                 <div className='space-y-0.5'>
-                  <p className='font-medium'>
+                  <p className='font-medium leading-5'>
                     Dr. {dataAppointment?.doctor?.first_name} {dataAppointment?.doctor?.last_name}
                   </p>
                   <p className='text-xs text-gray-600'>{dataAppointment?.doctor?.specialization}</p>
@@ -149,9 +151,166 @@ export default function ViewAppointment({ id }: { id: string }) {
             </div>
           </div>
         ) : (
-          <div className='text-center py-8 text-sm text-muted-foreground'>Appointment not found</div>
+          <EmptyAppointment />
         )}
       </DialogContent>
     </Dialog>
+  )
+}
+
+function EmptyAppointment() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant='icon'>
+          <Vault />
+        </EmptyMedia>
+        <EmptyTitle>Appointment Not Found</EmptyTitle>
+        <EmptyDescription>The appointment you're looking for doesn't exist or has been removed.</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  )
+}
+
+function AppointmentInformation({
+  id,
+  appointmentDate,
+  appointmentTime,
+  appointmentStatus,
+  appointmentReason
+}: {
+  id: string
+  appointmentDate: string
+  appointmentTime: string
+  appointmentStatus: AppointmentStatus
+  appointmentReason?: string
+}) {
+  const isAdmin = useIsAdmin()
+  const [isUpdate, setIsUpdate] = useState(false)
+  const [reason, setReason] = useState(appointmentReason ?? '')
+  const [status, setStatus] = useState<AppointmentStatus>(appointmentStatus)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: appointmentApi.updateAppointmentDetail,
+    onSuccess: (data) => {
+      console.log(data)
+      toast.success('Updated appointment successfully')
+    },
+    onError: (error: AxiosError) => {
+      console.log(error)
+      handleApiError(error)
+      setReason(appointmentReason ?? '')
+      setStatus(appointmentStatus)
+    }
+  })
+
+  const handleAction = () => {
+    mutate({ id, status, reason })
+  }
+
+  return (
+    <div className='space-y-3'>
+      <div className='flex items-center gap-6'>
+        <h3 className='text-sm font-semibold'>Appointment Information</h3>
+        {!isUpdate && !isAdmin && (
+          <Button variant='ghost' onClick={() => setIsUpdate(true)} className='cursor-pointer'>
+            <SquarePen size={18} />
+          </Button>
+        )}
+      </div>
+      <div className='space-y-3 text-sm'>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Calendar className='w-4 h-4 text-muted-foreground' />
+            <span className='text-muted-foreground'>Date:</span>
+          </div>
+          <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
+        </div>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Clock className='w-4 h-4 text-muted-foreground' />
+            <span className='text-muted-foreground'>Time:</span>
+          </div>
+          <span className='font-medium grow'>{appointmentTime}</span>
+        </div>
+        <div className='flex items-start'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <SquareActivity className='w-4 h-4 text-muted-foreground' />
+            <span className='text-muted-foreground'>Status:</span>
+          </div>
+          {!isUpdate ? (
+            <AppointmentStatusIndicator status={appointmentStatus} />
+          ) : (
+            <div className='flex items-center gap-2 flex-wrap'>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.SCHEDULED)}
+                disabled={isPending || status === AppointmentStatusEnum.SCHEDULED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.SCHEDULED} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.PENDING)}
+                disabled={isPending || status === AppointmentStatusEnum.PENDING}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.PENDING} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.CANCELLED)}
+                disabled={isPending || status === AppointmentStatusEnum.CANCELLED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.CANCELLED} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.COMPLETED)}
+                disabled={isPending || status === AppointmentStatusEnum.COMPLETED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.COMPLETED} />
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {appointmentReason && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Reason:</span>
+            </div>
+            {isUpdate ? (
+              <Textarea
+                disabled={isPending}
+                className='max-h-30 text-sm'
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              ></Textarea>
+            ) : (
+              <span className='font-medium grow'>{appointmentReason}</span>
+            )}
+          </div>
+        )}
+        {isUpdate && (
+          <div className='flex items-center pt-3'>
+            <div className='shrink-0 w-21 lg:w-21.5'></div>
+            <div className='flex items-center gap-3'>
+              <Button onClick={() => setIsUpdate(false)} size='sm' className='text-destructive' variant='outline'>
+                Cancel
+              </Button>
+              <Button disabled={isPending} size='sm' onClick={handleAction}>
+                {isPending && <Spinner />}
+                Confirm
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

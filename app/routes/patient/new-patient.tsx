@@ -13,9 +13,9 @@ import { useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import patientApi from '@/apis/patient.api'
-import Spinner from '@/components/shared/spinner'
 import { useAuthStore } from '@/stores/useAuthStore'
 import type { AxiosError } from 'axios'
+import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   data: Patient | null
@@ -108,9 +108,12 @@ export default function NewPatient({ data, type }: Props) {
   return (
     <Card className='w-full gap-2 lg:px-3 lg:py-6 rounded-lg'>
       <CardHeader>
-        <CardTitle className='text-2xl'>Patient Registration</CardTitle>
+        <CardTitle className='text-2xl'>{type === 'create' ? 'Patient Registration' : 'Patient Profile'}</CardTitle>
+
         <CardDescription>
-          Please provide all the information below to help uus understand better and provide good and quality to you.
+          {type === 'create'
+            ? 'Please provide all the information below to help us understand better and provide good and quality service to you.'
+            : 'You can update your personal and medical information below to help us keep your profile accurate and up-to-date.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
