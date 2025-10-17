@@ -3,6 +3,13 @@ import type { Patient } from './patient.type'
 
 export type AppointmentStatus = 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'
 
+export enum AppointmentStatusEnum {
+  CANCELLED = 'CANCELLED',
+  PENDING = 'PENDING',
+  SCHEDULED = 'SCHEDULED',
+  COMPLETED = 'COMPLETED'
+}
+
 export interface AppointmentStatusCount {
   CANCELLED: number
   PENDING: number
@@ -11,7 +18,7 @@ export interface AppointmentStatusCount {
 }
 
 export type AppointmentsChart = {
-  name: string
+  month: string
   appointment: number
   completed: number
 }[]
@@ -22,7 +29,7 @@ export interface Appointment {
   doctor_id: string
   appointment_date: string
   time: string
-  status: 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'
+  status: AppointmentStatus
   type: string
   note: string
   patient: Patient
