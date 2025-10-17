@@ -1,3 +1,6 @@
+import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
+import type { Doctor } from './doctor.type'
+
 export type Gender = 'MALE' | 'FEMALE'
 export type Marital_Status = 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'SEPARATED'
 export type Relation = 'FATHER' | 'MOTHER' | 'WIFE' | 'HUSBAND' | 'OTHER'
@@ -28,4 +31,20 @@ export interface Patient {
   photo_url?: string
   created_at: string
   updated_at: string
+}
+
+export interface PatientDashboardStatistic {
+  data: Patient
+  appointmentCounts: AppointmentStatusCount
+  last5Records: Appointment[]
+  totalAppointments: number
+  availableDoctor: Doctor[]
+  monthlyData: AppointmentsChart
+}
+
+export interface PatientAppointment {
+  data: Appointment[]
+  totalPages: number
+  currentPage: number
+  totalRecords: number
 }

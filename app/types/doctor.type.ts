@@ -10,6 +10,17 @@ export interface Doctor {
   department?: string
   photo_url?: string
   availability_status?: string
+  working_days: WorkingDays[]
+  created_at: string
+  updated_at: string
+}
+
+export interface WorkingDays {
+  id: number
+  doctor_id: string
+  day: string
+  start_time: string
+  close_time: string
   created_at: string
   updated_at: string
 }
