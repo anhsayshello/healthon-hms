@@ -24,3 +24,9 @@ export interface GoogleTokenResponse {
 export interface UserCredentialExtended extends UserCredential {
   _tokenResponse: GoogleTokenResponse
 }
+
+export interface SearchQueryParams {
+  query?: string
+  limit?: string
+  page?: string
+}
