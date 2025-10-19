@@ -3,7 +3,15 @@ import { cn } from '@/lib/utils'
 import { User2 } from 'lucide-react'
 import { useMemo } from 'react'
 
-export default function ProfileAvatar({ photoUrl, name, size }: { photoUrl?: string; name: string; size?: 'sm' }) {
+export default function ProfileAvatar({
+  photoUrl,
+  name,
+  size = 'sm'
+}: {
+  photoUrl?: string
+  name: string
+  size?: 'sm' | 'md' | 'lg'
+}) {
   const getInitials = (name: string) => {
     const arr = name.trim().split(' ')
     return arr[arr.length - 1].slice(0, 1).toUpperCase()
@@ -35,7 +43,7 @@ export default function ProfileAvatar({ photoUrl, name, size }: { photoUrl?: str
   console.log(photoUrl)
 
   return (
-    <Avatar className={cn({ 'w-7 h-7': size })}>
+    <Avatar className={cn({ 'w-8 h-8': size === 'sm', 'w-9 h-9': size === 'md', 'w-10 h-10': size === 'lg' })}>
       <AvatarImage src={photoUrl} />
       {name ? (
         <AvatarFallback className={cn(bgColor, 'text-white')}>{getInitials(name)}</AvatarFallback>

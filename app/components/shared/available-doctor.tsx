@@ -2,8 +2,8 @@ import type { Doctor, WorkingDays } from '@/types/doctor.type'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import CardWrapper from './card-wrapper'
 import getToday from '@/helpers/getToday'
-import ProfileAvatar from './profile-avatar'
 import { Calendar } from 'lucide-react'
+import UserInfo from './user-info'
 
 export default function AvailableDoctor({ data }: { data: Doctor[] }) {
   console.log(data)
@@ -29,13 +29,13 @@ export default function AvailableDoctor({ data }: { data: Doctor[] }) {
           data.map((doctor) => (
             <Card key={doctor.uid} className='gap-3'>
               <CardHeader>
-                <div className='flex items-start gap-2'>
-                  <ProfileAvatar photoUrl={doctor.photo_url} name={doctor.last_name} />
-                  <div>
-                    <div>Dr. {doctor.first_name + ' ' + doctor.last_name}</div>
-                    <div className='text-sm text-muted-foreground'>{doctor.specialization}</div>
-                  </div>
-                </div>
+                <UserInfo
+                  size='lg'
+                  firstName={doctor.first_name}
+                  lastName={doctor.last_name}
+                  photoUrl={doctor.photo_url}
+                  description={doctor.specialization}
+                />
               </CardHeader>
               <CardContent>
                 <p className='text-sm'>Available Time: {availableTime(doctor.working_days)}</p>
