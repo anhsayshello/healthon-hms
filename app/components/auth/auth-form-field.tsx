@@ -1,7 +1,6 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import type { Control } from 'react-hook-form'
-import { KeyRound, MailIcon } from 'lucide-react'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { Controller, type Control } from 'react-hook-form'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '../ui/input'
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,30 +13,27 @@ interface Props {
 
 export default function AuthFormField({ control, fieldName, placeholder, label, type = 'text' }: Props) {
   return (
-    <FormField
-      control={control}
-      name={fieldName}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <InputGroup>
-              <InputGroupInput
+    <>
+      <FieldGroup>
+        <Controller
+          control={control}
+          name={fieldName}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+              <Input
                 className='text-sm placeholder:text-sm'
-                type={type}
-                id={fieldName}
-                placeholder={placeholder}
                 {...field}
+                id={field.name}
+                type={type}
+                placeholder={placeholder}
+                aria-invalid={fieldState.invalid}
               />
-              <InputGroupAddon>
-                {fieldName === 'email' && <MailIcon />}
-                {(fieldName === 'password' || fieldName === 'confirm') && <KeyRound />}
-              </InputGroupAddon>
-            </InputGroup>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      </FieldGroup>
+    </>
   )
 }
