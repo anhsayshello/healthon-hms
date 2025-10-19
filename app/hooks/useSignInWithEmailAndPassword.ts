@@ -8,29 +8,26 @@ import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
 import useLinkCredential from './useLinkCredential'
 import useVerifyUser from './useVerifyUser'
+import { SignInFormSchema } from '@/lib/schemas/auth-form'
 
 export default function useSignInWithEmailAndPassword() {
   const [isPending, setIsPending] = useState(false)
   const { linkWithGooglePopup } = useLinkCredential()
   const verifyUser = useVerifyUser()
 
-  const formSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8, 'Password must be at least 8 characters.')
-  })
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignInFormSchema>>({
+    resolver: zodResolver(SignInFormSchema),
     defaultValues: {
       email: '',
       password: ''
     }
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof SignInFormSchema>) {
     setIsPending(true)
-    console.log(values)
+    console.log(data)
     try {
-      const userCred = await signInWithEmailAndPassword(auth, values.email, values.password)
+      const userCred = await signInWithEmailAndPassword(auth, data.email, data.password)
       const result = getAdditionalUserInfo(userCred)
       linkWithGooglePopup()
       console.log(result)

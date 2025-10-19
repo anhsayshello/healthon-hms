@@ -12,7 +12,7 @@ export const PatientFormSchema = z.object({
     .trim()
     .min(2, 'Last name must be at least 2 characters')
     .max(50, "Last name can'\t be more than 50 characters"),
-  date_of_birth: z.coerce.date(),
+  date_of_birth: z.date(),
   gender: z.enum(['MALE', 'FEMALE'], 'Gender is required'),
   phone: z.string().regex(/^\d{10}$/, 'Please enter a valid 10-digit phone number'),
   marital_status: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'SEPARATED'], 'Marital status is required'),

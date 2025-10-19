@@ -7,24 +7,14 @@ import { auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
 import useVerifyUser from './useVerifyUser'
+import { SignUpFormSchema } from '@/lib/schemas/auth-form'
 
 export default function useCreateUserWithEmailAndPassword() {
   const [isPending, setIsPending] = useState(false)
   const verifyUser = useVerifyUser()
 
-  const formSchema = z
-    .object({
-      email: z.email(),
-      password: z.string().min(8, 'Password must be at least 8 characters.'),
-      confirm: z.string().nonempty('Confirm password is required')
-    })
-    .refine((data) => data.password === data.confirm, {
-      message: "Passwords don't match",
-      path: ['confirm']
-    })
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignUpFormSchema>>({
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -32,11 +22,11 @@ export default function useCreateUserWithEmailAndPassword() {
     }
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof SignUpFormSchema>) {
     setIsPending(true)
-    console.log(values)
+    console.log(data)
     try {
-      const userCred = await createUserWithEmailAndPassword(auth, values.email, values.password)
+      const userCred = await createUserWithEmailAndPassword(auth, data.email, data.password)
       verifyUser(userCred)
     } catch (error) {
       if (error instanceof FirebaseError) {
