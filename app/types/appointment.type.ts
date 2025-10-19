@@ -24,14 +24,14 @@ export type AppointmentsChart = {
 }[]
 
 export interface Appointment {
-  id: string
+  id: number
   patient_id: string
   doctor_id: string
   appointment_date: string
   time: string
   status: AppointmentStatus
   type: string
-  note: string
+  note?: string
   patient: Patient
   doctor: Doctor
   reason: string
