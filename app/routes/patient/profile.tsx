@@ -12,6 +12,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Profile() {
   const role = useAuthStore((state) => state.role)
   console.log(role)
+
   const { data } = useQuery({
     queryKey: ['patient', 'information'],
     queryFn: () => patientApi.getPatientInformation(),

@@ -1,7 +1,7 @@
 import { useUserCredential } from '@/stores/useUserCredentialStore'
 import type { Patient } from '@/types/patient.type'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { PatientFormSchema } from '@/lib/schemas/patient-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -35,7 +35,7 @@ export default function NewPatient({ data, type }: Props) {
     resolver: zodResolver(PatientFormSchema),
     defaultValues: {
       ...userData,
-      date_of_birth: new Date().toISOString().split('T')[0],
+      date_of_birth: new Date(),
       phone: '',
       address: '',
       emergency_contact_name: '',
@@ -71,11 +71,11 @@ export default function NewPatient({ data, type }: Props) {
     }
   })
 
-  const onSubmit: SubmitHandler<z.infer<typeof PatientFormSchema>> = async (values) => {
-    mutate(values)
-    console.log(values)
+  const onSubmit = async (data: z.infer<typeof PatientFormSchema>) => {
+    mutate(data)
+    console.log(data)
   }
-
+  console.log(data)
   useEffect(() => {
     if (type === 'create') {
       form.reset(userData)
@@ -84,7 +84,7 @@ export default function NewPatient({ data, type }: Props) {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
-        date_of_birth: new Date(data.date_of_birth).toISOString().split('T')[0],
+        date_of_birth: new Date(data.date_of_birth),
         gender: data.gender,
         phone: data.phone,
         marital_status: data.marital_status,
@@ -103,7 +103,7 @@ export default function NewPatient({ data, type }: Props) {
         medical_consent: data.medical_consent
       })
     }
-  }, [data, type])
+  }, [data, type, form])
 
   return (
     <Card className='w-full gap-2 lg:px-3 lg:py-6 rounded-lg'>
@@ -134,7 +134,7 @@ export default function NewPatient({ data, type }: Props) {
                 placeholder='Select Gender'
                 options={GENDER}
               />
-              <CustomField control={form.control} label='Birth Day' name='date_of_birth' inputType='date' />
+              <CustomField control={form.control} label='Date of Birth' name='date_of_birth' inputType='date' />
             </div>
             <div className='flex flex-col lg:flex-row items-start gap-6 lg:gap-8'>
               <CustomField control={form.control} label='Phone' name='phone' placeholder='Enter your phone number' />
@@ -246,7 +246,7 @@ export default function NewPatient({ data, type }: Props) {
                 />
               </>
             )}
-            <Button disabled={isPending} className='w-full md:w-fit' type='submit'>
+            <Button disabled={isPending} className='w-full md:w-fit'>
               {isPending && <Spinner />}
               {type === 'create' ? 'Submit' : 'Update'}
             </Button>

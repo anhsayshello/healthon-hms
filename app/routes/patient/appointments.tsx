@@ -12,8 +12,7 @@ import { useCallback, useMemo } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import patientApi from '@/apis/patient.api'
 import AppointmentRecords from '@/components/shared/appointment-records'
-import { omitBy, isNull, isUndefined } from 'lodash'
-import BookAppoinment from '@/components/shared/book-appoinment'
+import { omitBy, isUndefined } from 'lodash'
 
 export default function Appointments() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -70,7 +69,6 @@ export default function Appointments() {
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       {dataAppoinments && (
         <>
-          <BookAppoinment />
           <AppointmentRecords onSearch={handleSearch} data={dataAppoinments} totalRecords={totalRecords} />
           <AppointmentsPagination
             handlePageChange={handlePageChange}
