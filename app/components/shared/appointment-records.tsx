@@ -1,20 +1,19 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import CardWrapper from './card-wrapper'
-import type { Appointment } from '@/types/appointment.type'
+import { type Appointment } from '@/types/appointment.type'
 import formatDate from '@/helpers/formatDate'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 import AppointmentStatusIndicator from './appointment-status-indicator'
-import ViewAppointment from './view-appointment'
-import ProfileAvatar from './profile-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import { Check, EllipsisVertical, Search, X } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Badge } from '../ui/badge'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '../ui/separator'
+import AppointmentAction from './appointment-action'
+import BookAppoinment from './book-appoinment'
+import UserInfo from './user-info'
 
 const columns = [
   { header: 'Patient Info', key: 'name' },
@@ -71,7 +70,12 @@ export default function AppointmentRecords({
             View All
           </Button>
         )}
-        {!isDashboard && <SearchInput onSearch={onSearch} />}
+        {!isDashboard && (
+          <div className='flex flex-wrap items-center gap-3'>
+            <SearchInput onSearch={onSearch} />
+            <BookAppoinment />
+          </div>
+        )}
       </div>
       <Table className='bg-background'>
         <TableHeader>
@@ -92,7 +96,7 @@ export default function AppointmentRecords({
                     photoUrl={item.patient.photo_url}
                     firstName={item.patient.first_name}
                     lastName={item.patient.last_name}
-                    desc={item.patient.gender}
+                    description={item.patient.gender}
                   />
                 </TableCell>
                 <TableCell>{formatDate(item?.appointment_date)}</TableCell>
@@ -102,71 +106,20 @@ export default function AppointmentRecords({
                     photoUrl={item.doctor.photo_url}
                     firstName={item.doctor.first_name}
                     lastName={item.doctor.last_name}
-                    desc={item.doctor.specialization}
+                    description={item.doctor.specialization}
                   />
                 </TableCell>
                 <TableCell>
                   <AppointmentStatusIndicator status={item.status} />
                 </TableCell>
                 <TableCell>
-                  <AppointmentOptions id={item.id} />
+                  <AppointmentAction id={item.id} appointment={item} />
                 </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
     </CardWrapper>
-  )
-}
-
-function AppointmentOptions({ id }: { id: string }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant='ghost'>
-          <EllipsisVertical />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className='!p-1 w-36'>
-        <div className='space-y-1 text-sm'>
-          <div className='py-1 px-3'>Actions</div>
-          <Separator />
-          <ViewAppointment id={id} />
-          <Separator />
-          <Button variant='ghost' className='w-full !py-1 !justify-start'>
-            <Check />
-            <div>Approve</div>
-          </Button>
-          <Separator />
-          <Button variant='ghost' className='w-full !py-1 !justify-start'>
-            <X className='text-destructive' />
-            <div className='text-destructive'>Cancel</div>
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function UserInfo({
-  photoUrl,
-  firstName,
-  lastName,
-  desc
-}: {
-  photoUrl?: string
-  firstName: string
-  lastName: string
-  desc: string
-}) {
-  return (
-    <div className='flex items-center gap-1.5'>
-      <ProfileAvatar photoUrl={photoUrl} name={lastName} />
-      <div>
-        <span>{firstName + ' ' + lastName}</span>
-        <div className='text-xs text-muted-foreground capitalize'>{desc?.toLocaleLowerCase()}</div>
-      </div>
-    </div>
   )
 }
 

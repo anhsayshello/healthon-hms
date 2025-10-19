@@ -1,10 +1,12 @@
 import patientApi from '@/apis/patient.api'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 export default function usePatientStatistic() {
   const { data, isPending } = useQuery({
     queryKey: ['patient', 'statistic'],
-    queryFn: () => patientApi.getPatientDashboardStatistic()
+    queryFn: () => patientApi.getPatientDashboardStatistic(),
+    staleTime: Infinity,
+    placeholderData: keepPreviousData
   })
 
   return {
@@ -13,6 +15,7 @@ export default function usePatientStatistic() {
     totalAppointments: data?.data.totalAppointments ?? 0,
     monthlyData: data?.data.monthlyData,
     last5Records: data?.data.last5Records,
+    availableDoctor: data?.data.availableDoctor,
     isPending
   }
 }

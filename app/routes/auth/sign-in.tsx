@@ -53,7 +53,7 @@ export default function SignIn() {
                     <AuthFormField
                       control={form.control}
                       fieldName='email'
-                      placeholder='Enter your email'
+                      placeholder='name@example.com'
                       label='Email'
                     />
                     <AuthFormField

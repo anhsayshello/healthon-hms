@@ -21,14 +21,14 @@ import { Spinner } from '../ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Textarea } from '../ui/textarea'
-import useIsAdmin from '@/hooks/use-admin'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
 import handleApiError from '@/helpers/handleApiError'
 import ProfileAvatar from './profile-avatar'
 import { cn } from '@/lib/utils'
+import useRole from '@/hooks/use-role'
 
-export default function ViewAppointment({ id }: { id: string }) {
+export default function ViewAppointment({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
 
   const { data, isPending } = useQuery({
@@ -83,6 +83,7 @@ export default function ViewAppointment({ id }: { id: string }) {
                 <ProfileAvatar
                   photoUrl={dataAppointment?.doctor?.photo_url}
                   name={dataAppointment?.doctor?.last_name}
+                  size='md'
                 />
                 <div className='space-y-0.5'>
                   <p className='font-medium leading-5'>
@@ -179,13 +180,13 @@ function AppointmentInformation({
   appointmentStatus,
   appointmentReason
 }: {
-  id: string
+  id: number
   appointmentDate: string
   appointmentTime: string
   appointmentStatus: AppointmentStatus
   appointmentReason?: string
 }) {
-  const isAdmin = useIsAdmin()
+  const { isAdmin, isDoctor } = useRole()
   const [isUpdate, setIsUpdate] = useState(false)
   const [reason, setReason] = useState(appointmentReason ?? '')
   const [status, setStatus] = useState<AppointmentStatus>(appointmentStatus)
@@ -212,7 +213,7 @@ function AppointmentInformation({
     <div className='space-y-3'>
       <div className='flex items-center gap-6'>
         <h3 className='text-sm font-semibold'>Appointment Information</h3>
-        {!isUpdate && !isAdmin && (
+        {!isUpdate && (isAdmin || isDoctor) && (
           <Button variant='ghost' onClick={() => setIsUpdate(true)} className='cursor-pointer'>
             <SquarePen size={18} />
           </Button>
