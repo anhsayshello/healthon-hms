@@ -1,9 +1,11 @@
 import patientApi from '@/apis/patient.api'
+import { useAuthStore } from '@/stores/useAuthStore'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 export default function usePatientStatistic() {
+  const idToken = useAuthStore((state) => state.idToken)
   const { data, isPending } = useQuery({
-    queryKey: ['patient', 'statistic'],
+    queryKey: ['patient', 'statistic', idToken],
     queryFn: () => patientApi.getPatientDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData

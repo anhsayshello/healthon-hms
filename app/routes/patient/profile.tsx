@@ -10,11 +10,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Profile() {
+  const user = useAuthStore((state) => state.user)
   const role = useAuthStore((state) => state.role)
-  console.log(role)
 
   const { data } = useQuery({
-    queryKey: ['patient', 'information'],
+    queryKey: ['patient', 'information', user?.uid],
     queryFn: () => patientApi.getPatientInformation(),
     enabled: Boolean(role),
     staleTime: Infinity

@@ -13,8 +13,10 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import patientApi from '@/apis/patient.api'
 import AppointmentRecords from '@/components/shared/appointment-records'
 import { omitBy, isUndefined } from 'lodash'
+import { useAuthStore } from '@/stores/useAuthStore'
 
 export default function Appointments() {
+  const user = useAuthStore((state) => state.user)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const query = searchParams.get('q') || ''
@@ -22,7 +24,7 @@ export default function Appointments() {
   const limit = searchParams.get('limit') || '10'
 
   const { data } = useQuery({
-    queryKey: ['patient', 'appointment', { query, page, limit }],
+    queryKey: ['patient', 'appointment', user?.uid, { query, page, limit }],
     queryFn: () => patientApi.getPatientAppointment({ query, page, limit }),
     placeholderData: keepPreviousData
   })
