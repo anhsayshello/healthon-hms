@@ -1,5 +1,5 @@
 import doctorApi from '@/apis/doctor.api'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Dialog,
   DialogContent,
@@ -17,14 +17,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
 import CustomField from './custom-field'
 import { APPOINTMENT_TYPE } from '@/lib/schemas'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import UserInfo from './user-info'
 import { Spinner } from '../ui/spinner'
 import appointmentApi from '@/apis/appointment.api'
 import { useAuthStore } from '@/stores/useAuthStore'
+import { toast } from 'sonner'
+import { type Doctor } from '@/types/doctor.type'
 
 export default function BookAppoinment() {
+  const [open, setOpen] = useState(false)
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>()
   const user = useAuthStore((state) => state.user)
 
   const { data } = useQuery({
@@ -33,30 +37,35 @@ export default function BookAppoinment() {
   })
   const dataDoctors = useMemo(() => data?.data.data, [data])
 
+  const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
-    mutationFn: appointmentApi.createNewAppointment
+    mutationFn: appointmentApi.createNewAppointment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
+      toast.success('Appointment create successfully')
+      setOpen(false)
+    }
   })
 
   const form = useForm<z.infer<typeof AppointmentFormSchema>>({
     resolver: zodResolver(AppointmentFormSchema),
     defaultValues: {
       doctor_id: '',
-      type: '',
       appointment_date: new Date(),
       time: '08:00:00',
+      type: '',
       note: ''
     }
   })
 
   const onSubmit = (data: z.infer<typeof AppointmentFormSchema>) => {
-    console.log(data)
+    console.log(data.appointment_date.toISOString(), 'date')
     if (user?.uid) {
-      mutate({ ...data, patient_id: user.uid, appointment_date: data.appointment_date.toString() })
+      mutate({ ...data, appointment_date: data.appointment_date.toISOString() })
     }
   }
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <CalendarPlus2 />
@@ -65,10 +74,10 @@ export default function BookAppoinment() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Book Appoinment</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
+            Please fill in the appointment details below. Make sure to select an available doctor and working day before
+            confirming your booking.
           </DialogDescription>
         </DialogHeader>
         <div>
@@ -92,9 +101,17 @@ export default function BookAppoinment() {
                       <span className='-ml-1 text-destructive text-lg leading-0'>*</span>
                     </FieldLabel>
 
-                    <Select name={field.name} value={field.value} onValueChange={field.onChange}>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value)
+                        const doctor = dataDoctors?.find((d) => d.uid === value)
+                        setSelectedDoctor(doctor)
+                      }}
+                    >
                       <SelectTrigger
-                        style={{ height: 46 }}
+                        style={{ height: 42 }}
                         id={field.name}
                         aria-invalid={fieldState.invalid}
                         className='w-full'
@@ -103,7 +120,7 @@ export default function BookAppoinment() {
                       </SelectTrigger>
                       <SelectContent>
                         {dataDoctors?.map((doctor) => (
-                          <SelectItem key={doctor.uid} value={doctor.uid}>
+                          <SelectItem onClick={() => setSelectedDoctor(doctor)} key={doctor.uid} value={doctor.uid}>
                             <UserInfo
                               firstName={doctor.first_name}
                               lastName={doctor.last_name}
@@ -115,6 +132,11 @@ export default function BookAppoinment() {
                       </SelectContent>
                     </Select>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    {selectedDoctor && (
+                      <div className='text-sm'>
+                        Working on: {selectedDoctor.working_days?.map((item) => item.day).join(', ')}
+                      </div>
+                    )}
                   </Field>
                 )}
               />
@@ -125,6 +147,7 @@ export default function BookAppoinment() {
                   name='appointment_date'
                   fieldType='date'
                   placeholder='Select Appointment Date'
+                  isDob={false}
                 />
                 <CustomField
                   control={form.control}
@@ -134,8 +157,15 @@ export default function BookAppoinment() {
                   placeholder='Enter Time'
                 />
               </div>
-              <CustomField control={form.control} label='Note' name='note' fieldType='textarea' placeholder='Note' />
-              <Button form='form-create-appointment'>
+              <CustomField
+                control={form.control}
+                isRequired={false}
+                label='Note'
+                name='note'
+                fieldType='textarea'
+                placeholder='Note'
+              />
+              <Button form='form-create-appointment' disabled={isPending}>
                 {isPending && <Spinner />}
                 <span>Confirm</span>
               </Button>
