@@ -22,6 +22,7 @@ interface Props {
   fieldType?: 'date' | 'select' | 'textarea'
   inputType?: HTMLInputTypeAttribute
   options?: { name: string; value: string }[]
+  isDob?: boolean
 }
 
 function InputField({
@@ -34,7 +35,7 @@ function InputField({
   props: Props
   fieldState: ControllerFieldState
 }) {
-  const { label, name, placeholder, inputType, fieldType, options } = props
+  const { label, name, placeholder, inputType, fieldType, options, isDob = true } = props
 
   switch (fieldType ?? inputType) {
     case 'date':
@@ -45,7 +46,7 @@ function InputField({
               variant={'outline'}
               className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
             >
-              {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+              {field.value ? format(field.value, 'MM/dd/yyyy') : <span>Pick a date</span>}
               <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
             </Button>
           </PopoverTrigger>
@@ -54,7 +55,9 @@ function InputField({
               mode='single'
               selected={field.value}
               onSelect={field.onChange}
-              disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+              startMonth={isDob ? undefined : new Date()}
+              endMonth={!isDob ? undefined : new Date()}
+              disabled={(date) => (isDob ? date > new Date() : date <= new Date() || date < new Date('1900-01-01'))}
               aria-invalid={fieldState.invalid}
               captionLayout='dropdown'
             />
