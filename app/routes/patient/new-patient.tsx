@@ -14,7 +14,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import patientApi from '@/apis/patient.api'
 import { useAuthStore } from '@/stores/useAuthStore'
-import type { AxiosError } from 'axios'
 import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
@@ -64,16 +63,12 @@ export default function NewPatient({ data, type }: Props) {
       setUser(data.data.data)
       await queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
       toast.success(`${type === 'create' ? 'Patient created successfully' : 'Patient updated successfully'}`)
-    },
-    onError: (error: AxiosError) => {
-      toast.error(error?.response?.data?.error ?? error.message)
-      console.log(error)
     }
   })
 
   const onSubmit = async (data: z.infer<typeof PatientFormSchema>) => {
-    mutate(data)
-    console.log(data)
+    mutate({ ...data, date_of_birth: data.date_of_birth.toISOString() })
+    console.log(data.date_of_birth.toISOString())
   }
   console.log(data)
   useEffect(() => {

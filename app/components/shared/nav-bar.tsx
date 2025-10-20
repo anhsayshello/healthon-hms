@@ -23,6 +23,7 @@ import useSignOut from '@/hooks/useSignOut'
 const UserMenu = () => {
   const { handleSignOut } = useSignOut()
   const user = useAuthStore((state) => state.user)
+  const role = useAuthStore((state) => state.role)
   const userCred = useUserCredential((state) => state.userCred)
   const isMobile = useIsMobile()
 
@@ -38,13 +39,15 @@ const UserMenu = () => {
       <DropdownMenuContent align='end' alignOffset={8} sideOffset={isMobile ? 12 : 14} className='w-56'>
         <DropdownMenuLabel>
           <div className='space-y-2'>
-            <p className='text-sm font-medium leading-none'>{user?.last_name ?? userCred?.lastName}</p>
+            <p className='text-sm font-medium leading-none'>
+              {user?.last_name ?? userCred?.lastName ?? userCred?.firstName}
+            </p>
             <p className='text-[13px] leading-none text-muted-foreground'>{user?.email ?? userCred?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => {}}>Dashboard</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>Profile</DropdownMenuItem>
+        {role && <DropdownMenuItem onClick={() => {}}>Profile</DropdownMenuItem>}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>
           <LogOut />

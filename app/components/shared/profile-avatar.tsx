@@ -40,8 +40,6 @@ export default function ProfileAvatar({
     return colors[hash % colors.length]
   }, [name, colors])
 
-  console.log(photoUrl)
-
   return (
     <Avatar className={cn({ 'w-8 h-8': size === 'sm', 'w-9 h-9': size === 'md', 'w-10 h-10': size === 'lg' })}>
       <AvatarImage src={photoUrl} />

@@ -11,7 +11,8 @@ import {
   SquareActivity,
   SquarePen,
   Vault,
-  ScanSearch
+  ScanSearch,
+  Syringe
 } from 'lucide-react'
 import formatDate from '@/helpers/formatDate'
 import AppointmentStatusIndicator from './appointment-status-indicator'
@@ -65,6 +66,7 @@ export default function ViewAppointment({ id }: { id: number }) {
             {/* Appointment Info */}
             <AppointmentInformation
               id={dataAppointment.id}
+              appointmentType={dataAppointment.type}
               appointmentDate={dataAppointment.appointment_date}
               appointmentTime={dataAppointment.time}
               appointmentStatus={dataAppointment.status}
@@ -175,12 +177,14 @@ function EmptyAppointment() {
 
 function AppointmentInformation({
   id,
+  appointmentType,
   appointmentDate,
   appointmentTime,
   appointmentStatus,
   appointmentReason
 }: {
   id: number
+  appointmentType: string
   appointmentDate: string
   appointmentTime: string
   appointmentStatus: AppointmentStatus
@@ -220,6 +224,13 @@ function AppointmentInformation({
         )}
       </div>
       <div className='space-y-3 text-sm'>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Syringe className='w-4 h-4 text-muted-foreground' />
+            <span className='text-muted-foreground'>Type:</span>
+          </div>
+          <span className='font-medium grow capitalize'>{appointmentType}</span>
+        </div>
         <div className='flex items-center'>
           <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
             <Calendar className='w-4 h-4 text-muted-foreground' />
