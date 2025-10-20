@@ -26,10 +26,10 @@ export const BLOOD_GROUP = [
 ]
 
 export const APPOINTMENT_TYPE = [
-  { name: 'General Checkup', value: 'general_checkup' },
-  { name: 'Specialist Consultation', value: 'specialist_consultation' },
-  { name: 'Follow-up', value: 'follow_up' },
-  { name: 'Routine Examination', value: 'routine_exam' },
-  { name: 'Online Consultation', value: 'telemedicine' },
-  { name: 'Emergency Visit', value: 'emergency' }
+  { name: 'General Checkup', value: 'General checkup' },
+  { name: 'Specialist Consultation', value: 'Specialist consultation' },
+  { name: 'Follow-up', value: 'Follow up' },
+  { name: 'Routine Examination', value: 'Routine exam' },
+  { name: 'Online Consultation', value: 'Telemedicine' },
+  { name: 'Emergency Visit', value: 'Emergency' }
 ]
