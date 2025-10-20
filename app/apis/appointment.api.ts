@@ -4,8 +4,11 @@ import http from '@/utils/http'
 const appointmentApi = {
   getAppointmentDetail: (id: number) => http.get<{ data: Appointment }>(`appointment/${id}`),
   createNewAppointment: (
-    body: Omit<Appointment, 'id' | 'status' | 'patient' | 'doctor' | 'reason' | 'created_at' | 'updated_at'>
-  ) => http.post('appointment', { body }),
+    body: Omit<
+      Appointment,
+      'id' | 'patient_id' | 'status' | 'patient' | 'doctor' | 'reason' | 'created_at' | 'updated_at'
+    >
+  ) => http.post('appointment', body),
   updateAppointmentDetail: ({ id, status, reason }: { id: number; status: AppointmentStatus; reason: string }) =>
     http.post<{ data: Appointment }>(`appointment/${id}`, { status, reason })
 }
