@@ -57,7 +57,6 @@ export default function NewPatient({ data, type }: Props) {
     mutationKey: ['patient', 'upsert'],
     mutationFn: patientApi.upsertPatient,
     onSuccess: async (data) => {
-      console.log(data)
       const role = data.data.role
       setRole(role)
       setUser(data.data.data)

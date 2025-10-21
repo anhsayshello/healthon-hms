@@ -21,7 +21,6 @@ export default function useSendMagicLink({ onSuccess }: { onSuccess?: () => void
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
     setIsPending(true)
     try {
       await sendSignInLinkToEmail(auth, values.email, actionCodeSettings)
@@ -43,8 +42,6 @@ export default function useSendMagicLink({ onSuccess }: { onSuccess?: () => void
             message: errorMessage
           })
         }
-        console.log(errorCode)
-        console.log(errorMessage)
       } else {
         console.log('Unknown error:', error)
       }

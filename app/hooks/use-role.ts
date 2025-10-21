@@ -9,6 +9,7 @@ export default function useRole() {
   const isPatient = role === RoleEnum.PATIENT
   const isNurse = role === RoleEnum.NURSE
   const isLabTechnician = role === RoleEnum.LAB_TECHNICIAN
+  const isCashier = role === RoleEnum.CASHIER
 
-  return { isAdmin, isDoctor, isPatient, isNurse, isLabTechnician }
+  return { role, isAdmin, isDoctor, isPatient, isNurse, isLabTechnician, isCashier }
 }

@@ -1,22 +1,23 @@
-import patientApi from '@/apis/patient.api'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import useRole from './use-role'
+import doctorApi from '@/apis/doctor.api'
 
-export default function usePatientStatistic() {
+export default function useDoctorStatistic() {
   const idToken = useAuthStore((state) => state.idToken)
-  const { isPatient } = useRole()
+  const { isDoctor } = useRole()
 
   const { data, isPending } = useQuery({
     queryKey: ['patient', 'statistic', idToken],
-    queryFn: () => patientApi.getPatientDashboardStatistic(),
+    queryFn: () => doctorApi.getDoctorDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,
-    enabled: isPatient
+    enabled: isDoctor
   })
 
   return {
-    dataPatient: data?.data.data,
+    totalPatients: data?.data.totalPatients,
+    totalNurses: data?.data.totalNurses,
     appointmentsCounts: data?.data.appointmentCounts,
     totalAppointments: data?.data.totalAppointments ?? 0,
     monthlyData: data?.data.monthlyData,

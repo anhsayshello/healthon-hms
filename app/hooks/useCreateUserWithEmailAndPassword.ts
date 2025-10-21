@@ -24,7 +24,6 @@ export default function useCreateUserWithEmailAndPassword() {
 
   async function onSubmit(data: z.infer<typeof SignUpFormSchema>) {
     setIsPending(true)
-    console.log(data)
     try {
       const userCred = await createUserWithEmailAndPassword(auth, data.email, data.password)
       verifyUser(userCred)
