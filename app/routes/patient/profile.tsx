@@ -23,9 +23,5 @@ export default function Profile() {
   const dataPatient = useMemo(() => data?.data.data, [data])
   console.log(data)
 
-  return (
-    <div className='pt-3 pb-2 flex justify-center'>
-      <UpdatePatient data={dataPatient} />
-    </div>
-  )
+  return <div className='pt-3 pb-2 flex justify-center'>{dataPatient && <UpdatePatient data={dataPatient} />}</div>
 }

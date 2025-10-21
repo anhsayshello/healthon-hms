@@ -11,7 +11,7 @@ import {
 import { useCallback, useMemo } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import patientApi from '@/apis/patient.api'
-import AppointmentRecords from '@/components/shared/appointment-records'
+import AppointmentRecords from '@/components/appointments/appointment-records'
 import { omitBy, isUndefined } from 'lodash'
 import { useAuthStore } from '@/stores/useAuthStore'
 
