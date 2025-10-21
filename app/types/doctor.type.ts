@@ -1,3 +1,5 @@
+import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
+
 export interface Doctor {
   uid: string
   email: string
@@ -23,4 +25,14 @@ export interface WorkingDays {
   close_time: string
   created_at: string
   updated_at: string
+}
+
+export interface DoctorDashboardStatistic {
+  totalPatients: number
+  totalNurses: number
+  appointmentCounts: AppointmentStatusCount
+  last5Records: Appointment[]
+  availableDoctors: Doctor[]
+  totalAppointments: number
+  monthlyData: AppointmentsChart
 }
