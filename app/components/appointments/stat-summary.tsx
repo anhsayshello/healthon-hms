@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 import { RadialBarChart, RadialBar, PolarGrid } from 'recharts'
 import formatNumber from '@/helpers/formatNumber'
 import type { AppointmentStatusCount } from '@/types/appointment.type'
-import CardWrapper from './card-wrapper'
+import CardWrapper from '../shared/card-wrapper'
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 
 export default function StatSummary({ data, total }: { data: AppointmentStatusCount; total: number }) {
@@ -39,7 +39,7 @@ export default function StatSummary({ data, total }: { data: AppointmentStatusCo
 
   return (
     <CardWrapper className='h-full xl:h-110 p-6'>
-      <div className='flex items-center justify-between mb-4'>
+      <div className='flex items-center justify-between'>
         <h1 className='text-xl font-semibold'>Summary</h1>
         <Button size='sm' variant='outline' className='cursor-pointer font-normal text-xs hover:underline capitalize'>
           See details

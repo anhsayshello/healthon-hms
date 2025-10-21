@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import CardWrapper from './card-wrapper'
+import CardWrapper from '../shared/card-wrapper'
 import { type Appointment } from '@/types/appointment.type'
 import formatDate from '@/helpers/formatDate'
 import { Button } from '../ui/button'
@@ -13,7 +13,7 @@ import { useDebounce } from 'use-debounce'
 import { Badge } from '../ui/badge'
 import AppointmentAction from './appointment-action'
 import BookAppoinment from './book-appoinment'
-import UserInfo from './user-info'
+import UserInfo from '../shared/user-info'
 
 const columns = [
   { header: 'Patient Info', key: 'name' },
@@ -56,7 +56,7 @@ export default function AppointmentRecords({
 
   return (
     <CardWrapper>
-      <div className='flex flex-col gap-3 sm:flex-row items-center justify-between mb-6'>
+      <div className='flex gap-3 items-center justify-between'>
         <div className='flex flex-wrap items-center gap-3 sm:gap-1.5 md:gap-3'>
           <div className='text-xl font-semibold'>{isDashboard ? 'Recent' : 'Appointment'} Record</div>
           {totalRecords && (

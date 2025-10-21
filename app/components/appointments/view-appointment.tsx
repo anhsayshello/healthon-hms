@@ -25,9 +25,11 @@ import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
 import handleApiError from '@/helpers/handleApiError'
-import ProfileAvatar from './profile-avatar'
+import ProfileAvatar from '../shared/profile-avatar'
 import { cn } from '@/lib/utils'
 import useRole from '@/hooks/use-role'
+import Timestamps from '../shared/time-stamps'
+import PatientInformation from '../shared/patient-information'
 
 export default function ViewAppointment({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
@@ -48,7 +50,7 @@ export default function ViewAppointment({ id }: { id: number }) {
           <div className='text-sm'>View</div>
         </Button>
       </DialogTrigger>
-      <DialogContent className='w-full md:max-w-2xl md:max-h-[90vh] overflow-y-auto'>
+      <DialogContent className='w-full md:max-w-2xl max-h-[96vh] md:max-h-[90vh] overflow-y-auto'>
         {dataAppointment ? (
           <DialogHeader>
             <DialogTitle className='text-xl font-semibold'>Appointment Details</DialogTitle>
@@ -105,34 +107,11 @@ export default function ViewAppointment({ id }: { id: number }) {
                 <User className='w-4 h-4' />
                 Patient
               </h3>
-              <div className='grid grid-cols-2 gap-3 text-sm'>
-                <div className='col-span-2'>
-                  <p className='text-muted-foreground text-xs mb-1'>Patient ID</p>
-                  <p className='font-medium text-xs'>{dataAppointment?.patient?.uid}</p>
-                </div>
-                <div>
-                  <p className='text-muted-foreground text-xs mb-1'>Name</p>
-                  <p className='font-medium'>
-                    {dataAppointment?.patient?.first_name} {dataAppointment?.patient?.last_name}
-                  </p>
-                </div>
-                <div>
-                  <p className='text-muted-foreground text-xs mb-1'>Date of Birth</p>
-                  <p className='font-medium'>{formatDate(dataAppointment?.patient?.date_of_birth)}</p>
-                </div>
-                <div>
-                  <p className='text-muted-foreground text-xs mb-1'>Gender</p>
-                  <p className='font-medium capitalize'>{dataAppointment?.patient.gender.toLocaleLowerCase()}</p>
-                </div>
-                <div>
-                  <p className='text-muted-foreground text-xs mb-1'>Phone</p>
-                  <p className='font-medium flex items-center gap-1'>{dataAppointment?.patient?.phone}</p>
-                </div>
-                <div className='col-span-2'>
-                  <p className='text-muted-foreground text-xs mb-1'>Address</p>
-                  <p className='font-medium flex items-start gap-1'>{dataAppointment?.patient?.address}</p>
-                </div>
+              <div className='col-span-2'>
+                <p className='text-muted-foreground text-xs mb-1'>Patient ID</p>
+                <p className='font-medium text-xs'>{dataAppointment?.patient?.uid}</p>
               </div>
+              <PatientInformation patient={dataAppointment.patient} />
             </div>
 
             {/* Note */}
@@ -148,10 +127,7 @@ export default function ViewAppointment({ id }: { id: number }) {
 
             {/* Footer */}
             <Separator />
-            <div className='flex justify-between text-xs text-muted-foreground'>
-              <span>Created: {new Date(dataAppointment.created_at).toLocaleString('en-US')}</span>
-              <span>Updated: {new Date(dataAppointment.updated_at).toLocaleString('en-US')}</span>
-            </div>
+            <Timestamps createdAt={dataAppointment.created_at} updatedAt={dataAppointment.updated_at} />
           </div>
         ) : (
           <EmptyAppointment />

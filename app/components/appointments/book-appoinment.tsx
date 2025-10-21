@@ -15,11 +15,11 @@ import type z from 'zod'
 import { AppointmentFormSchema } from '@/lib/schemas/appointment-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
-import CustomField from './custom-field'
+import CustomField from '../shared/custom-field'
 import { APPOINTMENT_TYPE } from '@/lib/schemas'
 import { useMemo, useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import UserInfo from './user-info'
+import UserInfo from '../shared/user-info'
 import { Spinner } from '../ui/spinner'
 import appointmentApi from '@/apis/appointment.api'
 import { useAuthStore } from '@/stores/useAuthStore'
@@ -42,8 +42,8 @@ export default function BookAppoinment() {
     mutationFn: appointmentApi.createNewAppointment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
-      toast.success('Appointment create successfully')
       setOpen(false)
+      toast.success('Appointment create successfully')
     }
   })
 

@@ -1,7 +1,7 @@
 import type { AppointmentsChart } from '@/types/appointment.type'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import CardWrapper from './card-wrapper'
+import CardWrapper from '../shared/card-wrapper'
 
 export default function AppointmentChart({ chartData }: { chartData: AppointmentsChart }) {
   console.log(chartData)
@@ -17,7 +17,7 @@ export default function AppointmentChart({ chartData }: { chartData: Appointment
   } satisfies ChartConfig
   return (
     <CardWrapper>
-      <h1 className='text-xl font-semibold mb-4'>Appointments</h1>
+      <h1 className='text-xl font-semibold'>Appointments</h1>
       <div className='bg-background rounded-lg p-4'>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>

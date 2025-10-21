@@ -25,8 +25,8 @@ import { AppointmentStatusEnum, type Appointment } from '@/types/appointment.typ
 import { Button } from '../ui/button'
 import formatDate from '@/helpers/formatDate'
 import { useAuthStore } from '@/stores/useAuthStore'
-import UserInfo from './user-info'
-import CustomField from './custom-field'
+import UserInfo from '../shared/user-info'
+import CustomField from '../shared/custom-field'
 
 export default function AppointmentAction({ id, appointment }: { id: number; appointment: Appointment }) {
   const { isAdmin, isDoctor } = useRole()

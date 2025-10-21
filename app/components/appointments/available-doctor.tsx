@@ -1,9 +1,9 @@
 import type { Doctor, WorkingDays } from '@/types/doctor.type'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import CardWrapper from './card-wrapper'
+import CardWrapper from '../shared/card-wrapper'
 import getToday from '@/helpers/getToday'
 import { Calendar } from 'lucide-react'
-import UserInfo from './user-info'
+import UserInfo from '../shared/user-info'
 
 export default function AvailableDoctor({ data }: { data: Doctor[] }) {
   console.log(data)
@@ -16,7 +16,7 @@ export default function AvailableDoctor({ data }: { data: Doctor[] }) {
 
   return (
     <CardWrapper>
-      <div className='space-y-2 mb-4'>
+      <div className='space-y-1.5'>
         <div className='font-semibold text-xl'>Available Doctor</div>
         <div className='flex items-center gap-1 text-sm text-muted-foreground'>
           <Calendar size={18} />
