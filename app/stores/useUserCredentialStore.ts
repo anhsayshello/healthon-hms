@@ -18,7 +18,7 @@ export const useUserCredential = create<UserCredential>()(
       clearUserCred: () => set({ userCred: null })
     }),
     {
-      name: 'usercred'
+      name: 'user-cred'
     }
   )
 )
