@@ -18,10 +18,13 @@ import { useAuthStore } from '@/stores/useAuthStore'
 import { useUserCredential } from '@/stores/useUserCredentialStore'
 import ProfileAvatar from './profile-avatar'
 import useSignOut from '@/hooks/useSignOut'
+import { useNavigate } from 'react-router'
+import path from '@/constants/path'
 
 // User Menu Component
 const UserMenu = () => {
   const { handleSignOut } = useSignOut()
+  const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
   const role = useAuthStore((state) => state.role)
   const userCred = useUserCredential((state) => state.userCred)
@@ -40,13 +43,17 @@ const UserMenu = () => {
         <DropdownMenuLabel>
           <div className='space-y-2'>
             <p className='text-sm font-medium leading-none'>
-              {user?.last_name ?? userCred?.lastName ?? userCred?.firstName}
+              {user?.first_name && user?.last_name
+                ? `${user.first_name} ${user.last_name}`
+                : userCred?.firstName && userCred?.lastName
+                  ? `${userCred.firstName} ${userCred.lastName}`
+                  : 'Unnamed'}
             </p>
             <p className='text-[13px] leading-none text-muted-foreground'>{user?.email ?? userCred?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {}}>Dashboard</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate({ pathname: path.dashboard })}>Dashboard</DropdownMenuItem>
         {role && <DropdownMenuItem onClick={() => {}}>Profile</DropdownMenuItem>}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>

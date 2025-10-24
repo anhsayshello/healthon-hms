@@ -1,10 +1,10 @@
-import type { Route } from './+types/admin/user-management'
+import type { Route } from '../admin/+types/user-management'
 import UserInfo from '@/components/shared/user-info'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useAuthStore } from '@/stores/useAuthStore'
 import adminApi from '@/apis/admin.api'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import CardWrapper from '@/components/shared/card-wrapper'
 import {
   Dialog,
@@ -24,45 +24,58 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getInitials } from '@/components/shared/profile-avatar'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
+import { Button } from '@/components/ui/button'
+import { User, UserPlus } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import NewDoctor from './new-doctor'
+import type { FirebaseUserRecord } from '@/types/index.type'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { RoleEnum } from '@/types/role.type'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
+const columns = [
+  {
+    header: 'User uid',
+    key: 'uid'
+  },
+  { header: 'User Info', key: 'name' },
+  {
+    header: 'Role',
+    key: 'role'
+  },
+  {
+    header: 'Email',
+    key: 'email'
+  },
+  {
+    header: 'Email Verified',
+    key: 'email-verified'
+  },
+
+  {
+    header: 'Last login',
+    key: 'last-login'
+  }
+]
+
 export default function UserManagement() {
   const user = useAuthStore((state) => state.user)
   const { data, isPending } = useQuery({
-    queryKey: ['admin', 'user-management', user?.uid],
-    queryFn: () => adminApi.getUsers()
+    queryKey: ['admin', 'firebase-users', user?.uid],
+    queryFn: () => adminApi.getUsers(),
+    placeholderData: keepPreviousData
   })
-  console.log(data)
-
-  const dataPatients = useMemo(() => data?.data.patients, [data])
-  const dataDoctors = useMemo(() => data?.data.doctors, [data])
-
-  const columns = [
-    { header: 'User Info', key: 'name' },
-    {
-      header: 'Role',
-      key: 'role'
-    },
-    {
-      header: 'Phone',
-      key: 'phone'
-    },
-    {
-      header: 'Email',
-      key: 'email'
-    },
-    {
-      header: 'Address',
-      key: 'address'
-    }
-  ]
+  const dataUsers = useMemo(() => data?.data.allUsers, [data])
 
   return (
     <CardWrapper>
-      <div className='text-xl font-semibold'>User Management</div>
+      <div className='flex items-center justify-between'>
+        <div className='text-xl font-semibold'>User Management Firebase</div>
+        <CreateUser />
+      </div>
       <Table className='bg-background'>
         <TableHeader>
           <TableRow>
@@ -71,120 +84,171 @@ export default function UserManagement() {
             ))}
           </TableRow>
         </TableHeader>
-        {(!dataPatients || !dataDoctors) && (
-          <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>
-        )}
+        {!dataUsers && <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>}
         <TableBody>
-          {dataPatients && dataPatients.map((patient) => <UserDetail patient={patient} />)}
-          {dataDoctors && dataDoctors.map((doctor) => <UserDetail doctor={doctor} />)}
+          {dataUsers?.map((user) => (
+            <UserDetail key={user.uid} data={user} />
+          ))}
         </TableBody>
       </Table>
     </CardWrapper>
   )
 }
 
-function UserDetail({ patient, doctor }: { patient?: Patient; doctor?: Doctor }) {
-  const user = patient ?? doctor
-  if (!user) return null
-
-  const roleLabel = patient ? 'Patient' : 'Doctor'
-  const description = patient ? patient.gender : doctor?.specialization
-
-  console.log(doctor)
-
+function CreateUser() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <TableRow key={user.uid} className='cursor-pointer hover:bg-muted/50'>
+        <Button>
+          <UserPlus />
+          <span>Create User</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='min-w-2xl max-w-3xl max-h-[90vh] overflow-y-auto'>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <Tabs defaultValue='doctor'>
+          <TabsList>
+            <TabsTrigger value='doctor'>Create Doctor</TabsTrigger>
+            <TabsTrigger value='staff'>Create Staff</TabsTrigger>
+          </TabsList>
+          <TabsContent value='doctor'>
+            <NewDoctor />
+          </TabsContent>
+          <TabsContent value='staff'>Create staff</TabsContent>
+        </Tabs>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function EmptyDataUser() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant='icon'>
+          <User />
+        </EmptyMedia>
+        <EmptyTitle>No data</EmptyTitle>
+        <EmptyDescription>No data found</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  )
+}
+
+function UserDetail({ data }: { data: FirebaseUserRecord }) {
+  const [open, setOpen] = useState(false)
+
+  const { data: dataUser, isPending } = useQuery({
+    queryKey: ['admin', 'user-detail', data.uid],
+    queryFn: () => adminApi.getUserById(data.uid),
+    enabled: open
+  })
+  const user = useMemo(() => dataUser?.data.data, [dataUser])
+  const role = useMemo(() => data.customClaims?.role, [data])
+  const isPatient = useMemo(() => role === RoleEnum.PATIENT && user, [role, user])
+  const isDoctor = useMemo(() => role === RoleEnum.DOCTOR && user, [role, user])
+  const patient = useMemo(() => (isPatient ? (user as Patient) : null), [isPatient, user])
+  const doctor = useMemo(() => (isDoctor ? (user as Doctor) : null), [isDoctor, user])
+  console.log(doctor)
+  const description = useMemo(() => patient?.gender || doctor?.specialization || '', [patient, doctor])
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <TableRow key={data.uid} className='cursor-pointer hover:bg-muted/50'>
+          <TableCell className='text-[13px]'>{data?.uid}</TableCell>
           <TableCell>
-            <UserInfo
-              photoUrl={user.photo_url}
-              firstName={user.first_name}
-              lastName={user.last_name}
-              description={description as string}
-            />
+            <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
           </TableCell>
-          <TableCell>{roleLabel}</TableCell>
-          <TableCell>{user.phone}</TableCell>
-          <TableCell>{user.email}</TableCell>
-          <TableCell>{user.address}</TableCell>
-          <TableCell></TableCell>
+          <TableCell className='capitalize'>{role?.toLowerCase() ?? 'Null'}</TableCell>
+          <TableCell>{data.email}</TableCell>
+          <TableCell>{data.emailVerified ? 'True' : 'False'}</TableCell>
+          <TableCell>{data.metadata.lastSignInTime}</TableCell>
         </TableRow>
       </DialogTrigger>
 
       <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto'>
-        <DialogHeader>
-          <DialogTitle className='text-2xl'>{roleLabel} Details</DialogTitle>
-          <DialogDescription>
-            Complete information for {user.first_name} {user.last_name}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className='space-y-6 mt-4'>
-          {/* Profile Section */}
-          <div className='flex items-start gap-5'>
-            <div className='relative'>
-              <Avatar className={'w-20 h-20 border-2 border-primary'}>
-                <AvatarImage src={user.photo_url} />
-                <AvatarFallback>{getInitials(user.last_name)}</AvatarFallback>
-              </Avatar>
-            </div>
-            <div className='flex-1 space-y-0.5'>
-              <h3 className='text-xl font-semibold'>
-                {user.first_name} {user.last_name}
-              </h3>
-              <p className='text-sm text-muted-foreground'>{description}</p>
-              <p className='text-sm text-muted-foreground'>{user.email}</p>
-            </div>
+        {isPending && (
+          <div className='flex items-center justify-center'>
+            <Spinner />
           </div>
-          <Separator />
-          {/* Basic Information */}
-          <div>
-            <h4 className='font-semibold mb-3 text-lg'>Basic Information</h4>
-            {patient && <PatientBasicInfo patient={patient} />}
-            {doctor && (
-              <div className='grid grid-cols-2 gap-4'>
-                <InfoItem label='Phone' value={doctor.phone} />
-                <InfoItem label='Address' value={doctor.address} />
-                <InfoItem label='License Number' value={doctor.license_number} />
-                <InfoItem label='Specialization' value={doctor.specialization} />
-                <InfoItem label='Department' value={doctor.department || 'N/A'} />
-                <InfoItem label='Status' value={doctor.availability_status || 'N/A'} />
-              </div>
-            )}
-          </div>
+        )}
+        {!isPending && !user && <EmptyDataUser />}
+        {!isPending && user && (
+          <>
+            <DialogHeader>
+              <DialogTitle className='text-2xl capitalize'>{role?.toLowerCase()} Details</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
 
-          {/* Patient Specific Information */}
-          {patient && (
-            <>
+            <div className='space-y-6 mt-4'>
+              {/* Profile Section */}
+              <div className='flex items-start gap-5'>
+                <div className='relative'>
+                  <Avatar className={'w-20 h-20 border-2 border-primary'}>
+                    <AvatarImage src={user?.photo_url} />
+                    <AvatarFallback>{getInitials(user?.last_name ?? '')}</AvatarFallback>
+                  </Avatar>
+                </div>
+                <div className='flex-1 space-y-0.5'>
+                  <h3 className='text-xl font-semibold'>
+                    {user?.first_name} {user?.last_name}
+                  </h3>
+                  <p className='text-sm text-muted-foreground'>{description}</p>
+                  <p className='text-sm text-muted-foreground'>{user?.email}</p>
+                </div>
+              </div>
+              <Separator />
+              {/* Basic Information */}
               <div>
-                <h4 className='font-semibold mb-3 text-lg'>Emergency Contact</h4>
-                <PatientEmergencyContact patient={patient} />
+                <h4 className='font-semibold mb-3 text-lg'>Basic Information</h4>
+                {patient && <PatientBasicInfo patient={patient} />}
+                {doctor && (
+                  <div className='grid grid-cols-2 gap-4'>
+                    <InfoItem label='Phone' value={doctor?.phone} />
+                    <InfoItem label='Address' value={doctor?.address} />
+                    <InfoItem label='License Number' value={doctor?.license_number} />
+                    <InfoItem label='Specialization' value={doctor?.specialization} />
+                    <InfoItem label='Department' value={doctor?.department || 'N/A'} />
+                    <InfoItem label='Status' value={doctor?.availability_status || 'N/A'} />
+                  </div>
+                )}
               </div>
+              {/* Patient Specific Information */}
+              {patient && (
+                <>
+                  <div>
+                    <h4 className='font-semibold mb-3 text-lg'>Emergency Contact</h4>
+                    <PatientEmergencyContact patient={patient} />
+                  </div>
 
-              <div>
-                <h4 className='font-semibold mb-3 text-lg'>Medical Information</h4>
-                <PatientMedicalInfo patient={patient} />
-              </div>
-            </>
-          )}
+                  <div>
+                    <h4 className='font-semibold mb-3 text-lg'>Medical Information</h4>
+                    <PatientMedicalInfo patient={patient} />
+                  </div>
+                </>
+              )}
+              {/* Doctor Specific Information */}
+              {doctor && doctor.working_days && (
+                <div>
+                  <h4 className='font-semibold mb-3 text-lg'>Working Schedule</h4>
+                  <div className='space-y-2 space-x-2'>
+                    {doctor?.working_days?.map((item) => (
+                      <Badge key={item.id}>{item.day}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* Doctor Specific Information */}
-          {doctor && doctor.working_days && (
-            <div>
-              <h4 className='font-semibold mb-3 text-lg'>Working Schedule</h4>
-              <div className='space-y-2 space-x-2'>
-                {doctor.working_days.map((item) => (
-                  <Badge key={item.id}>{item.day}</Badge>
-                ))}
-              </div>
+              {/* Timestamps */}
+              <Separator />
+              <Timestamps createdAt={user?.created_at ?? ''} updatedAt={user?.updated_at ?? ''} />
             </div>
-          )}
-
-          {/* Timestamps */}
-          <Separator />
-          <Timestamps createdAt={user.created_at} updatedAt={user.updated_at} />
-        </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )

@@ -134,7 +134,10 @@ export default function BookAppoinment() {
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     {selectedDoctor && (
                       <div className='text-sm'>
-                        Working on: {selectedDoctor.working_days?.map((item) => item.day).join(', ')}
+                        Working on:{' '}
+                        <span className='capitalize'>
+                          {selectedDoctor.working_days?.map((item) => item.day.toLowerCase()).join(', ')}
+                        </span>
                       </div>
                     )}
                   </Field>

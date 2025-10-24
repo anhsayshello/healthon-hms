@@ -1,35 +1,50 @@
 export const GENDER = [
-  { name: 'Male', value: 'MALE' },
-  { name: 'Female', value: 'FEMALE' }
+  { label: 'Male', value: 'MALE' },
+  { label: 'Female', value: 'FEMALE' }
 ]
 
 export const MARITAL_STATUS = [
-  { name: 'Single', value: 'SINGLE' },
-  { name: 'Married', value: 'MARRIED' },
-  { name: 'Divorced', value: 'DIVORCED' },
-  { name: 'Separated', value: 'SEPARATED' }
+  { label: 'Single', value: 'SINGLE' },
+  { label: 'Married', value: 'MARRIED' },
+  { label: 'Divorced', value: 'DIVORCED' },
+  { label: 'Separated', value: 'SEPARATED' }
 ]
 
 export const RELATION = [
-  { name: 'Father', value: 'FATHER' },
-  { name: 'Mother', value: 'MOTHER' },
-  { name: 'Wife', value: 'WIFE' },
-  { name: 'Husband', value: 'HUSBAND' },
-  { name: 'Other', value: 'OTHER' }
+  { label: 'Father', value: 'FATHER' },
+  { label: 'Mother', value: 'MOTHER' },
+  { label: 'Wife', value: 'WIFE' },
+  { label: 'Husband', value: 'HUSBAND' },
+  { label: 'Other', value: 'OTHER' }
 ]
 
 export const BLOOD_GROUP = [
-  { name: 'A', value: 'A' },
-  { name: 'B', value: 'B' },
-  { name: 'AB', value: 'AB' },
-  { name: 'O', value: 'O' }
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'AB', value: 'AB' },
+  { label: 'O', value: 'O' }
 ]
 
 export const APPOINTMENT_TYPE = [
-  { name: 'General Checkup', value: 'General checkup' },
-  { name: 'Specialist Consultation', value: 'Specialist consultation' },
-  { name: 'Follow-up', value: 'Follow up' },
-  { name: 'Routine Examination', value: 'Routine exam' },
-  { name: 'Online Consultation', value: 'Telemedicine' },
-  { name: 'Emergency Visit', value: 'Emergency' }
+  { label: 'General Checkup', value: 'General checkup' },
+  { label: 'Specialist Consultation', value: 'Specialist consultation' },
+  { label: 'Follow-up', value: 'Follow up' },
+  { label: 'Routine Examination', value: 'Routine exam' },
+  { label: 'Online Consultation', value: 'Telemedicine' },
+  { label: 'Emergency Visit', value: 'Emergency' }
+]
+
+export const JOB_TYPE = [
+  { label: 'Full time', value: 'FULL' },
+  { label: 'Part time', value: 'PART' }
+]
+
+export const WORKING_DAYS = [
+  { label: 'Monday', value: 'MONDAY' },
+  { label: 'Tuesday', value: 'TUESDAY' },
+  { label: 'Wednesday', value: 'WEDNESDAY' },
+  { label: 'Thursday', value: 'THURSDAY' },
+  { label: 'Friday', value: 'FRIDAY' },
+  { label: 'Saturday', value: 'SATURDAY' },
+  { label: 'Sunday', value: 'SUNDAY' }
 ]

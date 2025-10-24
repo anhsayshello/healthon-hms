@@ -14,6 +14,7 @@ import { Badge } from '../ui/badge'
 import AppointmentAction from './appointment-action'
 import BookAppoinment from './book-appoinment'
 import UserInfo from '../shared/user-info'
+import useRole from '@/hooks/use-role'
 
 const columns = [
   { header: 'Patient Info', key: 'name' },
@@ -50,9 +51,8 @@ export default function AppointmentRecords({
   isDashboard?: boolean
   onSearch?: (query: string) => void
 }) {
-  console.log(data)
-  console.log('re-render')
   const navigate = useNavigate()
+  const { isPatient } = useRole()
 
   return (
     <CardWrapper>
@@ -73,7 +73,7 @@ export default function AppointmentRecords({
         {!isDashboard && (
           <div className='flex flex-wrap items-center gap-3'>
             <SearchInput onSearch={onSearch} />
-            <BookAppoinment />
+            {isPatient && <BookAppoinment />}
           </div>
         )}
       </div>
