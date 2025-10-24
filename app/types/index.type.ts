@@ -1,4 +1,5 @@
 import type { UserCredential } from 'firebase/auth'
+import type { RoleEnum } from './role.type'
 
 export interface GoogleTokenResponse {
   federatedId: string
@@ -29,4 +30,31 @@ export interface SearchQueryParams {
   query?: string
   limit?: string
   page?: string
+}
+
+export interface CustomClaims {
+  role: RoleEnum
+}
+
+export interface FirebaseUserRecord {
+  uid: string
+  email?: string
+  displayName?: string
+  photoURL?: string
+  emailVerified: boolean
+  disabled: boolean
+  customClaims?: CustomClaims
+  metadata: {
+    creationTime: string
+    lastSignInTime?: string
+    lastRefreshTime?: string
+  }
+  providerData: {
+    uid: string
+    providerId: string
+    displayName?: string
+    email?: string
+    photoURL?: string
+  }[]
+  tokensValidAfterTime?: string
 }

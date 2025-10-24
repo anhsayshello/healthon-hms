@@ -14,25 +14,48 @@ import patientApi from '@/apis/patient.api'
 import AppointmentRecords from '@/components/appointments/appointment-records'
 import { omitBy, isUndefined } from 'lodash'
 import { useAuthStore } from '@/stores/useAuthStore'
+import doctorApi from '@/apis/doctor.api'
+import useRole from '@/hooks/use-role'
 
 export default function Appointments() {
   const user = useAuthStore((state) => state.user)
   const [searchParams, setSearchParams] = useSearchParams()
+  const { isPatient, isDoctor } = useRole()
 
   const query = searchParams.get('q') || ''
   const page = searchParams.get('page') || '1'
   const limit = searchParams.get('limit') || '10'
 
-  const { data } = useQuery({
+  const { data: dataPatientAppointments } = useQuery({
     queryKey: ['patient', 'appointment', user?.uid, { query, page, limit }],
     queryFn: () => patientApi.getPatientAppointment({ query, page, limit }),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled: isPatient
   })
 
-  const currentPage = useMemo(() => data?.data.currentPage || 1, [data])
-  const totalPages = useMemo(() => data?.data.totalPages || 1, [data])
-  const totalRecords = useMemo(() => data?.data.totalRecords, [data])
-  const dataAppoinments = useMemo(() => data?.data.data, [data])
+  const { data: dataDoctorAppointments } = useQuery({
+    queryKey: ['doctor', 'appointment', user?.uid, { query, page, limit }],
+    queryFn: () => doctorApi.getDoctorAppointment({ query, page, limit }),
+    placeholderData: keepPreviousData,
+    enabled: isDoctor
+  })
+
+  const currentPage = useMemo(
+    () => dataPatientAppointments?.data.currentPage ?? dataDoctorAppointments?.data.currentPage ?? 1,
+    [dataPatientAppointments, dataDoctorAppointments]
+  )
+  const totalPages = useMemo(
+    () => dataPatientAppointments?.data.totalPages ?? dataDoctorAppointments?.data.totalPages ?? 1,
+    [dataPatientAppointments, dataDoctorAppointments]
+  )
+  const totalRecords = useMemo(
+    () => dataPatientAppointments?.data.totalRecords ?? dataDoctorAppointments?.data.totalRecords,
+    [dataPatientAppointments, dataDoctorAppointments]
+  )
+  const dataAppoinments = useMemo(
+    () => dataPatientAppointments?.data.data ?? dataDoctorAppointments?.data.data,
+    [dataPatientAppointments, dataDoctorAppointments]
+  )
 
   const generatePageNumbers = useCallback((currentPage: number, totalPages: number) => {
     const pages = []
