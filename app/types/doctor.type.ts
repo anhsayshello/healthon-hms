@@ -1,5 +1,6 @@
 import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
 
+type JobType = 'FULL' | 'PART'
 export interface Doctor {
   uid: string
   email: string
@@ -12,15 +13,20 @@ export interface Doctor {
   department?: string
   photo_url?: string
   availability_status?: string
+  type: JobType
   working_days: WorkingDays[]
+  appointments: Appointment[]
+  diagnosis: string
   created_at: string
   updated_at: string
 }
 
+export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+
 export interface WorkingDays {
   id: number
   doctor_id: string
-  day: string
+  day: Weekday
   start_time: string
   close_time: string
   created_at: string

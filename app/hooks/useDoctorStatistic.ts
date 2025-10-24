@@ -8,7 +8,7 @@ export default function useDoctorStatistic() {
   const { isDoctor } = useRole()
 
   const { data, isPending } = useQuery({
-    queryKey: ['patient', 'statistic', idToken],
+    queryKey: ['doctor', 'statistic', idToken],
     queryFn: () => doctorApi.getDoctorDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,

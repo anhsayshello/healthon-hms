@@ -1,9 +1,7 @@
-import type { Route } from './+types/doctor/dashboard'
 import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { useNavigate } from 'react-router'
 import path from '@/constants/path'
-import { BriefcaseBusiness, BriefcaseMedical, User, User2 } from 'lucide-react'
+import { BriefcaseBusiness, BriefcaseMedical, Users } from 'lucide-react'
 import StatCard from '@/components/appointments/stat-card'
 import StatSummary from '@/components/appointments/stat-summary'
 import AppointmentChart from '@/components/appointments/appointment-chart'
@@ -13,13 +11,10 @@ import AvailableDoctor from '@/components/appointments/available-doctor'
 import type { Doctor } from '@/types/doctor.type'
 import AppointmentRecords from '@/components/appointments/appointment-records'
 import useDoctorStatistic from '@/hooks/useDoctorStatistic'
+import { useAuthStore } from '@/stores/useAuthStore'
 
-export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Dashboard' }, { name: 'description', content: 'Welcome to React Router!' }]
-}
-
-export default function PatientDashboard() {
-  const navigate = useNavigate()
+export default function DoctorDashboard() {
+  const user = useAuthStore((state) => state.user)
   const {
     totalPatients,
     totalNurses,
@@ -35,16 +30,16 @@ export default function PatientDashboard() {
       {
         title: 'Patients',
         value: totalPatients ?? 0,
-        icon: User,
+        icon: Users,
         className: 'bg-blue-600/15',
         iconClassName: 'bg-blue-600/25 text-blue-600',
         note: 'total patients',
-        link: path.patient.records
+        link: path.record.patients
       },
       {
         title: 'Nurses',
         value: totalNurses ?? 0,
-        icon: User2,
+        icon: Users,
         className: 'bg-rose-600/15',
         iconClassName: 'bg-rose-600/25 text-rose-600',
         note: 'total nurses',
@@ -78,13 +73,12 @@ export default function PatientDashboard() {
       <div className='w-full xl:basis-7/10 space-y-6'>
         <CardWrapper>
           <div className='flex items-center justify-between'>
-            <div className='text-lg xl:text-2xl font-semibold'>Welcome Dr.</div>
+            <div className='text-lg xl:text-2xl font-semibold'>
+              Welcome Dr. {user?.first_name} {user?.last_name}
+            </div>
             <div className='space-x-2 space-y-2'>
               <Button variant='outline' size='sm' className='text-sm'>
                 {new Date().getFullYear()}
-              </Button>
-              <Button size='sm' onClick={() => navigate({ pathname: path.patient.profile })} className='cursor-pointer'>
-                View Profile
               </Button>
             </div>
           </div>
