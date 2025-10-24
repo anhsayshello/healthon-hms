@@ -2,6 +2,8 @@ const path = {
   home: '/',
   signIn: '/sign-in',
   signUp: '/sign-up',
+  emailLinkSent: '/email-sent',
+  emailVerification: '/email-vefification',
 
   dashboard: '/dashboard',
   notifications: '/notifications',
