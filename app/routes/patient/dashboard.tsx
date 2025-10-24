@@ -1,4 +1,3 @@
-import type { Route } from './+types/patient/dashboard'
 import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router'
@@ -14,11 +13,7 @@ import AvailableDoctor from '@/components/appointments/available-doctor'
 import type { Doctor } from '@/types/doctor.type'
 import AppointmentRecords from '@/components/appointments/appointment-records'
 
-export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Dashboard' }, { name: 'description', content: 'Welcome to React Router!' }]
-}
-
-export default function DoctorDashboard() {
+export default function PatientDashboard() {
   const navigate = useNavigate()
   const { dataPatient, appointmentsCounts, totalAppointments, monthlyData, last5Records, availableDoctors } =
     usePatientStatistic()
