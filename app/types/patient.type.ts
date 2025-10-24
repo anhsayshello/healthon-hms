@@ -41,10 +41,3 @@ export interface PatientDashboardStatistic {
   totalAppointments: number
   monthlyData: AppointmentsChart
 }
-
-export interface PatientAppointment {
-  data: Appointment[]
-  totalPages: number
-  currentPage: number
-  totalRecords: number
-}
