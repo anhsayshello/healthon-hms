@@ -1,6 +1,6 @@
 import { persist } from 'zustand/middleware'
 import { create } from 'zustand'
-import type { GoogleTokenResponse } from '@/types/common.type'
+import type { GoogleTokenResponse } from '@/types/index.type'
 
 type FirebaseUser = Pick<GoogleTokenResponse, 'email' | 'firstName' | 'lastName' | 'photoUrl'>
 

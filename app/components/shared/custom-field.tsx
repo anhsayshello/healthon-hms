@@ -21,7 +21,7 @@ interface Props {
   placeholder?: string
   fieldType?: 'date' | 'select' | 'textarea'
   inputType?: HTMLInputTypeAttribute
-  options?: { name: string; value: string }[]
+  options?: { label: string; value: string }[]
   isDob?: boolean
 }
 
@@ -73,7 +73,7 @@ function InputField({
           <SelectContent>
             {options?.map((option, index) => (
               <SelectItem key={index} value={option.value}>
-                {option.name}
+                {option.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -122,7 +122,7 @@ function InputField({
               inputType === 'time'
           })}
           step='1'
-          disabled={name === 'email'}
+          // disabled={name === 'email'}
           placeholder={placeholder}
           type={inputType}
           id={field.name}

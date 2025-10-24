@@ -12,7 +12,7 @@ export default function UserInfo({
   firstName: string
   lastName: string
   email?: string
-  description: string
+  description?: string
   size?: 'sm' | 'md' | 'lg'
 }) {
   return (

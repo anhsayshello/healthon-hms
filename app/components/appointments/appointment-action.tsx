@@ -51,7 +51,11 @@ export default function AppointmentAction({ id, appointment }: { id: number; app
           {(isAdmin || isAssignedDoctor) && (
             <>
               <Separator />
-              <Button variant='ghost' className='w-full !py-1 !justify-start'>
+              <Button
+                variant='ghost'
+                className='w-full !py-1 !justify-start'
+                disabled={appointment.status !== AppointmentStatusEnum.PENDING}
+              >
                 <Check />
                 <div>Approve</div>
               </Button>
@@ -84,6 +88,7 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
     mutationFn: appointmentApi.updateAppointmentDetail,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
+      queryClient.invalidateQueries({ queryKey: ['doctor', 'appointment'] })
       toast.success('Cancel appointment successfully')
       setOpen(false)
     }
@@ -188,3 +193,5 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
     </Dialog>
   )
 }
+
+function ApproveAppointment() {}

@@ -87,7 +87,7 @@ export default function ViewAppointment({ id }: { id: number }) {
                 <ProfileAvatar
                   photoUrl={dataAppointment?.doctor?.photo_url}
                   name={dataAppointment?.doctor?.last_name}
-                  size='md'
+                  size='lg'
                 />
                 <div className='space-y-0.5'>
                   <p className='font-medium leading-5'>
