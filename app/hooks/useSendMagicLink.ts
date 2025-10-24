@@ -6,9 +6,12 @@ import { sendSignInLinkToEmail } from 'firebase/auth'
 import { actionCodeSettings, auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import path from '@/constants/path'
 
-export default function useSendMagicLink({ onSuccess }: { onSuccess?: () => void } = {}) {
+export default function useSendMagicLink() {
   const [isPending, setIsPending] = useState(false)
+  const navigate = useNavigate()
 
   const formSchema = z.object({
     email: z.email()
@@ -25,9 +28,7 @@ export default function useSendMagicLink({ onSuccess }: { onSuccess?: () => void
     try {
       await sendSignInLinkToEmail(auth, values.email, actionCodeSettings)
       window.localStorage.setItem('emailForSignIn', values.email)
-      if (onSuccess) {
-        onSuccess()
-      }
+      navigate({ pathname: path.emailLinkSent })
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
