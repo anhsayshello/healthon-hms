@@ -182,7 +182,7 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
         {/* Actions */}
         <div className='flex gap-3 justify-between sm:justify-end pt-2'>
           <DialogClose asChild>
-            <Button variant='outline'>Keep </Button>
+            <Button variant='outline'>Keep</Button>
           </DialogClose>
           <Button variant='destructive' form='form-cancel-appointment' disabled={isPending}>
             {isPending && <Spinner />}

@@ -33,7 +33,7 @@ export default function BookAppoinment() {
 
   const { data } = useQuery({
     queryKey: ['doctors'],
-    queryFn: () => doctorApi.getDoctors()
+    queryFn: () => doctorApi.getAllDoctors()
   })
   const dataDoctors = useMemo(() => data?.data.data, [data])
 
