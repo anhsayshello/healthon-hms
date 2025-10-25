@@ -1,10 +1,10 @@
-import type { Route } from '../admin/+types/user-management'
+import type { Route } from '../admin/+types/user-management.tsx'
 import UserInfo from '@/components/shared/user-info'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useAuthStore } from '@/stores/useAuthStore'
 import adminApi from '@/apis/admin.api'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CardWrapper from '@/components/shared/card-wrapper'
 import {
   Dialog,
@@ -31,6 +31,8 @@ import NewDoctor from './new-doctor'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { RoleEnum } from '@/types/role.type'
+import UserAction from './user-action'
+import { useInView } from 'react-intersection-observer'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -54,28 +56,53 @@ const columns = [
     header: 'Email Verified',
     key: 'email-verified'
   },
-
   {
     header: 'Last login',
     key: 'last-login'
+  },
+  {
+    header: 'Action',
+    key: 'action'
   }
 ]
 
 export default function UserManagement() {
   const user = useAuthStore((state) => state.user)
-  const { data, isPending } = useQuery({
+  const { ref, inView } = useInView()
+
+  const { data, isPending, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ['admin', 'firebase-users', user?.uid],
-    queryFn: () => adminApi.getUsers(),
-    placeholderData: keepPreviousData
+    queryFn: ({ pageParam }) => adminApi.getUsers(pageParam),
+    getNextPageParam: (lastPage) => lastPage.data.nextPageToken,
+    placeholderData: keepPreviousData,
+    initialPageParam: undefined as string | undefined
   })
-  const dataUsers = useMemo(() => data?.data.allUsers, [data])
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
+  console.log(data, 'data')
+
+  const dataUsers = useMemo(() => data?.pages.flatMap((page) => page?.data?.data) ?? [], [data])
+  console.log(dataUsers)
 
   return (
     <CardWrapper>
       <div className='flex items-center justify-between'>
-        <div className='text-xl font-semibold'>User Management Firebase</div>
+        <div className='flex items-center gap-2'>
+          <img
+            className='aspect-square w-8'
+            src='https://www.gstatic.com/mobilesdk/240501_mobilesdk/firebase_28dp.png'
+            loading='lazy'
+            alt=''
+          />
+          <div className='text-xl font-semibold'>Firebase User Management</div>
+        </div>
         <CreateUser />
       </div>
+
       <Table className='bg-background'>
         <TableHeader>
           <TableRow>
@@ -84,13 +111,32 @@ export default function UserManagement() {
             ))}
           </TableRow>
         </TableHeader>
-        {!dataUsers && <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>}
+
+        {!dataUsers.length && (
+          <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>
+        )}
+
         <TableBody>
-          {dataUsers?.map((user) => (
+          {dataUsers.map((user) => (
             <UserDetail key={user.uid} data={user} />
           ))}
         </TableBody>
       </Table>
+
+      {dataUsers.length > 0 && (
+        <div ref={ref} className='text-sm flex justify-center py-1'>
+          {isFetchingNextPage ? (
+            <div className='flex items-center gap-3'>
+              <Spinner />
+              <span>Loading more...</span>
+            </div>
+          ) : hasNextPage ? (
+            'Load more'
+          ) : (
+            'Nothing more to load'
+          )}
+        </div>
+      )}
     </CardWrapper>
   )
 }
@@ -157,18 +203,21 @@ function UserDetail({ data }: { data: FirebaseUserRecord }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <TableRow key={data.uid} className='cursor-pointer hover:bg-muted/50'>
-          <TableCell className='text-[13px]'>{data?.uid}</TableCell>
-          <TableCell>
-            <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
-          </TableCell>
-          <TableCell className='capitalize'>{role?.toLowerCase() ?? 'Null'}</TableCell>
-          <TableCell>{data.email}</TableCell>
-          <TableCell>{data.emailVerified ? 'True' : 'False'}</TableCell>
-          <TableCell>{data.metadata.lastSignInTime}</TableCell>
-        </TableRow>
-      </DialogTrigger>
+      <TableRow key={data.uid}>
+        <DialogTrigger asChild>
+          <TableCell className='text-[13px] cursor-pointer'>{data?.uid}</TableCell>
+        </DialogTrigger>
+        <TableCell>
+          <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
+        </TableCell>
+        <TableCell className='capitalize'>{role?.toLowerCase() ?? 'Null'}</TableCell>
+        <TableCell>{data.email}</TableCell>
+        <TableCell>{data.emailVerified ? 'True' : 'False'}</TableCell>
+        <TableCell>{data.metadata.lastSignInTime}</TableCell>
+        <TableCell>
+          <UserAction uid={data.uid} />
+        </TableCell>
+      </TableRow>
 
       <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto'>
         {isPending && (
