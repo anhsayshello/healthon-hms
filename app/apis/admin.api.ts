@@ -8,8 +8,10 @@ import http from '@/utils/http'
 const adminApi = {
   getAdminDashboardStatistic: () => http.get<AdminDashboardStatistic>('admin/statistic'),
   getUserById: (id: string) => http.get<{ data: Patient | Doctor }>(`admin/${id}`),
-  getUsers: () => http.get<{ allUsers: FirebaseUserRecord[] }>('admin/users'),
+  getUsers: (nextPageToken?: string) =>
+    http.get<{ data: FirebaseUserRecord[]; nextPageToken?: string }>('admin/users', { params: { nextPageToken } }),
   setUserRole: (role: Role) => http.post('admin', { role }),
+  deleteUserById: (uid: string) => http.delete(`admin/${uid}`),
   createDoctor: (body: {
     working_days: Weekday[]
     doctor: Omit<
