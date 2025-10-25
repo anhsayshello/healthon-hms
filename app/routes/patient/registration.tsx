@@ -1,4 +1,4 @@
-import type { Route } from '@/+types/patient/registration'
+import type { Route } from '../patient/+types/registration'
 import { CreateNewPatient } from './new-patient'
 
 export function meta({}: Route.MetaArgs) {

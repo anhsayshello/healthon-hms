@@ -1,4 +1,4 @@
-import type { Route } from '@/+types/patient/profile'
+import type { Route } from '../patient/+types/profile'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useQuery } from '@tanstack/react-query'
 import patientApi from '@/apis/patient.api'

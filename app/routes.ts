@@ -3,7 +3,6 @@ import path from './constants/path'
 
 export default [
   index('routes/home.tsx'),
-  route('/admin', 'routes/admin.tsx'),
 
   layout('./layouts/auth-layout.tsx', [
     route(path.signIn, 'routes/auth/sign-in.tsx'),
