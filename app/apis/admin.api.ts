@@ -2,16 +2,17 @@ import type { AdminDashboardStatistic } from '@/types/admin.type'
 import type { Doctor, Weekday } from '@/types/doctor.type'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import type { Patient } from '@/types/patient.type'
-import type { Role } from '@/types/role.type'
+import type { StaffRole } from '@/types/role.type'
 import http from '@/utils/http'
 
 const adminApi = {
   getAdminDashboardStatistic: () => http.get<AdminDashboardStatistic>('admin/statistic'),
   getUserById: (id: string) => http.get<{ data: Patient | Doctor }>(`admin/${id}`),
-  getUsers: (nextPageToken?: string) =>
+  getFiresbaseUsers: (nextPageToken?: string) =>
     http.get<{ data: FirebaseUserRecord[]; nextPageToken?: string }>('admin/users', { params: { nextPageToken } }),
-  setUserRole: (role: Role) => http.post('admin', { role }),
-  deleteUserById: (uid: string) => http.delete(`admin/${uid}`),
+  setStaffRole: (body: { uid: string; role: StaffRole }) => http.patch<{ message: string }>('admin/role', body),
+  setUserAccess: (body: { uid: string; disabled: boolean }) => http.patch<{ message: string }>('admin/access', body),
+  deleteUserById: (uid: string) => http.delete<{ message: string }>(`admin/${uid}`),
   createDoctor: (body: {
     working_days: Weekday[]
     doctor: Omit<
