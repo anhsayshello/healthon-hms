@@ -33,15 +33,21 @@ export default function useSendMagicLink() {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
         const errorMessage = error.message
-
-        if (errorCode === 'auth/quota-exceeded') {
-          form.setError('email', {
-            message: 'Sign in limit exceeded. Please try again later.'
-          })
-        } else {
-          form.setError('email', {
-            message: errorMessage
-          })
+        switch (errorCode) {
+          case 'auth/user-disabled':
+            form.setError('email', {
+              message: 'Your account has been disabled by an administrator.'
+            })
+            break
+          case 'auth/quota-exceeded':
+            form.setError('email', {
+              message: 'Sign in limit exceeded. Please try again later.'
+            })
+            break
+          default:
+            form.setError('email', {
+              message: errorMessage
+            })
         }
       } else {
         console.log('Unknown error:', error)

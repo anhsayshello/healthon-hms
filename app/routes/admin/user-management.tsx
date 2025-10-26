@@ -1,10 +1,7 @@
 import type { Route } from '../admin/+types/user-management.tsx'
 import UserInfo from '@/components/shared/user-info'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { useAuthStore } from '@/stores/useAuthStore'
-import adminApi from '@/apis/admin.api'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import CardWrapper from '@/components/shared/card-wrapper'
 import {
   Dialog,
@@ -14,8 +11,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import type { Doctor } from '@/types/doctor.type'
-import type { Patient } from '@/types/patient.type'
 import Timestamps from '@/components/shared/time-stamps'
 import { Separator } from '@/components/ui/separator'
 import { PatientBasicInfo, PatientEmergencyContact, PatientMedicalInfo } from '@/components/shared/patient-information'
@@ -30,9 +25,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import NewDoctor from './new-doctor'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
-import { RoleEnum } from '@/types/role.type'
 import UserAction from './user-action'
-import { useInView } from 'react-intersection-observer'
+import { format } from 'date-fns'
+import useFirebaseUsers from '@/hooks/useFirebaseUsers.js'
+import useUserDetail from '@/hooks/useUserDetail.js'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -43,7 +39,7 @@ const columns = [
     header: 'User uid',
     key: 'uid'
   },
-  { header: 'User Info', key: 'name' },
+  { header: 'User info', key: 'name' },
   {
     header: 'Role',
     key: 'role'
@@ -53,8 +49,12 @@ const columns = [
     key: 'email'
   },
   {
-    header: 'Email Verified',
+    header: 'Email verified',
     key: 'email-verified'
+  },
+  {
+    header: 'Disabled',
+    key: 'disabled'
   },
   {
     header: 'Last login',
@@ -67,26 +67,7 @@ const columns = [
 ]
 
 export default function UserManagement() {
-  const user = useAuthStore((state) => state.user)
-  const { ref, inView } = useInView()
-
-  const { data, isPending, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ['admin', 'firebase-users', user?.uid],
-    queryFn: ({ pageParam }) => adminApi.getUsers(pageParam),
-    getNextPageParam: (lastPage) => lastPage.data.nextPageToken,
-    placeholderData: keepPreviousData,
-    initialPageParam: undefined as string | undefined
-  })
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
-  console.log(data, 'data')
-
-  const dataUsers = useMemo(() => data?.pages.flatMap((page) => page?.data?.data) ?? [], [data])
-  console.log(dataUsers)
+  const { dataUsers, isPending, isFetchingNextPage, hasNextPage, ref } = useFirebaseUsers()
 
   return (
     <CardWrapper>
@@ -187,19 +168,12 @@ function EmptyDataUser() {
 function UserDetail({ data }: { data: FirebaseUserRecord }) {
   const [open, setOpen] = useState(false)
 
-  const { data: dataUser, isPending } = useQuery({
-    queryKey: ['admin', 'user-detail', data.uid],
-    queryFn: () => adminApi.getUserById(data.uid),
-    enabled: open
-  })
-  const user = useMemo(() => dataUser?.data.data, [dataUser])
-  const role = useMemo(() => data.customClaims?.role, [data])
-  const isPatient = useMemo(() => role === RoleEnum.PATIENT && user, [role, user])
-  const isDoctor = useMemo(() => role === RoleEnum.DOCTOR && user, [role, user])
-  const patient = useMemo(() => (isPatient ? (user as Patient) : null), [isPatient, user])
-  const doctor = useMemo(() => (isDoctor ? (user as Doctor) : null), [isDoctor, user])
-  console.log(doctor)
-  const description = useMemo(() => patient?.gender || doctor?.specialization || '', [patient, doctor])
+  const { isPending, user, role, disabled, patient, doctor, description } = useUserDetail(data, open)
+
+  const formatLastSignIn = (time?: string) => {
+    if (!time) return 'Never'
+    return format(new Date(time), 'dd MMM yyyy, hh:mm a')
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -210,12 +184,13 @@ function UserDetail({ data }: { data: FirebaseUserRecord }) {
         <TableCell>
           <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
         </TableCell>
-        <TableCell className='capitalize'>{role?.toLowerCase() ?? 'Null'}</TableCell>
+        <TableCell>{role ? <span className='capitalize'>{role?.toLowerCase()}</span> : <span>null</span>}</TableCell>
         <TableCell>{data.email}</TableCell>
-        <TableCell>{data.emailVerified ? 'True' : 'False'}</TableCell>
-        <TableCell>{data.metadata.lastSignInTime}</TableCell>
+        <TableCell>{data.emailVerified ? 'true' : 'false'}</TableCell>
+        <TableCell>{disabled ? 'true' : 'false'}</TableCell>
+        <TableCell>{formatLastSignIn(data.metadata.lastSignInTime)}</TableCell>
         <TableCell>
-          <UserAction uid={data.uid} />
+          <UserAction uid={data.uid} role={role} disabled={disabled} />
         </TableCell>
       </TableRow>
 

@@ -6,7 +6,6 @@ import { Calendar } from 'lucide-react'
 import UserInfo from '../shared/user-info'
 
 export default function AvailableDoctor({ data }: { data: Doctor[] }) {
-  console.log(data)
   const today = getToday()
   const availableTime = (days: WorkingDays[]) => {
     const isWorkingDay = days.find((d) => d.day === today)

@@ -10,11 +10,8 @@ import { Form } from '@/components/ui/form'
 import CustomField from '@/components/shared/custom-field'
 import { BLOOD_GROUP, GENDER, MARITAL_STATUS, RELATION } from '@/lib/schemas'
 import { useEffect } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import patientApi from '@/apis/patient.api'
-import { useAuthStore } from '@/stores/useAuthStore'
 import { Spinner } from '@/components/ui/spinner'
+import useUpsertPatient from '@/hooks/useUpsertPatient'
 
 interface Props {
   data: Patient | null
@@ -23,6 +20,7 @@ interface Props {
 
 export default function NewPatient({ data, type }: Props) {
   const userCred = useUserCredential((state) => state.userCred)
+  const { mutate, isPending } = useUpsertPatient(type)
 
   const userData = {
     first_name: userCred?.firstName ?? '',
@@ -50,26 +48,11 @@ export default function NewPatient({ data, type }: Props) {
     }
   })
 
-  const { setUser, setRole } = useAuthStore()
-  const queryClient = useQueryClient()
-
-  const { isPending, mutate } = useMutation({
-    mutationKey: ['patient', 'upsert'],
-    mutationFn: patientApi.upsertPatient,
-    onSuccess: async (data) => {
-      const role = data.data.role
-      setRole(role)
-      setUser(data.data.data)
-      await queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
-      toast.success(`${type === 'create' ? 'Patient created successfully' : 'Patient updated successfully'}`)
-    }
-  })
-
   const onSubmit = async (data: z.infer<typeof PatientFormSchema>) => {
     mutate({ ...data, date_of_birth: data.date_of_birth.toISOString() })
     console.log(data.date_of_birth.toISOString())
   }
-  console.log(data)
+
   useEffect(() => {
     if (type === 'create') {
       form.reset(userData)

@@ -1,4 +1,5 @@
 export type Role = 'ADMIN' | 'PATIENT' | 'DOCTOR' | 'NURSE' | 'LAB_TECHNICIAN' | 'CASHIER'
+export type StaffRole = Exclude<Role, 'PATIENT' | 'DOCTOR'>
 
 export enum RoleEnum {
   ADMIN = 'ADMIN',

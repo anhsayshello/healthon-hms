@@ -5,3 +5,7 @@ export const DeleteUserSchema = (uid: string) =>
     confirm_uid: z.literal(uid, { message: `The value does not match "${uid}"` }),
     confirm_delete: z.literal('delete user', { error: 'The value does not match “delete user”' })
   })
+
+export const SetUserRoleSchema = z.object({
+  role: z.enum(['ADMIN', 'NURSE', 'LAB_TECHNICIAN', 'CASHIER'])
+})

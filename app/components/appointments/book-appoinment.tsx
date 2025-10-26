@@ -1,9 +1,8 @@
-import doctorApi from '@/apis/doctor.api'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -17,35 +16,21 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
 import CustomField from '../shared/custom-field'
 import { APPOINTMENT_TYPE } from '@/lib/schemas'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import UserInfo from '../shared/user-info'
 import { Spinner } from '../ui/spinner'
-import appointmentApi from '@/apis/appointment.api'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { toast } from 'sonner'
 import { type Doctor } from '@/types/doctor.type'
+import useCreateAppointment from '@/hooks/useCreateAppointment'
+import useDoctors from '@/hooks/useDoctors'
 
 export default function BookAppoinment() {
-  const [open, setOpen] = useState(false)
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>()
   const user = useAuthStore((state) => state.user)
-
-  const { data } = useQuery({
-    queryKey: ['doctors'],
-    queryFn: () => doctorApi.getAllDoctors()
-  })
-  const dataDoctors = useMemo(() => data?.data.data, [data])
-
-  const queryClient = useQueryClient()
-  const { mutate, isPending } = useMutation({
-    mutationFn: appointmentApi.createNewAppointment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
-      setOpen(false)
-      toast.success('Appointment create successfully')
-    }
-  })
+  const [open, setOpen] = useState(false)
+  const { mutate, isPending: isCreating } = useCreateAppointment()
+  const { dataDoctors, isPending: isLoadingDoctors } = useDoctors()
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>()
 
   const form = useForm<z.infer<typeof AppointmentFormSchema>>({
     resolver: zodResolver(AppointmentFormSchema),
@@ -119,6 +104,7 @@ export default function BookAppoinment() {
                         <SelectValue placeholder={'Select Doctor'} />
                       </SelectTrigger>
                       <SelectContent>
+                        {isLoadingDoctors && <Spinner />}
                         {dataDoctors?.map((doctor) => (
                           <SelectItem onClick={() => setSelectedDoctor(doctor)} key={doctor.uid} value={doctor.uid}>
                             <UserInfo
@@ -168,10 +154,13 @@ export default function BookAppoinment() {
                 fieldType='textarea'
                 placeholder='Note'
               />
-              <Button form='form-create-appointment' disabled={isPending}>
-                {isPending && <Spinner />}
-                <span>Confirm</span>
-              </Button>
+              <DialogFooter>
+                <Button variant={'outline'}>Cancel</Button>
+                <Button form='form-create-appointment' disabled={isCreating}>
+                  {isCreating && <Spinner />}
+                  <span>Confirm</span>
+                </Button>
+              </DialogFooter>
             </FieldGroup>
           </form>
         </div>

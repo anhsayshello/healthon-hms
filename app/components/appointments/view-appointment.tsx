@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import appointmentApi from '@/apis/appointment.api'
 import {
   Calendar,
   Clock,
@@ -14,7 +12,6 @@ import {
   ScanSearch,
   Syringe
 } from 'lucide-react'
-import formatDate from '@/helpers/formatDate'
 import AppointmentStatusIndicator from './appointment-status-indicator'
 import { Separator } from '../ui/separator'
 import { AppointmentStatusEnum, type AppointmentStatus } from '@/types/appointment.type'
@@ -22,25 +19,18 @@ import { Spinner } from '../ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Textarea } from '../ui/textarea'
-import { toast } from 'sonner'
-import { AxiosError } from 'axios'
-import handleApiError from '@/helpers/handleApiError'
 import ProfileAvatar from '../shared/profile-avatar'
 import { cn } from '@/lib/utils'
 import useRole from '@/hooks/use-role'
 import Timestamps from '../shared/time-stamps'
 import PatientInformation from '../shared/patient-information'
+import { format } from 'date-fns'
+import useAppointment from '@/hooks/useAppointment'
+import useUpdateAppointment from '@/hooks/useUpdateAppointment'
 
 export default function ViewAppointment({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
-
-  const { data, isPending } = useQuery({
-    queryKey: ['appointment', id],
-    queryFn: () => appointmentApi.getAppointmentDetail(id),
-    enabled: open
-  })
-
-  const dataAppointment = data?.data.data
+  const { dataAppointment, isPending } = useAppointment(id, open)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -171,22 +161,18 @@ function AppointmentInformation({
   const [reason, setReason] = useState(appointmentReason ?? '')
   const [status, setStatus] = useState<AppointmentStatus>(appointmentStatus)
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: appointmentApi.updateAppointmentDetail,
-    onSuccess: (data) => {
-      console.log(data)
-      toast.success('Updated appointment successfully')
-    },
-    onError: (error: AxiosError) => {
-      console.log(error)
-      handleApiError(error)
-      setReason(appointmentReason ?? '')
-      setStatus(appointmentStatus)
-    }
-  })
+  const { mutate, isPending } = useUpdateAppointment()
 
   const handleAction = () => {
-    mutate({ id, status, reason })
+    mutate(
+      { id, status, reason },
+      {
+        onSuccess: () => {
+          setReason(appointmentReason ?? '')
+          setStatus(appointmentStatus)
+        }
+      }
+    )
   }
 
   return (
@@ -212,7 +198,7 @@ function AppointmentInformation({
             <Calendar className='w-4 h-4 text-muted-foreground' />
             <span className='text-muted-foreground'>Date:</span>
           </div>
-          <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
+          <span className='font-medium grow'>{format(new Date(appointmentDate), 'yyyy-MM-dd')}</span>
         </div>
         <div className='flex items-center'>
           <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>

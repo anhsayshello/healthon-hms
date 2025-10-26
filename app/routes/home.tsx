@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className=''>
-      <div className='w-full h-screen relative'>
+      {/* <div className='w-full h-screen relative'>
         <Dither
           waveColor={[0.5, 0.5, 0.5]}
           disableAnimation={false}
@@ -50,7 +50,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

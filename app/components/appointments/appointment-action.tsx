@@ -8,13 +8,12 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import appointmentApi from '@/apis/appointment.api'
-import { toast } from 'sonner'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Spinner } from '../ui/spinner'
 import useRole from '@/hooks/use-role'
 import z from 'zod'
@@ -23,10 +22,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldGroup } from '@/components/ui/field'
 import { AppointmentStatusEnum, type Appointment } from '@/types/appointment.type'
 import { Button } from '../ui/button'
-import formatDate from '@/helpers/formatDate'
 import { useAuthStore } from '@/stores/useAuthStore'
 import UserInfo from '../shared/user-info'
 import CustomField from '../shared/custom-field'
+import { format } from 'date-fns'
+import useCancelAppointment from '@/hooks/useCancelAppointment'
 
 export default function AppointmentAction({ id, appointment }: { id: number; appointment: Appointment }) {
   const { isAdmin, isDoctor } = useRole()
@@ -71,7 +71,7 @@ export default function AppointmentAction({ id, appointment }: { id: number; app
 
 function CancelAppointment({ id, appointment }: { id: number; appointment: Appointment }) {
   const [open, setOpen] = useState(false)
-  const queryClient = useQueryClient()
+  const { mutate, isPending } = useCancelAppointment()
 
   const formSchema = z.object({
     reason: z.string().max(300).nonempty()
@@ -84,18 +84,13 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
     }
   })
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: appointmentApi.updateAppointmentDetail,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
-      queryClient.invalidateQueries({ queryKey: ['doctor', 'appointment'] })
-      toast.success('Cancel appointment successfully')
-      setOpen(false)
-    }
-  })
-
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    mutate({ id, status: AppointmentStatusEnum.CANCELLED, reason: data.reason })
+    mutate(
+      { id, status: AppointmentStatusEnum.CANCELLED, reason: data.reason },
+      {
+        onSuccess: () => setOpen(false)
+      }
+    )
   }
 
   const isDisabled = useMemo(
@@ -148,7 +143,7 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
             <span className='text-sm font-medium text-muted-foreground'>Date & Time:</span>
             <div className='flex items-center gap-1.5 text-sm font-medium'>
               <CalendarIcon className='size-4 text-muted-foreground' />
-              <span>{formatDate(appointment.appointment_date)}</span>
+              <span>{format(appointment.appointment_date, 'yyyy-MM-dd')}</span>
               <span className='text-muted-foreground'>•</span>
               <ClockIcon className='size-4 text-muted-foreground' />
               <span>{appointment.time}</span>
@@ -169,18 +164,17 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
         </form>
 
         {/* Warning Message */}
-        <div className='flex gap-2 rounded-lg border border-destructive/20 bg-destructive/5 p-3'>
-          <AlertCircle className='size-5 text-destructive shrink-0 mt-0.5' />
-          <div className='space-y-1'>
-            <p className='text-sm font-medium text-destructive'>Important Notice</p>
-            <p className='text-xs text-muted-foreground'>
-              Frequent cancellations may affect your ability to book future appointments.
-            </p>
-          </div>
-        </div>
+
+        <Alert variant='destructive' className='bg-destructive/5 border border-destructive/20'>
+          <AlertCircle />
+          <AlertTitle>Important Notice</AlertTitle>
+          <AlertDescription>
+            <p className='text-xs'>Frequent cancellations may affect your ability to book future appointments.</p>
+          </AlertDescription>
+        </Alert>
 
         {/* Actions */}
-        <div className='flex gap-3 justify-between sm:justify-end pt-2'>
+        <DialogFooter className='pt-2'>
           <DialogClose asChild>
             <Button variant='outline'>Keep</Button>
           </DialogClose>
@@ -188,7 +182,7 @@ function CancelAppointment({ id, appointment }: { id: number; appointment: Appoi
             {isPending && <Spinner />}
             Cancel
           </Button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

@@ -13,14 +13,12 @@ import type z from 'zod'
 import { useState } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 import type { Weekday } from '@/types/doctor.type'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import adminApi from '@/apis/admin.api'
 import { useDebouncedCallback } from 'use-debounce'
-import { toast } from 'sonner'
+import useCreateDoctor from '@/hooks/useCreateDoctor'
 
 export default function NewDoctor() {
   const [isGeneratingData, setIsGeneratingData] = useState(false)
-  const queryClient = useQueryClient()
+  const { mutate, isPending } = useCreateDoctor()
 
   const form = useForm<z.infer<typeof DoctorFormSchema>>({
     resolver: zodResolver(DoctorFormSchema),
@@ -33,22 +31,14 @@ export default function NewDoctor() {
       phone: '',
       address: '',
       department: '',
-      photo_url: ''
-    }
-  })
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: adminApi.createDoctor,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
-      form.reset()
-      toast.success('Created doctor user successfully')
-      console.log(data)
+      photo_url: '',
+      start_time: '08:00:00',
+      close_time: '17:00:00'
     }
   })
 
   const onSubmit = (data: z.infer<typeof DoctorFormSchema>) => {
-    mutate({ working_days: data.working_days, doctor: data })
+    mutate({ working_days: data.working_days, doctor: data }, { onSuccess: () => form.reset() })
     console.log(data)
   }
 
@@ -139,7 +129,7 @@ export default function NewDoctor() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor='working_days'>
-                    <span>Working days</span>
+                    <span>Working Days</span>
                     <span className='-ml-1 text-destructive text-lg leading-0'>*</span>
                   </FieldLabel>
                   <Select
@@ -174,6 +164,10 @@ export default function NewDoctor() {
                 </Field>
               )}
             />
+          </div>
+          <div className='flex items-start gap-6 lg:gap-8'>
+            <CustomField control={form.control} inputType='time' label='Start Time' name='start_time' />
+            <CustomField control={form.control} inputType='time' label='Close Time' name='close_time' />
           </div>
 
           <CustomField

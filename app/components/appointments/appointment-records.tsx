@@ -1,7 +1,6 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import CardWrapper from '../shared/card-wrapper'
 import { type Appointment } from '@/types/appointment.type'
-import formatDate from '@/helpers/formatDate'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
@@ -15,6 +14,7 @@ import AppointmentAction from './appointment-action'
 import BookAppoinment from './book-appoinment'
 import UserInfo from '../shared/user-info'
 import useRole from '@/hooks/use-role'
+import { format } from 'date-fns'
 
 const columns = [
   { header: 'Patient Info', key: 'name' },
@@ -99,7 +99,7 @@ export default function AppointmentRecords({
                     description={item.patient.gender}
                   />
                 </TableCell>
-                <TableCell>{formatDate(item?.appointment_date)}</TableCell>
+                <TableCell>{format(new Date(item?.appointment_date), 'yyyy-MM-dd')}</TableCell>
                 <TableCell>{item.time}</TableCell>
                 <TableCell>
                   <UserInfo

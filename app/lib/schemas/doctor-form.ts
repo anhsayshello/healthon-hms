@@ -1,4 +1,5 @@
 import z from 'zod'
+import dayjs from 'dayjs'
 
 export const DoctorFormSchema = z.object({
   email: z.email(),
@@ -25,11 +26,22 @@ export const DoctorFormSchema = z.object({
   phone: z.string().min(10).max(20),
   address: z.string().nonempty('Address is required'),
   department: z.string().trim().max(100, 'Department name cannot exceed 100 characters').optional(),
-  photo_url: z.url('Please enter a valid URL').optional(),
+  photo_url: z.url('Please enter a valid URL').or(z.literal('')),
   type: z.enum(['FULL', 'PART'], 'Please select either Full-time or Part-time'),
   working_days: z
     .array(
-      z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'], { message: 'Invalid day' })
+      z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'], {
+        message: 'Invalid day'
+      })
     )
-    .nonempty({ message: 'Please select at least one working day' })
+    .nonempty({ message: 'Please select at least one working day' }),
+  start_time: z.iso.time(),
+  close_time: z.iso.time()
 })
+// .refine(
+//   (data) => dayjs(data.start_time, ['HH:mm:ss', 'HH:mm']).isBefore(dayjs(data.close_time, ['HH:mm:ss', 'HH:mm'])),
+//   {
+//     message: 'Closing time must be after starting time',
+//     path: ['close_time']
+//   }
+// )

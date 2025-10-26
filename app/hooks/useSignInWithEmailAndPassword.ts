@@ -40,6 +40,14 @@ export default function useSignInWithEmailAndPassword() {
               message: 'Email or password is incorrect'
             })
             break
+          case 'auth/user-disabled':
+            form.setError('email', {
+              message: ''
+            })
+            form.setError('password', {
+              message: 'Your account has been disabled by an administrator.'
+            })
+            break
           default:
             form.setError('email', {
               message: ''

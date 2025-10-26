@@ -4,7 +4,6 @@ import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } f
 import CardWrapper from '../shared/card-wrapper'
 
 export default function AppointmentChart({ chartData }: { chartData: AppointmentsChart }) {
-  console.log(chartData)
   const chartConfig = {
     appointment: {
       label: 'Appointment',

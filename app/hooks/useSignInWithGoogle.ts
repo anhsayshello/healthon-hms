@@ -2,6 +2,8 @@ import { auth } from '@/lib/firebase/client'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import useVerifyUser from './useVerifyUser'
+import { FirebaseError } from 'firebase/app'
+import { toast } from 'sonner'
 
 export default function useSignInWithGoogle() {
   const [isPending, setIsPending] = useState(false)
@@ -16,10 +18,17 @@ export default function useSignInWithGoogle() {
       })
       const userCred = await signInWithPopup(auth, provider)
       verifyUser(userCred)
-    } catch (error) {
-      console.log(error)
-    } finally {
       setTimeout(() => setIsPending(false), 5000)
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        if (errorCode === 'auth/user-disabled') {
+          toast.error('Your account has been disabled by an administrator.')
+        } else toast.error(errorMessage)
+      }
+    } finally {
+      setIsPending(false)
     }
   }, [])
 
