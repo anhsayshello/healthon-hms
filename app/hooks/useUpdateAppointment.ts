@@ -1,18 +1,15 @@
 import appointmentApi from '@/apis/appointment.api'
-import handleApiError from '@/helpers/handleApiError'
-import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
-import { toast } from 'sonner'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function useUpdateAppointment() {
+  const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
     mutationFn: appointmentApi.updateAppointmentDetail,
-    onSuccess: (data) => {
-      console.log(data)
-      toast.success('Updated appointment successfully')
-    },
-    onError: (error: AxiosError) => {
-      handleApiError(error)
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'appointment'] })
+      queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
+      queryClient.invalidateQueries({ queryKey: ['doctor', 'appointment'] })
+      queryClient.invalidateQueries({ queryKey: ['appointment', 'detail'] })
     }
   })
 

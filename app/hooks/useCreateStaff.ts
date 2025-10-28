@@ -1,11 +1,11 @@
 import adminApi from '@/apis/admin.api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export default function useCreateDoctor() {
+export default function useCreateStaff() {
   const queryClient = useQueryClient()
 
   const { mutate, isPending } = useMutation({
-    mutationFn: adminApi.createDoctor,
+    mutationFn: adminApi.createStaff,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
     }

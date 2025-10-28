@@ -48,3 +48,10 @@ export const WORKING_DAYS = [
   { label: 'Saturday', value: 'SATURDAY' },
   { label: 'Sunday', value: 'SUNDAY' }
 ]
+
+export const STAFF_ROLES = [
+  { label: 'Admin', value: 'ADMIN' },
+  { label: 'Nurse', value: 'NURSE' },
+  { label: 'Lab Technician', value: 'LAB_TECHNICIAN' },
+  { label: 'Cashier', value: 'CASHIER' }
+]

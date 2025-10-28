@@ -2,9 +2,9 @@ import appointmentApi from '@/apis/appointment.api'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-export default function useAppointment(id: number, enabled: boolean) {
+export default function useAppointmentDetail(id: number, enabled: boolean) {
   const { data, isPending } = useQuery({
-    queryKey: ['appointment', id],
+    queryKey: ['appointment', 'detail', id],
     queryFn: () => appointmentApi.getAppointmentDetail(id),
     enabled
   })

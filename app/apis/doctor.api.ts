@@ -5,7 +5,7 @@ import type { AppointmentListResponse } from '@/types/appointment.type'
 
 const doctorApi = {
   getAllDoctors: () => http.get<{ data: Doctor[] }>('doctor'),
-  getDoctorAppointment: (params: SearchQueryParams) =>
+  getDoctorAppointments: (params: SearchQueryParams) =>
     http.get<AppointmentListResponse>('doctor/appointments', { params }),
   getDoctorDashboardStatistic: () => http.get<DoctorDashboardStatistic>('doctor/statistic')
 }
