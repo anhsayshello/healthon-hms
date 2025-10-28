@@ -21,7 +21,7 @@ import CustomField from '../shared/custom-field'
 import { toast } from 'sonner'
 import useUpdateAppointment from '@/hooks/useUpdateAppointment'
 import AppointmentSummaryCard from './appointment-summary-card'
-import { AlertCircle, X } from 'lucide-react'
+import { AlertCircle, CalendarX2 } from 'lucide-react'
 
 export default function CancelAppointment({ id, appointment }: { id: number; appointment: Appointment }) {
   const [open, setOpen] = useState(false)
@@ -60,7 +60,7 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='ghost' className='w-full py-1 justify-start' disabled={isDisabled}>
-          <X className='size-4 text-destructive' />
+          <CalendarX2 className='size-4 text-destructive' />
           <span className='text-destructive'>Cancel</span>
         </Button>
       </DialogTrigger>
@@ -70,7 +70,6 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
           <DialogDescription>This action cannot be undone. Please provide a reason for cancellation.</DialogDescription>
         </DialogHeader>
 
-        {/* Appointment Details Card */}
         <AppointmentSummaryCard appointment={appointment} />
 
         <form id='form-cancel-appointment' onSubmit={form.handleSubmit(onSubmit)}>
@@ -85,7 +84,6 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
           </FieldGroup>
         </form>
 
-        {/* Warning Message */}
         <Alert variant='destructive' className='bg-destructive/5 border border-destructive/20'>
           <AlertCircle />
           <AlertTitle>Important Notice</AlertTitle>
@@ -94,7 +92,6 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
           </AlertDescription>
         </Alert>
 
-        {/* Actions */}
         <DialogFooter className='pt-2'>
           <DialogClose asChild>
             <Button variant='outline'>Keep</Button>

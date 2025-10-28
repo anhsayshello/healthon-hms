@@ -1,5 +1,4 @@
 import { useState } from 'react'
-
 import {
   Dialog,
   DialogClose,
@@ -21,7 +20,7 @@ import CustomField from '../shared/custom-field'
 import { toast } from 'sonner'
 import useUpdateAppointment from '@/hooks/useUpdateAppointment'
 import AppointmentSummaryCard from './appointment-summary-card'
-import { Check } from 'lucide-react'
+import { CalendarCheck2 } from 'lucide-react'
 
 export default function ApproveAppointment({ id, appointment }: { id: number; appointment: Appointment }) {
   const [open, setOpen] = useState(false)
@@ -58,7 +57,7 @@ export default function ApproveAppointment({ id, appointment }: { id: number; ap
           className='w-full py-1 justify-start'
           disabled={appointment.status !== AppointmentStatusEnum.PENDING}
         >
-          <Check />
+          <CalendarCheck2 />
           <div>Approve</div>
         </Button>
       </DialogTrigger>
