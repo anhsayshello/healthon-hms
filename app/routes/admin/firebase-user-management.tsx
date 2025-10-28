@@ -1,4 +1,4 @@
-import type { Route } from '../admin/+types/user-management.tsx'
+import type { Route } from './+types/firebase-user-management'
 import UserInfo from '@/components/shared/user-info'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useState } from 'react'
@@ -20,78 +20,50 @@ import { getInitials } from '@/components/shared/profile-avatar'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { Copy, User } from 'lucide-react'
-import NewDoctor from './new-doctor'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import UserAction from './user-action'
 import { format } from 'date-fns'
 import useFirebaseUsers from '@/hooks/useFirebaseUsers'
 import useUserDetail from '@/hooks/useUserDetail'
-import NewStaff from './new-staff'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
-const columns = [
-  {
-    header: 'User uid',
-    key: 'uid'
-  },
+const tableColumns = [
+  { header: 'User uid', key: 'uid' },
   { header: 'User info', key: 'name' },
-  {
-    header: 'Role',
-    key: 'role'
-  },
-  {
-    header: 'Email',
-    key: 'email'
-  },
-  {
-    header: 'Email verified',
-    key: 'email-verified'
-  },
-  {
-    header: 'Access',
-    key: 'disabled'
-  },
-  {
-    header: 'Last login',
-    key: 'last-login'
-  },
-  {
-    header: 'Action',
-    key: 'action'
-  }
+  { header: 'Role', key: 'role' },
+  { header: 'Email', key: 'email' },
+  { header: 'Email verified', key: 'email-verified' },
+  { header: 'Access', key: 'disabled' },
+  { header: 'Last login', key: 'last-login' },
+  { header: 'Action', key: 'action' }
 ]
 
-export default function UserManagement() {
+export default function FirebaseUserManagement() {
   const { dataUsers, isPending, isFetchingNextPage, hasNextPage, ref } = useFirebaseUsers()
 
   return (
     <CardWrapper>
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <img
-            className='aspect-square w-8'
-            src='https://www.gstatic.com/mobilesdk/240501_mobilesdk/firebase_28dp.png'
-            loading='lazy'
-            alt=''
-          />
-          <div className='text-xl font-semibold'>Firebase User Management</div>
-        </div>
-        <div className='flex items-center gap-2'>
-          <NewDoctor />
-          <NewStaff />
-        </div>
+      <div className='flex items-center gap-2'>
+        <img
+          className='aspect-square w-8'
+          src='https://www.gstatic.com/mobilesdk/240501_mobilesdk/firebase_28dp.png'
+          loading='lazy'
+          alt=''
+        />
+        <div className='text-xl font-semibold'>Firebase User Management</div>
       </div>
 
       <Table className='bg-background'>
         <TableHeader>
           <TableRow>
-            {columns.map((column) => (
+            {tableColumns.map((column) => (
               <TableHead key={column.key}>{column.header}</TableHead>
             ))}
           </TableRow>
@@ -137,6 +109,7 @@ function EmptyDataUser() {
 }
 
 function UserDetail({ data }: { data: FirebaseUserRecord }) {
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
 
   const { isPending, user, role, disabled, patient, doctor, description } = useUserDetail(data, open)
@@ -180,14 +153,20 @@ function UserDetail({ data }: { data: FirebaseUserRecord }) {
         <TableCell>{role ? <span className='capitalize'>{role?.toLowerCase()}</span> : <span>null</span>}</TableCell>
         <TableCell>{data.email}</TableCell>
         <TableCell>{data.emailVerified ? 'true' : 'false'}</TableCell>
-        <TableCell>{disabled ? 'disabled' : 'enabled'}</TableCell>
+        <TableCell>
+          {disabled ? (
+            <span className='text-destructive'>disabled</span>
+          ) : (
+            <span className='text-green-500'>enabled</span>
+          )}
+        </TableCell>
         <TableCell>{formatLastSignIn(data.metadata.lastSignInTime)}</TableCell>
         <TableCell>
           <UserAction uid={data.uid} email={data.email} role={role} disabled={disabled} />
         </TableCell>
       </TableRow>
 
-      <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto'>
+      <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto' showCloseButton={isMobile}>
         {isPending && (
           <div className='flex items-center justify-center'>
             <Spinner />
