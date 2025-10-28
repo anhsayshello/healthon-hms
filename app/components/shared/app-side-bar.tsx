@@ -14,7 +14,6 @@ import {
   Settings,
   SquareLibrary,
   Pin,
-  PinOff,
   X
 } from 'lucide-react'
 
@@ -39,6 +38,7 @@ import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
 import { cn } from '@/lib/utils'
 import { RoleEnum } from '@/types/role.type'
 import { useSidebarPinnedStore } from '@/stores/useSidebarPinnedStore'
+import { Toggle } from '@/components/ui/toggle'
 
 const ALL_ROLE = [
   RoleEnum.ADMIN,
@@ -207,30 +207,24 @@ export default function AppSidebar() {
 
             <SidebarGroupAction asChild>
               <div>
-                {!isMobile &&
-                  (isPinned ? (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant='ghost' className='!rounded-full' onClick={() => setIsPinned(false)}>
-                          <PinOff />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side='right' sideOffset={2}>
-                        <p>Unpin Sidebar</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant='ghost' className='!rounded-full' onClick={() => setIsPinned(true)}>
-                          <Pin />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side='right' sideOffset={2}>
-                        <p>Pin Sidebar</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
+                {!isMobile && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Toggle
+                        aria-label='Toggle pin sidebar'
+                        pressed={isPinned}
+                        onPressedChange={setIsPinned}
+                        size='sm'
+                        className='data-[state=on]:[&_svg]:fill-yellow-500 data-[state=on]:[&_svg]:stroke-yellow-500'
+                      >
+                        <Pin />
+                      </Toggle>
+                    </TooltipTrigger>
+                    <TooltipContent side='right' sideOffset={2}>
+                      <p>{isPinned ? 'Unpin Sidebar' : 'Pin Sidebar'}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
                 {isMobile && (
                   <Button className='z-10' variant='ghost' onClick={() => setOpenMobile(false)}>
                     <X />

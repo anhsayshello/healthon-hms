@@ -24,9 +24,11 @@ import { useAuthStore } from '@/stores/useAuthStore'
 import { type Doctor } from '@/types/doctor.type'
 import useCreateAppointment from '@/hooks/useCreateAppointment'
 import useDoctors from '@/hooks/useDoctors'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function BookAppoinment() {
   const user = useAuthStore((state) => state.user)
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const { mutate, isPending: isCreating } = useCreateAppointment()
   const { dataDoctors, isPending: isLoadingDoctors } = useDoctors()
@@ -57,7 +59,7 @@ export default function BookAppoinment() {
           <span>Book Appoinment</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={isMobile}>
         <DialogHeader>
           <DialogTitle>Book Appoinment</DialogTitle>
           <DialogDescription>

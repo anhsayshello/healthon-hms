@@ -27,6 +27,7 @@ export function PatientBasicInfo({ patient }: { patient: Patient }) {
   return (
     <div className='grid grid-cols-2 gap-4'>
       <InfoItem label='Name' value={`${patient.first_name} ${patient.last_name}`} />
+      <InfoItem label='Email' value={patient.email} />
       <InfoItem label='Phone' value={patient.phone} />
       <InfoItem label='Address' value={patient.address} />
       <InfoItem label='Date of Birth' value={new Date(patient.date_of_birth).toLocaleDateString()} />

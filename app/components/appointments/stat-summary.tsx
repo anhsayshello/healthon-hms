@@ -39,12 +39,7 @@ export default function StatSummary({ data, total }: { data: AppointmentStatusCo
 
   return (
     <CardWrapper className='h-full xl:h-110 p-6'>
-      <div className='flex items-center justify-between'>
-        <h1 className='text-xl font-semibold'>Summary</h1>
-        <Button size='sm' variant='outline' className='cursor-pointer font-normal text-xs hover:underline capitalize'>
-          See details
-        </Button>
-      </div>
+      <h1 className='text-xl font-semibold'>Summary</h1>
 
       <div className='grow'>
         <ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-[250px]'>

@@ -25,12 +25,15 @@ import useRole from '@/hooks/use-role'
 import Timestamps from '../shared/time-stamps'
 import PatientInformation from '../shared/patient-information'
 import { format } from 'date-fns'
-import useAppointment from '@/hooks/useAppointment'
 import useUpdateAppointment from '@/hooks/useUpdateAppointment'
+import useAppointmentDetail from '@/hooks/useAppointmentDetail'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { toast } from 'sonner'
 
 export default function ViewAppointment({ id }: { id: number }) {
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
-  const { dataAppointment, isPending } = useAppointment(id, open)
+  const { dataAppointment, isPending } = useAppointmentDetail(id, open)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,7 +43,10 @@ export default function ViewAppointment({ id }: { id: number }) {
           <div className='text-sm'>View</div>
         </Button>
       </DialogTrigger>
-      <DialogContent className='w-full md:max-w-2xl max-h-[96vh] md:max-h-[90vh] overflow-y-auto'>
+      <DialogContent
+        showCloseButton={isMobile}
+        className='w-full md:max-w-2xl max-h-[96vh] md:max-h-[90vh] overflow-y-auto'
+      >
         {dataAppointment ? (
           <DialogHeader>
             <DialogTitle className='text-xl font-semibold'>Appointment Details</DialogTitle>
@@ -63,6 +69,7 @@ export default function ViewAppointment({ id }: { id: number }) {
               appointmentTime={dataAppointment.time}
               appointmentStatus={dataAppointment.status}
               appointmentReason={dataAppointment.reason}
+              appointmentNote={dataAppointment.note}
             />
 
             <Separator />
@@ -104,17 +111,6 @@ export default function ViewAppointment({ id }: { id: number }) {
               <PatientInformation patient={dataAppointment.patient} />
             </div>
 
-            {/* Note */}
-            {dataAppointment.note && (
-              <>
-                <Separator />
-                <div className='space-y-2'>
-                  <h3 className='text-sm font-semibold'>Notes</h3>
-                  <p className='text-sm leading-relaxed'>{dataAppointment.note}</p>
-                </div>
-              </>
-            )}
-
             {/* Footer */}
             <Separator />
             <Timestamps createdAt={dataAppointment.created_at} updatedAt={dataAppointment.updated_at} />
@@ -147,7 +143,8 @@ function AppointmentInformation({
   appointmentDate,
   appointmentTime,
   appointmentStatus,
-  appointmentReason
+  appointmentReason,
+  appointmentNote
 }: {
   id: number
   appointmentType: string
@@ -155,6 +152,7 @@ function AppointmentInformation({
   appointmentTime: string
   appointmentStatus: AppointmentStatus
   appointmentReason?: string
+  appointmentNote?: string
 }) {
   const { isAdmin, isDoctor } = useRole()
   const [isUpdate, setIsUpdate] = useState(false)
@@ -167,7 +165,8 @@ function AppointmentInformation({
     mutate(
       { id, status, reason },
       {
-        onSuccess: () => {
+        onSuccess: () => toast.success('Updated appointment successfully'),
+        onError: () => {
           setReason(appointmentReason ?? '')
           setStatus(appointmentStatus)
         }
@@ -252,24 +251,40 @@ function AppointmentInformation({
           )}
         </div>
 
-        {appointmentReason && (
+        {appointmentNote && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Note:</span>
+            </div>
+            <span className='font-medium grow'>{appointmentNote}</span>
+          </div>
+        )}
+
+        {appointmentReason && !isUpdate && (
           <div className='flex items-start'>
             <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
               <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
               <span className='text-muted-foreground'>Reason:</span>
             </div>
-            {isUpdate ? (
-              <Textarea
-                disabled={isPending}
-                className='max-h-30 text-sm'
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-              ></Textarea>
-            ) : (
-              <span className='font-medium grow'>{appointmentReason}</span>
-            )}
+            <span className='font-medium grow'>{appointmentReason}</span>
           </div>
         )}
+        {isUpdate && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Reason:</span>
+            </div>
+            <Textarea
+              disabled={isPending}
+              className='max-h-30 text-sm'
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
+        )}
+
         {isUpdate && (
           <div className='flex items-center pt-3'>
             <div className='shrink-0 w-21 lg:w-21.5'></div>
