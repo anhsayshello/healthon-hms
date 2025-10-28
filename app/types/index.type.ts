@@ -38,7 +38,7 @@ export interface CustomClaims {
 
 export interface FirebaseUserRecord {
   uid: string
-  email?: string
+  email: string
   displayName?: string
   photoURL?: string
   emailVerified: boolean

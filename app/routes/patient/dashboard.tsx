@@ -15,7 +15,7 @@ import AppointmentRecords from '@/components/appointments/appointment-records'
 
 export default function PatientDashboard() {
   const navigate = useNavigate()
-  const { dataPatient, appointmentsCounts, totalAppointments, monthlyData, last5Records, availableDoctors } =
+  const { dataPatient, appointmentsCounts, totalAppointments, monthlyData, last5Records, availableDoctors, isPending } =
     usePatientStatistic()
 
   const cardData = useMemo(
@@ -75,14 +75,14 @@ export default function PatientDashboard() {
             </div>
           </div>
           <div className='w-full flex flex-wrap gap-5 xl:gap-6'>
-            {cardData.map((el, id) => (
-              <StatCard key={id} {...el} link='#' />
+            {cardData.map((item, id) => (
+              <StatCard key={id} {...item} link='#' />
             ))}
           </div>
         </CardWrapper>
         <AppointmentChart chartData={monthlyData as AppointmentsChart} />
         <div>
-          <AppointmentRecords isDashboard data={last5Records as Appointment[]} />
+          <AppointmentRecords isPending={isPending} isDashboard data={last5Records as Appointment[]} />
         </div>
       </div>
       {/* Right */}

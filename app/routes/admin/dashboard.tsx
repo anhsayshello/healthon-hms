@@ -22,7 +22,8 @@ export default function AdminDashboard() {
     totalAppointments,
     monthlyData,
     last5Records,
-    availableDoctors
+    availableDoctors,
+    isPending
   } = useAdminStatistic()
 
   const cardData = useMemo(
@@ -90,7 +91,7 @@ export default function AdminDashboard() {
         </CardWrapper>
         <AppointmentChart chartData={monthlyData as AppointmentsChart} />
         <div>
-          <AppointmentRecords isDashboard data={last5Records as Appointment[]} />
+          <AppointmentRecords isPending={isPending} isDashboard data={last5Records as Appointment[]} />
         </div>
       </div>
       {/* Right */}
