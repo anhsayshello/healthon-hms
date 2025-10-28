@@ -32,8 +32,13 @@ export default function AppointmentAction({ id, appointment }: { id: number; app
           <div className='py-1 px-3'>Actions</div>
           <Separator />
           <ViewAppointment id={id} />
-          <Separator />
-          {(isAdmin || isAssignedDoctor) && <ApproveAppointment id={id} appointment={appointment} />}
+
+          {(isAdmin || isAssignedDoctor) && (
+            <>
+              <Separator />
+              <ApproveAppointment id={id} appointment={appointment} />
+            </>
+          )}
           <Separator />
           <CancelAppointment id={id} appointment={appointment} />
         </div>

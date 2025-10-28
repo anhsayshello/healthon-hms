@@ -38,7 +38,7 @@ export default function AdminDashboard() {
         link: path.record.patients
       },
       {
-        title: 'Nurses',
+        title: 'Doctors',
         value: totalDoctors ?? 0,
         icon: Users,
         className: 'bg-rose-600/15',

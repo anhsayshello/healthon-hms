@@ -16,7 +16,7 @@ export default function UserAction({
   uid: string
   email: string
   role?: Role
-  disabled: boolean
+  disabled?: boolean
 }) {
   return (
     <Popover>
@@ -29,8 +29,12 @@ export default function UserAction({
         <div className='space-y-1 text-sm'>
           <div className='py-1 px-3'>Actions</div>
           <Separator />
-          <SetStaffRole uid={uid} staffRole={role as StaffRole} />
-          <Separator />
+          {role && (
+            <>
+              <SetStaffRole uid={uid} staffRole={role as StaffRole} />
+              <Separator />
+            </>
+          )}
           <SetUserAccess uid={uid} disabled={disabled} />
           <Separator />
           <DeleteUser uid={uid} email={email} />

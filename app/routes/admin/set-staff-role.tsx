@@ -151,7 +151,7 @@ export function SetStaffRole({ uid, staffRole }: { uid: string; staffRole: Staff
           <DialogClose asChild>
             <Button variant={'outline'}>Cancel</Button>
           </DialogClose>
-          <Button form='form-set-role' disabled={isPending}>
+          <Button className='cursor-pointer' form='form-set-role' disabled={isPending}>
             {isPending && <Spinner />}
             <span>Confirm</span>
           </Button>
