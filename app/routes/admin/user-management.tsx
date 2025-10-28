@@ -19,16 +19,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getInitials } from '@/components/shared/profile-avatar'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
-import { Button } from '@/components/ui/button'
-import { User, UserPlus } from 'lucide-react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Copy, User } from 'lucide-react'
 import NewDoctor from './new-doctor'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import UserAction from './user-action'
 import { format } from 'date-fns'
-import useFirebaseUsers from '@/hooks/useFirebaseUsers.js'
-import useUserDetail from '@/hooks/useUserDetail.js'
+import useFirebaseUsers from '@/hooks/useFirebaseUsers'
+import useUserDetail from '@/hooks/useUserDetail'
+import NewStaff from './new-staff'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { toast } from 'sonner'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -53,7 +54,7 @@ const columns = [
     key: 'email-verified'
   },
   {
-    header: 'Disabled',
+    header: 'Access',
     key: 'disabled'
   },
   {
@@ -81,7 +82,10 @@ export default function UserManagement() {
           />
           <div className='text-xl font-semibold'>Firebase User Management</div>
         </div>
-        <CreateUser />
+        <div className='flex items-center gap-2'>
+          <NewDoctor />
+          <NewStaff />
+        </div>
       </div>
 
       <Table className='bg-background'>
@@ -97,11 +101,7 @@ export default function UserManagement() {
           <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>
         )}
 
-        <TableBody>
-          {dataUsers.map((user) => (
-            <UserDetail key={user.uid} data={user} />
-          ))}
-        </TableBody>
+        <TableBody>{dataUsers && dataUsers.map((user) => <UserDetail key={user.uid} data={user} />)}</TableBody>
       </Table>
 
       {dataUsers.length > 0 && (
@@ -119,35 +119,6 @@ export default function UserManagement() {
         </div>
       )}
     </CardWrapper>
-  )
-}
-
-function CreateUser() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <UserPlus />
-          <span>Create User</span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className='min-w-2xl max-w-3xl max-h-[90vh] overflow-y-auto'>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        <Tabs defaultValue='doctor'>
-          <TabsList>
-            <TabsTrigger value='doctor'>Create Doctor</TabsTrigger>
-            <TabsTrigger value='staff'>Create Staff</TabsTrigger>
-          </TabsList>
-          <TabsContent value='doctor'>
-            <NewDoctor />
-          </TabsContent>
-          <TabsContent value='staff'>Create staff</TabsContent>
-        </Tabs>
-      </DialogContent>
-    </Dialog>
   )
 }
 
@@ -175,22 +146,44 @@ function UserDetail({ data }: { data: FirebaseUserRecord }) {
     return format(new Date(time), 'dd MMM yyyy, hh:mm a')
   }
 
+  const handleCopyUid = async () => {
+    try {
+      await navigator.clipboard.writeText(data.uid)
+      toast.success('Copied uid to clipboard!')
+    } catch (err) {
+      toast.error('Failed to copy uid')
+      console.error(err)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <TableRow key={data.uid}>
-        <DialogTrigger asChild>
-          <TableCell className='text-[13px] cursor-pointer'>{data?.uid}</TableCell>
-        </DialogTrigger>
         <TableCell>
-          <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
+          <div className='flex items-center gap-3'>
+            <Tooltip>
+              <TooltipTrigger>
+                <Copy className='hover:text-muted-foreground' size={16} onClick={handleCopyUid} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy uid</p>
+              </TooltipContent>
+            </Tooltip>
+            <span className='max-w-40 truncate text-[13px]'>{data?.uid}</span>
+          </div>
         </TableCell>
+        <DialogTrigger asChild>
+          <TableCell className='text-[13px] cursor-pointer'>
+            <UserInfo photoUrl={data?.photoURL} firstName={''} lastName={data?.displayName ?? ''} />
+          </TableCell>
+        </DialogTrigger>
         <TableCell>{role ? <span className='capitalize'>{role?.toLowerCase()}</span> : <span>null</span>}</TableCell>
         <TableCell>{data.email}</TableCell>
         <TableCell>{data.emailVerified ? 'true' : 'false'}</TableCell>
-        <TableCell>{disabled ? 'true' : 'false'}</TableCell>
+        <TableCell>{disabled ? 'disabled' : 'enabled'}</TableCell>
         <TableCell>{formatLastSignIn(data.metadata.lastSignInTime)}</TableCell>
         <TableCell>
-          <UserAction uid={data.uid} role={role} disabled={disabled} />
+          <UserAction uid={data.uid} email={data.email} role={role} disabled={disabled} />
         </TableCell>
       </TableRow>
 
