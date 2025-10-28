@@ -1,7 +1,7 @@
 import type { AdminDashboardStatistic } from '@/types/admin.type'
-import type { AppointmentListResponse } from '@/types/appointment.type'
+import type { Appointment } from '@/types/appointment.type'
 import type { Doctor, Weekday } from '@/types/doctor.type'
-import type { FirebaseUserRecord, SearchQueryParams } from '@/types/index.type'
+import type { FirebaseUserRecord, PaginatedResponse, SearchQueryParams } from '@/types/index.type'
 import type { Patient } from '@/types/patient.type'
 import type { StaffRole } from '@/types/role.type'
 import type { Staff } from '@/types/staff.type'
@@ -10,7 +10,7 @@ import http from '@/utils/http'
 const adminApi = {
   getAdminDashboardStatistic: () => http.get<AdminDashboardStatistic>('admin/statistic'),
   getAdminAppointments: (params: SearchQueryParams) =>
-    http.get<AppointmentListResponse>('admin/appointments', { params }),
+    http.get<PaginatedResponse<Appointment>>('admin/appointments', { params }),
   getUserById: (id: string) => http.get<{ data: Patient | Doctor }>(`admin/${id}`),
   getFiresbaseUsers: (nextPageToken?: string) =>
     http.get<{ data: FirebaseUserRecord[]; nextPageToken?: string }>('admin/users', { params: { nextPageToken } }),

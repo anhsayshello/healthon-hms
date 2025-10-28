@@ -58,3 +58,10 @@ export interface FirebaseUserRecord {
   }[]
   tokensValidAfterTime?: string
 }
+
+export interface PaginatedResponse<Data> {
+  data: Data[]
+  totalPages: number
+  currentPage: number
+  totalRecords: number
+}

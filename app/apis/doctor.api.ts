@@ -1,12 +1,12 @@
 import http from '@/utils/http'
 import type { Doctor, DoctorDashboardStatistic } from '@/types/doctor.type'
-import type { SearchQueryParams } from '@/types/index.type'
-import type { AppointmentListResponse } from '@/types/appointment.type'
+import type { PaginatedResponse, SearchQueryParams } from '@/types/index.type'
+import type { Appointment } from '@/types/appointment.type'
 
 const doctorApi = {
-  getAllDoctors: () => http.get<{ data: Doctor[] }>('doctor'),
+  getDoctors: (params: SearchQueryParams) => http.get<PaginatedResponse<Doctor>>('doctor', { params }),
   getDoctorAppointments: (params: SearchQueryParams) =>
-    http.get<AppointmentListResponse>('doctor/appointments', { params }),
+    http.get<PaginatedResponse<Appointment>>('doctor/appointments', { params }),
   getDoctorDashboardStatistic: () => http.get<DoctorDashboardStatistic>('doctor/statistic')
 }
 
