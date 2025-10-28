@@ -1,19 +1,14 @@
-import { useSearchParams } from 'react-router'
 import AppointmentRecords from '@/components/appointments/appointment-records'
-import { omitBy, isUndefined } from 'lodash'
 
 import { useMemo } from 'react'
 import AppPagination from '@/components/shared/app-pagination'
 import useDoctorAppointments from '@/hooks/useDoctorAppointments'
 import usePatientAppointments from '@/hooks/usePatientAppointments'
 import useAdminAppointments from '@/hooks/useAdminAppointment'
+import useQueryParams from '@/hooks/useQueryParams'
 
 export default function Appointments() {
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const query = searchParams.get('q') || ''
-  const page = searchParams.get('page') || '1'
-  const limit = searchParams.get('limit') || '10'
+  const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
 
   const { dataAdminAppointments, isPendingAdminAppointments } = useAdminAppointments(query, page, limit)
   const { dataPatientAppointments, isPendingPatientAppointments } = usePatientAppointments(query, page, limit)
@@ -41,7 +36,8 @@ export default function Appointments() {
     () =>
       dataAdminAppointments?.data.totalRecords ??
       dataPatientAppointments?.data.totalRecords ??
-      dataDoctorAppointments?.data.totalRecords,
+      dataDoctorAppointments?.data.totalRecords ??
+      0,
     [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
   const dataAppoinments = useMemo(
@@ -49,14 +45,6 @@ export default function Appointments() {
       dataAdminAppointments?.data.data ?? dataPatientAppointments?.data.data ?? dataDoctorAppointments?.data.data ?? [],
     [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
-
-  const handlePageChange = (newPage: number) => {
-    setSearchParams({ page: String(newPage) })
-  }
-
-  const handleSearch = (query: string) => {
-    setSearchParams(omitBy({ q: query, page: '1' }, (q) => isUndefined(q) || q === ''))
-  }
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
