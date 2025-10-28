@@ -1,4 +1,4 @@
-import type { Route } from '../patient/+types/profile'
+import type { Route } from './+types/profile'
 import { UpdatePatient } from './new-patient'
 import usePatientProfile from '@/hooks/usePatientProfile'
 
