@@ -15,6 +15,7 @@ import BookAppoinment from './book-appoinment'
 import UserInfo from '../shared/user-info'
 import useRole from '@/hooks/use-role'
 import { format } from 'date-fns'
+import { Spinner } from '../ui/spinner'
 
 const columns = [
   { header: 'Patient Info', key: 'name' },
@@ -42,11 +43,13 @@ const columns = [
 
 export default function AppointmentRecords({
   data,
+  isPending,
   totalRecords,
   isDashboard = false,
   onSearch
 }: {
   data: Appointment[]
+  isPending: boolean
   totalRecords?: number
   isDashboard?: boolean
   onSearch?: (query: string) => void
@@ -85,7 +88,9 @@ export default function AppointmentRecords({
             ))}
           </TableRow>
         </TableHeader>
-        {data && data.length < 1 && <TableCaption className='text-center'>No data found</TableCaption>}
+        {data && data.length === 0 && (
+          <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>
+        )}
         <TableBody>
           {data &&
             data.length > 0 &&
