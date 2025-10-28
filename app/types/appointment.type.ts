@@ -38,10 +38,3 @@ export interface Appointment {
   created_at: string
   updated_at: string
 }
-
-export interface AppointmentListResponse {
-  data: Appointment[]
-  totalPages: number
-  currentPage: number
-  totalRecords: number
-}
