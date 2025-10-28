@@ -5,10 +5,7 @@ import { Button } from '../ui/button'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 import AppointmentStatusIndicator from './appointment-status-indicator'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import { Search } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useDebounce } from 'use-debounce'
+
 import { Badge } from '../ui/badge'
 import AppointmentAction from './appointment-action'
 import BookAppoinment from './book-appoinment'
@@ -16,29 +13,15 @@ import UserInfo from '../shared/user-info'
 import useRole from '@/hooks/use-role'
 import { format } from 'date-fns'
 import { Spinner } from '../ui/spinner'
+import SearchInput from '../shared/search-input'
 
-const columns = [
+const tableColumns = [
   { header: 'Patient Info', key: 'name' },
-  {
-    header: 'Date',
-    key: 'appointment_date'
-  },
-  {
-    header: 'Time',
-    key: 'time'
-  },
-  {
-    header: 'Doctor',
-    key: 'doctor'
-  },
-  {
-    header: 'Status',
-    key: 'status'
-  },
-  {
-    header: 'Action',
-    key: 'action'
-  }
+  { header: 'Date', key: 'appointment_date' },
+  { header: 'Time', key: 'time' },
+  { header: 'Doctor', key: 'doctor' },
+  { header: 'Status', key: 'status' },
+  { header: 'Action', key: 'action' }
 ]
 
 export default function AppointmentRecords({
@@ -83,7 +66,7 @@ export default function AppointmentRecords({
       <Table className='bg-background'>
         <TableHeader>
           <TableRow>
-            {columns.map((column) => (
+            {tableColumns.map((column) => (
               <TableHead key={column.key}>{column.header}</TableHead>
             ))}
           </TableRow>
@@ -125,23 +108,5 @@ export default function AppointmentRecords({
         </TableBody>
       </Table>
     </CardWrapper>
-  )
-}
-
-function SearchInput({ onSearch }: { onSearch?: (query: string) => void }) {
-  const [text, setText] = useState('')
-  const [value] = useDebounce(text, 300)
-
-  useEffect(() => {
-    onSearch?.(value)
-  }, [value])
-
-  return (
-    <InputGroup className='w-full sm:w-80 lg:w-90 bg-background'>
-      <InputGroupInput placeholder='Search...' value={text} onChange={(e) => setText(e.target.value)} />
-      <InputGroupAddon>
-        <Search />
-      </InputGroupAddon>
-    </InputGroup>
   )
 }
