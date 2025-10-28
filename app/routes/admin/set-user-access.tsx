@@ -54,7 +54,7 @@ export default function SetUserAccess({ uid, disabled }: { uid: string; disabled
         <div className='flex items-center space-x-3 rounded-lg border p-4'>
           <Switch
             id='user-access'
-            defaultChecked={!disabled}
+            checked={!disabled}
             onCheckedChange={handleDisabledChange}
             disabled={isPending}
             className='cursor-pointer'
