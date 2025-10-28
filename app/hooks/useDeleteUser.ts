@@ -9,6 +9,9 @@ export default function useDeleteUser() {
     mutationFn: adminApi.deleteUserById,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
+      queryClient.invalidateQueries({ queryKey: ['doctors'] })
+      queryClient.invalidateQueries({ queryKey: ['patients'] })
+      queryClient.invalidateQueries({ queryKey: ['staffs'] })
       toast.success(data?.data?.message)
     }
   })

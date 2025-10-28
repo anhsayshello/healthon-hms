@@ -7,7 +7,7 @@ export default function useCreateDoctor() {
   const { mutate, isPending } = useMutation({
     mutationFn: adminApi.createDoctor,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
+      queryClient.invalidateQueries({ queryKey: ['doctors'] })
     }
   })
 

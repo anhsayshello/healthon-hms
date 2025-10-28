@@ -8,7 +8,7 @@ export default function useUpdateStaffRole() {
   const { mutate, isPending } = useMutation({
     mutationFn: adminApi.setStaffRole,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
+      queryClient.invalidateQueries({ queryKey: ['staffs'] })
       toast.success(data?.data?.message)
     }
   })

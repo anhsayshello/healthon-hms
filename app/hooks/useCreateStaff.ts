@@ -7,7 +7,7 @@ export default function useCreateStaff() {
   const { mutate, isPending } = useMutation({
     mutationFn: adminApi.createStaff,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'firebase-users'] })
+      queryClient.invalidateQueries({ queryKey: ['staffs'] })
     }
   })
 
