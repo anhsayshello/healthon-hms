@@ -39,6 +39,7 @@ export interface DoctorDashboardStatistic {
   appointmentCounts: AppointmentStatusCount
   last5Records: Appointment[]
   availableDoctors: Doctor[]
+  totalRecords: number
   totalAppointments: number
   monthlyData: AppointmentsChart
 }
