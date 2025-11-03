@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { Button } from '../ui/button'
 import { RadialBarChart, RadialBar, PolarGrid } from 'recharts'
 import formatNumber from '@/helpers/formatNumber'
 import type { AppointmentStatusCount } from '@/types/appointment.type'
@@ -10,26 +9,27 @@ export default function StatSummary({ data, total }: { data: AppointmentStatusCo
   const chartData = useMemo(
     () => [
       { status: 'total', value: total, fill: 'var(--color-total)' },
-      { status: 'appointments', value: data?.PENDING + data?.SCHEDULED || 0, fill: 'var(--color-appointments)' },
-      { status: 'consultation', value: data?.COMPLETED || 0, fill: 'var(--color-consultation)' }
+      {
+        status: 'upcomingAppointments',
+        value: data?.PENDING + data?.SCHEDULED || 0,
+        fill: 'var(--color-upcomingAppointments)'
+      },
+      { status: 'consultations', value: data?.COMPLETED || 0, fill: 'var(--color-consultations)' }
     ],
     [data, total]
   )
 
   const chartConfig = {
-    value: {
-      label: 'Count'
-    },
     total: {
       label: 'Total',
       color: 'var(--chart-1)'
     },
-    appointments: {
-      label: 'Appointments',
+    upcomingAppointments: {
+      label: 'Upcomming Appointments',
       color: 'var(--chart-4)'
     },
-    consultation: {
-      label: 'Consultation',
+    consultations: {
+      label: 'Consultations',
       color: 'var(--chart-5)'
     }
   } satisfies ChartConfig
@@ -53,8 +53,8 @@ export default function StatSummary({ data, total }: { data: AppointmentStatusCo
       <div className='flex justify-center items-center gap-8 mt-4'>
         <div className='space-y-2'>
           <div className='flex items-center gap-3'>
-            <div className='w-2.5 aspect-square rounded-full bg-[var(--chart-4)]' />
-            <span className='text-sm font-medium capitalize'>{chartConfig.appointments.label}</span>
+            <div className='shrink-0 w-2.5 aspect-square rounded-full bg-[var(--chart-4)]' />
+            <span className='text-sm font-medium capitalize'>{chartConfig.upcomingAppointments.label}</span>
           </div>
           <div className='flex items-center gap-2 ml-6'>
             <h1 className='text-2xl font-bold'>{formatNumber(appointment)}</h1>
@@ -68,8 +68,8 @@ export default function StatSummary({ data, total }: { data: AppointmentStatusCo
 
         <div className='space-y-2'>
           <div className='flex items-center gap-3'>
-            <div className='w-2.5 aspect-square rounded-full bg-[var(--chart-5)]' />
-            <span className='text-sm font-medium capitalize'>{chartConfig.consultation.label}</span>
+            <div className='shrink-0 w-2.5 aspect-square rounded-full bg-[var(--chart-5)]' />
+            <span className='text-sm font-medium capitalize'>{chartConfig.consultations.label}</span>
           </div>
           <div className='flex items-center gap-2 ml-6'>
             <h1 className='text-2xl font-bold'>{formatNumber(consultant)}</h1>
