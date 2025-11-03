@@ -14,14 +14,24 @@ export default function usePatientStatistic() {
     placeholderData: keepPreviousData,
     enabled: isPatient
   })
+  const dataPatient = data?.data.data
+  const appointmentsCounts = data?.data.appointmentCounts
+  const totalAppointments = data?.data.totalAppointments
+  const totalRecords = data?.data.totalRecords
+  const monthlyData = data?.data.monthlyData
+  const last5Records = data?.data.last5Records
+  const availableDoctors = data?.data.availableDoctors
+
+  console.log(totalRecords, 'records')
 
   return {
-    dataPatient: data?.data.data,
-    appointmentsCounts: data?.data.appointmentCounts,
-    totalAppointments: data?.data.totalAppointments ?? 0,
-    monthlyData: data?.data.monthlyData,
-    last5Records: data?.data.last5Records,
-    availableDoctors: data?.data.availableDoctors,
+    dataPatient,
+    appointmentsCounts,
+    totalAppointments,
+    totalRecords,
+    monthlyData,
+    last5Records,
+    availableDoctors,
     isPending
   }
 }

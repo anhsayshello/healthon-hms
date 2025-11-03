@@ -15,14 +15,24 @@ export default function useDoctorStatistic() {
     enabled: isDoctor
   })
 
+  const totalPatients = data?.data.totalPatients
+  const totalNurses = data?.data.totalNurses
+  const appointmentsCounts = data?.data.appointmentCounts
+  const totalAppointments = data?.data.totalAppointments
+  const totalRecords = data?.data.totalRecords
+  const monthlyData = data?.data.monthlyData
+  const last5Records = data?.data.last5Records
+  const availableDoctors = data?.data.availableDoctors
+
   return {
-    totalPatients: data?.data.totalPatients,
-    totalNurses: data?.data.totalNurses,
-    appointmentsCounts: data?.data.appointmentCounts,
-    totalAppointments: data?.data.totalAppointments ?? 0,
-    monthlyData: data?.data.monthlyData,
-    last5Records: data?.data.last5Records,
-    availableDoctors: data?.data.availableDoctors,
+    totalPatients,
+    totalNurses,
+    appointmentsCounts,
+    totalAppointments,
+    totalRecords,
+    monthlyData,
+    last5Records,
+    availableDoctors,
     isPending
   }
 }

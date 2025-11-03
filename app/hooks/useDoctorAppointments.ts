@@ -14,5 +14,7 @@ export default function useDoctorAppointments(query: string, page: string, limit
     enabled: isDoctor
   })
 
-  return { dataDoctorAppointments, isPendingDoctorAppointments: isDoctor ? isPending : false }
+  const isPendingDoctorAppointments = isDoctor ? isPending : false
+
+  return { dataDoctorAppointments, isPendingDoctorAppointments }
 }

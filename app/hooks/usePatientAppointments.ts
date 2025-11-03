@@ -14,7 +14,7 @@ export default function usePatientAppointments(query: string, page: string, limi
     enabled: isPatient
   })
 
-  console.log(dataPatientAppointments)
+  const isPendingPatientAppointments = isPatient ? isPending : false
 
-  return { dataPatientAppointments, isPendingPatientAppointments: isPatient ? isPending : false }
+  return { dataPatientAppointments, isPendingPatientAppointments }
 }

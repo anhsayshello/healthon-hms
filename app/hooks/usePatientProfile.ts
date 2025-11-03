@@ -1,7 +1,6 @@
 import patientApi from '@/apis/patient.api'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
 
 export default function usePatientProfile() {
   const user = useAuthStore((state) => state.user)
@@ -14,7 +13,7 @@ export default function usePatientProfile() {
     staleTime: Infinity
   })
 
-  const dataPatient = useMemo(() => data?.data.data, [data])
+  const dataPatient = data?.data.data
 
   return { dataPatient }
 }
