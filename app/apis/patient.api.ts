@@ -10,6 +10,7 @@ const patientApi = {
   getPatientDashboardStatistic: () => http.get<PatientDashboardStatistic>('patient/statistic'),
   getPatientAppointments: (params: SearchQueryParams) =>
     http.get<PaginatedResponse<Appointment>>('patient/appointments', { params }),
+  getPatientById: (uid: string) => http.get(`patient/${uid}`),
   upsertPatient: (body: Omit<Patient, 'uid' | 'created_at' | 'updated_at'>) =>
     http.post<{ data: Patient; role: Role }>('patient/upsert', body)
 }
