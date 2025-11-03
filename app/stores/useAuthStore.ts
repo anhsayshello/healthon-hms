@@ -46,7 +46,7 @@ export const useAuthStore = create<AuthStore>()(
         })
     }),
     {
-      name: 'auth_store'
+      name: 'auth-store'
     }
   )
 )

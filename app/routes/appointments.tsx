@@ -12,6 +12,7 @@ export default function Appointments() {
 
   const { dataAdminAppointments, isPendingAdminAppointments } = useAdminAppointments(query, page, limit)
   const { dataPatientAppointments, isPendingPatientAppointments } = usePatientAppointments(query, page, limit)
+
   const { dataDoctorAppointments, isPendingDoctorAppointments } = useDoctorAppointments(query, page, limit)
 
   const isPending = isPendingAdminAppointments || isPendingPatientAppointments || isPendingDoctorAppointments

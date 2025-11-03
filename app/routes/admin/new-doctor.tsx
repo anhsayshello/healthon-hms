@@ -98,130 +98,121 @@ export default function NewDoctor() {
       </DialogTrigger>
       <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
-          <DialogTitle>Create Doctor</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
+          <DialogHeader>
+            <div className='flex items-center justify-between'>
+              <DialogTitle>Create Doctor</DialogTitle>
+              <Button
+                className='cursor-pointer'
+                onClick={() => {
+                  setIsGeneratingData(true)
+                  handleGenerateRandomData()
+                }}
+                disabled={isGeneratingData}
+              >
+                {isGeneratingData && <Spinner />}
+                <span>{isGeneratingData ? 'Generating...' : 'Generate random data'}</span>
+                {!isGeneratingData && <Dices />}
+              </Button>
+            </div>
+            <DialogDescription></DialogDescription>
+          </DialogHeader>
         </DialogHeader>
-        <div className='space-y-3'>
-          <div className='flex items-center justify-between'>
-            <div className='font-semibold text-xl'>Doctor Information</div>
-            <Button
-              className='cursor-pointer'
-              onClick={() => {
-                setIsGeneratingData(true)
-                handleGenerateRandomData()
-              }}
-              disabled={isGeneratingData}
-            >
-              {isGeneratingData && <Spinner />}
-              <span>{isGeneratingData ? 'Generating...' : 'Generate random data'}</span>
-              {!isGeneratingData && <Dices />}
-            </Button>
-          </div>
-          <form id='form-create-doctor' onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-              <CustomField control={form.control} label='Email' name='email' placeholder='Enter email address' />
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField
-                  control={form.control}
-                  label='First Name'
-                  name='first_name'
-                  placeholder='Enter first name'
-                />
-                <CustomField control={form.control} label='Last Name' name='last_name' placeholder='Enter last name' />
-              </div>
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField
-                  control={form.control}
-                  label='Specialization'
-                  name='specialization'
-                  placeholder='Enter specialization'
-                />
-                <CustomField
-                  control={form.control}
-                  label='License Number'
-                  name='license_number'
-                  placeholder='Enter license number'
-                />
-              </div>
+        <form id='form-create-doctor' onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <CustomField control={form.control} label='Email' name='email' placeholder='Enter email address' />
+            <div className='flex items-start gap-6 lg:gap-8'>
+              <CustomField control={form.control} label='First Name' name='first_name' placeholder='Enter first name' />
+              <CustomField control={form.control} label='Last Name' name='last_name' placeholder='Enter last name' />
+            </div>
+            <div className='flex items-start gap-6 lg:gap-8'>
               <CustomField
                 control={form.control}
-                label='Department'
-                name='department'
-                placeholder='Enter department (optional)'
-                isRequired={false}
+                label='Specialization'
+                name='specialization'
+                placeholder='Enter specialization'
               />
-              <CustomField control={form.control} label='Phone' name='phone' placeholder='Enter phone number' />
-              <CustomField control={form.control} label='Address' name='address' placeholder='Enter full address' />
               <CustomField
                 control={form.control}
-                fieldType='select'
-                label='Job Type'
-                name='type'
-                placeholder='Select job type'
-                options={JOB_TYPE}
+                label='License Number'
+                name='license_number'
+                placeholder='Enter license number'
               />
-              <div className='space-y-3'>
-                <Controller
-                  name='working_days'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='working_days'>
-                        <span>Working Days</span>
-                        <span className='-ml-1 text-destructive text-lg leading-0'>*</span>
-                      </FieldLabel>
-                      <Select
-                        isMulti
-                        closeMenuOnSelect={false}
-                        aria-invalid={fieldState.invalid}
-                        value={WORKING_DAYS.filter((d) => field.value?.includes(d.value as Weekday))}
-                        onChange={(selected) => field.onChange(selected.map((s) => s.value))}
-                        components={animatedComponents}
-                        options={WORKING_DAYS}
-                        styles={{
-                          placeholder: (base) => ({
-                            ...base,
-                            fontSize: '0.875rem'
-                          }),
-                          option: (base) => ({
-                            ...base,
-                            fontSize: '0.875rem'
-                          }),
-                          singleValue: (base) => ({
-                            ...base,
-                            fontSize: '0.875rem'
-                          }),
-                          multiValueLabel: (base) => ({
-                            ...base,
-                            fontSize: '0.875rem'
-                          })
-                        }}
-                        placeholder='Select working days'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField control={form.control} inputType='time' label='Start Time' name='start_time' />
-                <CustomField control={form.control} inputType='time' label='Close Time' name='close_time' />
-              </div>
+            </div>
+            <CustomField
+              control={form.control}
+              label='Department'
+              name='department'
+              placeholder='Enter department (optional)'
+              isRequired={false}
+            />
+            <CustomField control={form.control} label='Phone' name='phone' placeholder='Enter phone number' />
+            <CustomField control={form.control} label='Address' name='address' placeholder='Enter full address' />
+            <CustomField
+              control={form.control}
+              fieldType='select'
+              label='Job Type'
+              name='type'
+              placeholder='Select job type'
+              options={JOB_TYPE}
+            />
+            <div className='space-y-3'>
+              <Controller
+                name='working_days'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='working_days'>
+                      <span>Working Days</span>
+                      <span className='-ml-1 text-destructive text-lg leading-0'>*</span>
+                    </FieldLabel>
+                    <Select
+                      isMulti
+                      closeMenuOnSelect={false}
+                      aria-invalid={fieldState.invalid}
+                      value={WORKING_DAYS.filter((d) => field.value?.includes(d.value as Weekday))}
+                      onChange={(selected) => field.onChange(selected.map((s) => s.value))}
+                      components={animatedComponents}
+                      options={WORKING_DAYS}
+                      styles={{
+                        placeholder: (base) => ({
+                          ...base,
+                          fontSize: '0.875rem'
+                        }),
+                        option: (base) => ({
+                          ...base,
+                          fontSize: '0.875rem'
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          fontSize: '0.875rem'
+                        }),
+                        multiValueLabel: (base) => ({
+                          ...base,
+                          fontSize: '0.875rem'
+                        })
+                      }}
+                      placeholder='Select working days'
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+            <div className='flex items-start gap-6 lg:gap-8'>
+              <CustomField control={form.control} inputType='time' label='Start Time' name='start_time' />
+              <CustomField control={form.control} inputType='time' label='Close Time' name='close_time' />
+            </div>
 
-              <CustomField
-                control={form.control}
-                label='Avatar URL'
-                name='photo_url'
-                placeholder='Enter avatar URL (optional)'
-                isRequired={false}
-              />
-            </FieldGroup>
-          </form>
-        </div>
-        <DialogFooter>
+            <CustomField
+              control={form.control}
+              label='Avatar URL'
+              name='photo_url'
+              placeholder='Enter avatar URL (optional)'
+              isRequired={false}
+            />
+          </FieldGroup>
+        </form>
+        <DialogFooter className='pt-2'>
           <Button variant={'outline'}>Cancel</Button>
           <Button className='cursor-pointer' form='form-create-doctor' disabled={isPending}>
             {isPending && <Spinner />}

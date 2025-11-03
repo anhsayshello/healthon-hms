@@ -82,15 +82,8 @@ export default function NewStaff() {
       </DialogTrigger>
       <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
-          <DialogTitle>Create Staff</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
-        </DialogHeader>
-        <div className='space-y-3'>
           <div className='flex items-center justify-between'>
-            <div className='font-semibold text-xl'>Staff Information</div>
+            <DialogTitle>Create Staff</DialogTitle>
             <Button
               className='cursor-pointer'
               onClick={() => {
@@ -104,57 +97,53 @@ export default function NewStaff() {
               {!isGeneratingData && <Dices />}
             </Button>
           </div>
-          <form id='form-create-staff' onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-              <CustomField control={form.control} label='Email' name='email' placeholder='Enter email address' />
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField
-                  control={form.control}
-                  label='First Name'
-                  name='first_name'
-                  placeholder='Enter first name'
-                />
-                <CustomField control={form.control} label='Last Name' name='last_name' placeholder='Enter last name' />
-              </div>
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField control={form.control} label='Phone' name='phone' placeholder='Enter phone number' />
-                <CustomField
-                  control={form.control}
-                  label='License Number'
-                  name='license_number'
-                  placeholder='Enter license number'
-                />
-              </div>
-              <div className='flex items-start gap-6 lg:gap-8'>
-                <CustomField
-                  control={form.control}
-                  fieldType='select'
-                  label='Staff Role'
-                  name='role'
-                  placeholder='Select role'
-                  options={STAFF_ROLES}
-                />
-                <CustomField
-                  control={form.control}
-                  label='Department'
-                  name='department'
-                  placeholder='Enter department (optional)'
-                  isRequired={false}
-                />
-              </div>
-              <CustomField control={form.control} label='Address' name='address' placeholder='Enter full address' />
-
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <form id='form-create-staff' onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <CustomField control={form.control} label='Email' name='email' placeholder='Enter email address' />
+            <div className='flex items-start gap-6 lg:gap-8'>
+              <CustomField control={form.control} label='First Name' name='first_name' placeholder='Enter first name' />
+              <CustomField control={form.control} label='Last Name' name='last_name' placeholder='Enter last name' />
+            </div>
+            <div className='flex items-start gap-6 lg:gap-8'>
+              <CustomField control={form.control} label='Phone' name='phone' placeholder='Enter phone number' />
               <CustomField
                 control={form.control}
-                label='Avatar URL'
-                name='photo_url'
-                placeholder='Enter avatar URL (optional)'
+                label='License Number'
+                name='license_number'
+                placeholder='Enter license number'
+              />
+            </div>
+            <div className='flex items-start gap-6 lg:gap-8'>
+              <CustomField
+                control={form.control}
+                fieldType='select'
+                label='Staff Role'
+                name='role'
+                placeholder='Select role'
+                options={STAFF_ROLES}
+              />
+              <CustomField
+                control={form.control}
+                label='Department'
+                name='department'
+                placeholder='Enter department (optional)'
                 isRequired={false}
               />
-            </FieldGroup>
-          </form>
-        </div>
-        <DialogFooter>
+            </div>
+            <CustomField control={form.control} label='Address' name='address' placeholder='Enter full address' />
+
+            <CustomField
+              control={form.control}
+              label='Avatar URL'
+              name='photo_url'
+              placeholder='Enter avatar URL (optional)'
+              isRequired={false}
+            />
+          </FieldGroup>
+        </form>
+        <DialogFooter className='pt-2'>
           <Button variant={'outline'}>Cancel</Button>
           <Button className='cursor-pointer' form='form-create-staff' disabled={isPending}>
             {isPending && <Spinner />}

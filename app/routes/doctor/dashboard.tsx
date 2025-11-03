@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import path from '@/constants/path'
 import { BriefcaseBusiness, BriefcaseMedical, Users } from 'lucide-react'
 import StatCard from '@/components/appointments/stat-card'
 import StatSummary from '@/components/appointments/stat-summary'
@@ -20,6 +19,7 @@ export default function DoctorDashboard() {
     totalNurses,
     appointmentsCounts,
     totalAppointments,
+    totalRecords,
     monthlyData,
     last5Records,
     availableDoctors,
@@ -34,8 +34,7 @@ export default function DoctorDashboard() {
         icon: Users,
         className: 'bg-blue-600/15',
         iconClassName: 'bg-blue-600/25 text-blue-600',
-        note: 'total patients',
-        link: path.record.patients
+        note: 'total patients'
       },
       {
         title: 'Nurses',
@@ -43,8 +42,7 @@ export default function DoctorDashboard() {
         icon: Users,
         className: 'bg-rose-600/15',
         iconClassName: 'bg-rose-600/25 text-rose-600',
-        note: 'total nurses',
-        link: path.record.staffs
+        note: 'total nurses'
       },
       {
         title: 'Appointments',
@@ -52,8 +50,7 @@ export default function DoctorDashboard() {
         icon: BriefcaseBusiness,
         className: 'bg-yellow-600/15',
         iconClassName: 'bg-yellow-600/25 text-yellow-600',
-        note: 'Total appointments',
-        link: path.record.appointments
+        note: 'Total appointments'
       },
       {
         title: 'Consultation',
@@ -61,8 +58,7 @@ export default function DoctorDashboard() {
         icon: BriefcaseMedical,
         className: 'bg-emerald-600/15',
         iconClassName: 'bg-emerald-600/25 text-emerald-600',
-        note: 'Total consultations',
-        link: path.record.appointments
+        note: 'Total consultations'
       }
     ],
     [totalPatients, totalNurses, totalAppointments, appointmentsCounts]
@@ -91,13 +87,18 @@ export default function DoctorDashboard() {
         </CardWrapper>
         <AppointmentChart chartData={monthlyData as AppointmentsChart} />
         <div>
-          <AppointmentRecords isPending={isPending} isDashboard data={last5Records as Appointment[]} />
+          <AppointmentRecords
+            totalRecords={totalRecords ?? 0}
+            isPending={isPending}
+            isDashboard
+            data={last5Records as Appointment[]}
+          />
         </div>
       </div>
       {/* Right */}
       <div className='w-full xl:basis-3/10'>
         <div className='space-y-6'>
-          <StatSummary data={appointmentsCounts as AppointmentStatusCount} total={totalAppointments} />
+          <StatSummary data={appointmentsCounts as AppointmentStatusCount} total={totalAppointments ?? 0} />
           <AvailableDoctor data={availableDoctors as Doctor[]} />
         </div>
       </div>
