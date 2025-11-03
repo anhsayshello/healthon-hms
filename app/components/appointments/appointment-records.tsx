@@ -11,9 +11,9 @@ import AppointmentAction from './appointment-action'
 import BookAppoinment from './book-appoinment'
 import UserInfo from '../shared/user-info'
 import useRole from '@/hooks/use-role'
-import { format } from 'date-fns'
 import { Spinner } from '../ui/spinner'
 import SearchInput from '../shared/search-input'
+import formatDate from '@/helpers/formatDate'
 
 const tableColumns = [
   { header: 'Patient Info', key: 'name' },
@@ -33,7 +33,7 @@ export default function AppointmentRecords({
 }: {
   data: Appointment[]
   isPending: boolean
-  totalRecords?: number
+  totalRecords: number
   isDashboard?: boolean
   onSearch?: (query: string) => void
 }) {
@@ -45,11 +45,9 @@ export default function AppointmentRecords({
       <div className='flex gap-3 items-center justify-between'>
         <div className='flex flex-wrap items-center gap-3 sm:gap-1.5 md:gap-3'>
           <div className='text-xl font-semibold'>{isDashboard ? 'Recent' : 'Appointment'} Record</div>
-          {totalRecords && (
-            <Badge variant='outline' className='bg-background'>
-              {totalRecords} {totalRecords > 1 ? 'records' : 'record'}
-            </Badge>
-          )}
+          <Badge variant='outline' className='bg-background'>
+            {totalRecords} {totalRecords > 1 ? 'records' : 'record'}
+          </Badge>
         </div>
         {isDashboard && (
           <Button variant='outline' onClick={() => navigate({ pathname: path.record.appointments })}>
@@ -87,7 +85,7 @@ export default function AppointmentRecords({
                     description={item.patient.gender}
                   />
                 </TableCell>
-                <TableCell>{format(new Date(item?.appointment_date), 'yyyy-MM-dd')}</TableCell>
+                <TableCell>{formatDate(item?.appointment_date)}</TableCell>
                 <TableCell>{item.time}</TableCell>
                 <TableCell>
                   <UserInfo

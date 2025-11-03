@@ -24,11 +24,11 @@ import { cn } from '@/lib/utils'
 import useRole from '@/hooks/use-role'
 import Timestamps from '../shared/time-stamps'
 import PatientInformation from '../shared/patient-information'
-import { format } from 'date-fns'
 import useUpdateAppointment from '@/hooks/useUpdateAppointment'
 import useAppointmentDetail from '@/hooks/useAppointmentDetail'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
+import formatDate from '@/helpers/formatDate'
 
 export default function ViewAppointment({ id }: { id: number }) {
   const isMobile = useIsMobile()
@@ -197,7 +197,7 @@ function AppointmentInformation({
             <Calendar className='w-4 h-4 text-muted-foreground' />
             <span className='text-muted-foreground'>Date:</span>
           </div>
-          <span className='font-medium grow'>{format(new Date(appointmentDate), 'yyyy-MM-dd')}</span>
+          <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
         </div>
         <div className='flex items-center'>
           <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>

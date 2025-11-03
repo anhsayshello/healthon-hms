@@ -1,6 +1,7 @@
 import type { Patient } from '@/types/patient.type'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import InfoItem from './info-item'
+import formatDate from '@/helpers/formatDate'
 
 export default function PatientInformation({ patient }: { patient: Patient }) {
   return (
@@ -30,7 +31,7 @@ export function PatientBasicInfo({ patient }: { patient: Patient }) {
       <InfoItem label='Email' value={patient.email} />
       <InfoItem label='Phone' value={patient.phone} />
       <InfoItem label='Address' value={patient.address} />
-      <InfoItem label='Date of Birth' value={new Date(patient.date_of_birth).toLocaleDateString()} />
+      <InfoItem label='Date of Birth' value={formatDate(patient.date_of_birth)} />
       <InfoItem label='Gender' value={patient.gender} />
       <InfoItem label='Marital Status' value={patient.marital_status} />
       <InfoItem label='Blood Group' value={patient.blood_group} />
