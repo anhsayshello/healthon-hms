@@ -9,6 +9,10 @@ import AppPagination from '@/components/shared/app-pagination'
 import useStaffs from '@/hooks/useStaffs'
 import NewStaff from './new-staff'
 import UserAction from './user-action'
+import type { Staff } from '@/types/staff.type'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import UserDetailsDialog from './user-details-dialog'
+import InfoItem from '@/components/shared/info-item'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Staff Table' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -47,24 +51,47 @@ export default function StaffList() {
           <TableBody>
             {dataStaffs &&
               dataStaffs.length > 0 &&
-              dataStaffs.map((staff) => (
-                <TableRow key={staff.uid}>
-                  <TableCell>
-                    <UserInfo photoUrl={staff.photo_url} firstName={staff.first_name} lastName={staff.last_name} />
-                  </TableCell>
-                  <TableCell className='capitalize'>{staff.role.toLowerCase()}</TableCell>
-                  <TableCell>{staff.email}</TableCell>
-                  <TableCell>{staff.phone}</TableCell>
-                  <TableCell>{staff.license_number}</TableCell>
-                  <TableCell>
-                    <UserAction uid={staff.uid} email={staff.email} role={staff.role} />
-                  </TableCell>
-                </TableRow>
-              ))}
+              dataStaffs.map((staff) => <StaffTableRow key={staff.uid} staff={staff} />)}
           </TableBody>
         </Table>
       </CardWrapper>
       <AppPagination handlePageChange={handlePageChange} currentPage={currentPage} totalPages={totalPages} />
     </div>
+  )
+}
+
+function StaffTableRow({ staff }: { staff: Staff }) {
+  return (
+    <Dialog>
+      <TableRow>
+        <DialogTrigger asChild>
+          <TableCell className='cursor-pointer'>
+            <UserInfo
+              photoUrl={staff.photo_url}
+              firstName={staff.first_name}
+              lastName={staff.last_name}
+              description={staff.department}
+            />
+          </TableCell>
+        </DialogTrigger>
+        <TableCell className='capitalize'>{staff.role.toLowerCase()}</TableCell>
+        <TableCell>{staff.email}</TableCell>
+        <TableCell>{staff.phone}</TableCell>
+        <TableCell>{staff.license_number}</TableCell>
+        <TableCell>
+          <UserAction uid={staff.uid} email={staff.email} role={staff.role} />
+        </TableCell>
+      </TableRow>
+      <UserDetailsDialog user={staff} role={staff.role}>
+        <div className='grid grid-cols-2 gap-4'>
+          <InfoItem label='Role' value={staff?.role} />
+          <InfoItem label='Department' value={staff?.department || 'N/A'} />
+          <InfoItem label='License Number' value={staff?.license_number} />
+          <InfoItem label='Phone' value={staff?.phone} />
+          <InfoItem label='Address' value={staff?.address} />
+          <InfoItem label='Status' value={staff?.status} />
+        </div>
+      </UserDetailsDialog>
+    </Dialog>
   )
 }

@@ -8,6 +8,12 @@ import TableMetadata from '@/components/shared/table-metadata'
 import AppPagination from '@/components/shared/app-pagination'
 import usePatients from '@/hooks/usePatients'
 import UserAction from './user-action'
+import type { Patient } from '@/types/patient.type'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import UserDetailsDialog from './user-details-dialog'
+import { RoleEnum } from '@/types/role.type'
+import { PatientBasicInfo, PatientEmergencyContact, PatientMedicalInfo } from '@/components/shared/patient-information'
+import formatDate from '@/helpers/formatDate'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Patient Table' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -17,6 +23,7 @@ const tableColumns = [
   { header: 'Patient info', key: 'patient-info' },
   { header: 'Email', key: 'email' },
   { header: 'Phone', key: 'phone' },
+  { header: 'Date of birth', key: 'dob' },
   { header: 'Address', key: 'address' },
   { header: 'Action', key: 'action' }
 ]
@@ -43,28 +50,48 @@ export default function PatientList() {
           <TableBody>
             {dataPatients &&
               dataPatients.length > 0 &&
-              dataPatients.map((patient) => (
-                <TableRow key={patient.uid}>
-                  <TableCell>
-                    <UserInfo
-                      photoUrl={patient.photo_url}
-                      firstName={patient.first_name}
-                      lastName={patient.last_name}
-                      description={patient.gender}
-                    />
-                  </TableCell>
-                  <TableCell>{patient.email}</TableCell>
-                  <TableCell>{patient.phone}</TableCell>
-                  <TableCell>{patient.address}</TableCell>
-                  <TableCell>
-                    <UserAction uid={patient.uid} email={patient.email} />
-                  </TableCell>
-                </TableRow>
-              ))}
+              dataPatients.map((patient) => <PatientTableRow key={patient.uid} patient={patient} />)}
           </TableBody>
         </Table>
       </CardWrapper>
       <AppPagination handlePageChange={handlePageChange} currentPage={currentPage} totalPages={totalPages} />
     </div>
+  )
+}
+
+function PatientTableRow({ patient }: { patient: Patient }) {
+  return (
+    <Dialog>
+      <TableRow>
+        <DialogTrigger asChild>
+          <TableCell className='cursor-pointer'>
+            <UserInfo
+              photoUrl={patient.photo_url}
+              firstName={patient.first_name}
+              lastName={patient.last_name}
+              description={patient.gender}
+            />
+          </TableCell>
+        </DialogTrigger>
+        <TableCell>{patient.email}</TableCell>
+        <TableCell>{patient.phone}</TableCell>
+        <TableCell>{formatDate(patient.date_of_birth)}</TableCell>
+        <TableCell>{patient.address}</TableCell>
+        <TableCell>
+          <UserAction uid={patient.uid} email={patient.email} />
+        </TableCell>
+      </TableRow>
+      <UserDetailsDialog user={patient} role={RoleEnum.PATIENT}>
+        <PatientBasicInfo patient={patient} />
+        <div>
+          <h4 className='font-semibold mb-3 text-lg'>Emergency Contact</h4>
+          <PatientEmergencyContact patient={patient} />
+        </div>
+        <div>
+          <h4 className='font-semibold mb-3 text-lg'>Medical Information</h4>
+          <PatientMedicalInfo patient={patient} />
+        </div>
+      </UserDetailsDialog>
+    </Dialog>
   )
 }
