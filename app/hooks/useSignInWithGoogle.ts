@@ -18,7 +18,6 @@ export default function useSignInWithGoogle() {
       })
       const userCred = await signInWithPopup(auth, provider)
       verifyUser(userCred)
-      setTimeout(() => setIsPending(false), 5000)
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
@@ -28,7 +27,7 @@ export default function useSignInWithGoogle() {
         } else toast.error(errorMessage)
       }
     } finally {
-      setIsPending(false)
+      setTimeout(() => setIsPending(false), 5000)
     }
   }, [])
 
