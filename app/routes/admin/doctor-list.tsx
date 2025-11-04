@@ -31,7 +31,7 @@ const tableColumns = [
 
 export default function DoctorList() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
-  const { dataDoctors, currentPage, totalPages, totalRecords, isPending } = useDoctors(query, page, limit)
+  const { dataDoctors, currentPage, totalPages, totalRecords, isPending } = useDoctors({ query, page, limit })
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>

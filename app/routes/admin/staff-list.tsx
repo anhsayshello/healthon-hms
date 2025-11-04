@@ -29,7 +29,7 @@ const tableColumns = [
 
 export default function StaffList() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
-  const { dataStaffs, currentPage, totalPages, totalRecords, isPending } = useStaffs(query, page, limit)
+  const { dataStaffs, currentPage, totalPages, totalRecords, isPending } = useStaffs({ query, page, limit })
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
