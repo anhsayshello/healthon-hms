@@ -4,7 +4,7 @@ import http from '@/utils/http'
 
 const staffApi = {
   getStaffs: (params: SearchQueryParams) => http.get<PaginatedResponse<Staff>>('staff', { params }),
-  getStaffById: (uid: string) => http.get(`staff/${uid}`)
+  getStaffById: (uid: string) => http.get<Staff>(`staff/${uid}`)
 }
 
 export default staffApi

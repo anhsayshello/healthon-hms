@@ -121,10 +121,10 @@ export interface LabTest {
   updated_at: string
 
   services?: Services
-  medical_record?: MedicalRecords
+  medical_record?: MedicalRecord
 }
 
-export interface MedicalRecords {
+export interface MedicalRecord {
   id: number
   patient_id: string
   appointment_id: number
@@ -158,7 +158,7 @@ export interface VitalSigns {
   created_at: string
   updated_at: string
 
-  medical_record?: MedicalRecords
+  medical_record?: MedicalRecord
 }
 
 export interface Diagnosis {
@@ -175,7 +175,7 @@ export interface Diagnosis {
   updated_at: string
 
   doctor?: Doctor
-  medical?: MedicalRecords
+  medical?: MedicalRecord
 }
 
 export interface Services {

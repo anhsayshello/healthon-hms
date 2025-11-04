@@ -4,47 +4,70 @@ import { useMemo } from 'react'
 import AppPagination from '@/components/shared/app-pagination'
 import useDoctorAppointments from '@/hooks/useDoctorAppointments'
 import usePatientAppointments from '@/hooks/usePatientAppointments'
-import useAdminAppointments from '@/hooks/useAdminAppointment'
 import useQueryParams from '@/hooks/useQueryParams'
+import useAppointmentFilter from '@/hooks/useAppointmentFilter'
+import useAppointments from '@/hooks/useAppointments'
 
 export default function Appointments() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
+  const { view, status } = useAppointmentFilter()
 
-  const { dataAdminAppointments, isPendingAdminAppointments } = useAdminAppointments(query, page, limit)
-  const { dataPatientAppointments, isPendingPatientAppointments } = usePatientAppointments(query, page, limit)
+  const { dataGeneralAppointments, isPendingAdminAppointments } = useAppointments({
+    query,
+    page,
+    limit,
+    view,
+    status
+  })
+  const { dataPatientAppointments, isPendingPatientAppointments } = usePatientAppointments({
+    query,
+    page,
+    limit,
+    view,
+    status
+  })
 
-  const { dataDoctorAppointments, isPendingDoctorAppointments } = useDoctorAppointments(query, page, limit)
+  const { dataDoctorAppointments, isPendingDoctorAppointments } = useDoctorAppointments({
+    query,
+    page,
+    limit,
+    view,
+    status
+  })
 
   const isPending = isPendingAdminAppointments || isPendingPatientAppointments || isPendingDoctorAppointments
 
   const currentPage = useMemo(
     () =>
-      dataAdminAppointments?.data.currentPage ??
+      dataGeneralAppointments?.data.currentPage ??
       dataPatientAppointments?.data.currentPage ??
       dataDoctorAppointments?.data.currentPage ??
       1,
-    [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
+    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
   const totalPages = useMemo(
     () =>
-      dataAdminAppointments?.data.totalPages ??
+      dataGeneralAppointments?.data.totalPages ??
       dataPatientAppointments?.data.totalPages ??
       dataDoctorAppointments?.data.totalPages ??
-      1,
-    [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
+      0,
+    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
   const totalRecords = useMemo(
     () =>
-      dataAdminAppointments?.data.totalRecords ??
+      dataGeneralAppointments?.data.totalRecords ??
       dataPatientAppointments?.data.totalRecords ??
       dataDoctorAppointments?.data.totalRecords ??
       0,
-    [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
+    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
   const dataAppoinments = useMemo(
     () =>
-      dataAdminAppointments?.data.data ?? dataPatientAppointments?.data.data ?? dataDoctorAppointments?.data.data ?? [],
-    [dataAdminAppointments, dataPatientAppointments, dataDoctorAppointments]
+      dataGeneralAppointments?.data.data ??
+      dataPatientAppointments?.data.data ??
+      dataDoctorAppointments?.data.data ??
+      [],
+    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
   )
 
   return (

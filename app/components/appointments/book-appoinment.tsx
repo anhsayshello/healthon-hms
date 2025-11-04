@@ -31,7 +31,7 @@ export default function BookAppoinment() {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const { mutate, isPending: isCreating } = useCreateAppointment()
-  const { dataDoctors, isPending: isLoadingDoctors } = useDoctors()
+  const { dataDoctors, isPending: isLoadingDoctors } = useDoctors({ limit: '1000' })
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor>()
 
   const form = useForm<z.infer<typeof AppointmentFormSchema>>({
