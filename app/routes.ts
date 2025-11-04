@@ -15,8 +15,9 @@ export default [
     route(path.dashboard, 'routes/dashboard.tsx'),
     route(path.admin.users, 'routes/admin/firebase-user-management.tsx'),
     route(path.record.doctors, 'routes/admin/doctor-list.tsx'),
-    route(path.record.patients, 'routes/admin/patient-list.tsx'),
+    route(path.record.patients, 'routes/patient-list.tsx'),
     route(path.record.staffs, 'routes/admin/staff-list.tsx'),
+    route(path.record.medicalRecords, 'routes/medical-records.tsx'),
     route(path.patient.profile, 'routes/patient/profile.tsx'),
     route(path.record.appointments, 'routes/appointments.tsx')
   ]),
