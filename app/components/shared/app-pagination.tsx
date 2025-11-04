@@ -98,7 +98,9 @@ export default function AppPagination({
         <PaginationItem>
           <PaginationNext
             onClick={() => handlePageChange(currentPage + 1)}
-            className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+            className={
+              currentPage >= totalPages || totalPages === 0 ? 'pointer-events-none opacity-50' : 'cursor-pointer'
+            }
           />
         </PaginationItem>
       </PaginationContent>

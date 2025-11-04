@@ -14,6 +14,7 @@ import useRole from '@/hooks/use-role'
 import { Spinner } from '../ui/spinner'
 import SearchInput from '../shared/search-input'
 import formatDate from '@/helpers/formatDate'
+import AppointmentFilters from './appointment-filters'
 
 const tableColumns = [
   { header: 'Patient Info', key: 'name' },
@@ -42,7 +43,7 @@ export default function AppointmentRecords({
 
   return (
     <CardWrapper>
-      <div className='flex gap-3 items-center justify-between'>
+      <div className='flex flex-col md:flex-row gap-3 items-center justify-between'>
         <div className='flex flex-wrap items-center gap-3 sm:gap-1.5 md:gap-3'>
           <div className='text-xl font-semibold'>{isDashboard ? 'Recent' : 'Appointment'} Record</div>
           <Badge variant='outline' className='bg-background'>
@@ -54,13 +55,14 @@ export default function AppointmentRecords({
             View All
           </Button>
         )}
-        {!isDashboard && (
-          <div className='flex flex-wrap items-center gap-3'>
-            <SearchInput onSearch={onSearch} />
-            {isPatient && <BookAppoinment />}
-          </div>
-        )}
+        <SearchInput onSearch={onSearch} />
       </div>
+      {!isDashboard && (
+        <div className='flex flex-col md:flex-row items-center justify-between w-full gap-4'>
+          <AppointmentFilters />
+          {isPatient && <BookAppoinment />}
+        </div>
+      )}
       <Table className='bg-background'>
         <TableHeader>
           <TableRow>
