@@ -1,4 +1,5 @@
 import type { Doctor } from './doctor.type'
+import type { SearchQueryParams } from './index.type'
 import type { Patient } from './patient.type'
 
 export type AppointmentStatus = 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'
@@ -38,3 +39,11 @@ export interface Appointment {
   created_at: string
   updated_at: string
 }
+
+export type ViewType = 'all' | 'today'
+export interface AppointmentFilter {
+  view?: ViewType
+  status?: AppointmentStatus
+}
+
+export type AppointmentParams = SearchQueryParams & AppointmentFilter
