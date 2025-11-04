@@ -9,7 +9,7 @@ export default function useAppointmentDetail(id: number, enabled: boolean) {
     enabled
   })
 
-  const dataAppointment = useMemo(() => data?.data.data, [data])
+  const dataAppointment = useMemo(() => data?.data, [data])
 
   return { dataAppointment, isPending }
 }

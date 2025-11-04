@@ -8,7 +8,7 @@ export default function usePatient(uid: string) {
     enabled: !!uid
   })
 
-  const dataStaff = data?.data.data
+  const dataStaff = data?.data
 
   return { dataStaff, isPending }
 }

@@ -2,14 +2,15 @@ import patientApi from '@/apis/patient.api'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import useRole from './use-role'
 import { useAuthStore } from '@/stores/useAuthStore'
+import type { AppointmentParams } from '@/types/appointment.type'
 
-export default function usePatientAppointments(query: string, page: string, limit: string) {
+export default function usePatientAppointments(params: AppointmentParams) {
   const user = useAuthStore((state) => state.user)
   const { isPatient } = useRole()
 
   const { data: dataPatientAppointments, isPending } = useQuery({
-    queryKey: ['patient', 'appointment', user?.uid, { query, page, limit }],
-    queryFn: () => patientApi.getPatientAppointments({ query, page, limit }),
+    queryKey: ['patient', 'appointment', user?.uid, params],
+    queryFn: () => patientApi.getPatientAppointments(params),
     placeholderData: keepPreviousData,
     enabled: isPatient
   })

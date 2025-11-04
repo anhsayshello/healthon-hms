@@ -9,7 +9,9 @@ export default function useQueryParams() {
   const limit = searchParams.get('limit') || '12'
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams({ page: String(newPage) })
+    const newParams = new URLSearchParams(searchParams)
+    newParams.set('page', String(newPage))
+    setSearchParams(newParams)
   }
 
   const handleSearch = (query: string) => {

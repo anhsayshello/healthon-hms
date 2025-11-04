@@ -8,7 +8,7 @@ export default function useDoctor(uid: string) {
     enabled: !!uid
   })
 
-  const dataDoctor = data?.data.data
+  const dataDoctor = data?.data
 
   return { dataDoctor, isPending }
 }

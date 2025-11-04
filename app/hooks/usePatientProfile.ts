@@ -13,7 +13,7 @@ export default function usePatientProfile() {
     staleTime: Infinity
   })
 
-  const dataPatient = data?.data.data
+  const dataPatient = data?.data
 
   return { dataPatient }
 }
