@@ -14,8 +14,9 @@ export default function useAppointments(params: AppointmentParams) {
     placeholderData: keepPreviousData,
     enabled: isAdmin || isNurse
   })
-  console.log(dataGeneralAppointments)
-  const isPendingAdminAppointments = isAdmin ? isPending : false
 
-  return { dataGeneralAppointments, isPendingAdminAppointments }
+  console.log(dataGeneralAppointments)
+  const isGeneralPendingAppointments = isAdmin || isNurse ? isPending : false
+
+  return { dataGeneralAppointments, isGeneralPendingAppointments }
 }

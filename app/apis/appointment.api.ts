@@ -5,6 +5,10 @@ import http from '@/utils/http'
 const appointmentApi = {
   getAppointmentDetail: (id: number) => http.get<Appointment>(`appointment/${id}`),
   getAppointments: (params: AppointmentParams) => http.get<PaginatedResponse<Appointment>>('appointment', { params }),
+  getDoctorAppointments: (params: AppointmentParams) =>
+    http.get<PaginatedResponse<Appointment>>('appointment/doctor', { params }),
+  getPatientAppointments: (params: AppointmentParams) =>
+    http.get<PaginatedResponse<Appointment>>('appointment/patient', { params }),
   createNewAppointment: (
     body: Omit<
       Appointment,
