@@ -12,7 +12,7 @@ export default function Appointments() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
   const { view, status } = useAppointmentFilter()
 
-  const { dataGeneralAppointments, isPendingAdminAppointments } = useAppointments({
+  const { dataGeneralAppointments, isGeneralPendingAppointments } = useAppointments({
     query,
     page,
     limit,
@@ -35,7 +35,7 @@ export default function Appointments() {
     status
   })
 
-  const isPending = isPendingAdminAppointments || isPendingPatientAppointments || isPendingDoctorAppointments
+  const isPending = isGeneralPendingAppointments || isPendingPatientAppointments || isPendingDoctorAppointments
 
   const currentPage = useMemo(
     () =>

@@ -150,9 +150,9 @@ export interface VitalSigns {
   body_temperature: number
   systolic: number
   diastolic: number
-  heartRate: string
+  heart_rate: string
   respiratory_rate?: number
-  oxygen_saturaion?: number
+  oxygen_saturation?: number
   weight: number
   height: number
   created_at: string

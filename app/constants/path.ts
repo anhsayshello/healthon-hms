@@ -22,7 +22,7 @@ const path = {
     billingOverview: '/record/billing'
   },
   nurse: {
-    patientManagement: '/nurse/patient-management',
+    vitalSigns: '/nurse/vital-signs',
     administerMedications: '/nurse/administer-medications'
   },
   patient: {

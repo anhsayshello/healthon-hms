@@ -25,6 +25,7 @@ import { type Doctor } from '@/types/doctor.type'
 import useCreateAppointment from '@/hooks/useCreateAppointment'
 import useDoctors from '@/hooks/useDoctors'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { toast } from 'sonner'
 
 export default function BookAppoinment() {
   const user = useAuthStore((state) => state.user)
@@ -46,9 +47,16 @@ export default function BookAppoinment() {
   })
 
   const onSubmit = (data: z.infer<typeof AppointmentFormSchema>) => {
-    console.log(data.appointment_date.toISOString(), 'date')
     if (user?.uid) {
-      mutate({ ...data, appointment_date: data.appointment_date.toISOString() })
+      mutate(
+        { ...data, appointment_date: data.appointment_date.toISOString() },
+        {
+          onSuccess: () => {
+            toast.success('Appointment create successfully')
+            setOpen(false)
+          }
+        }
+      )
     }
   }
   return (

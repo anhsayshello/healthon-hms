@@ -7,6 +7,8 @@ export default function useMedicalRecord(params: SearchQueryParams) {
     queryKey: ['medical-records', params],
     queryFn: () => medicalRecordApi.getMedicalRecords(params)
   })
+  console.log(data)
+
   const dataMedicalRecords = data?.data.data
   const currentPage = data?.data.currentPage ?? 1
   const totalPages = data?.data.totalPages ?? 0

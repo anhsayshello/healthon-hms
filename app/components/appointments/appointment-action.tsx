@@ -13,7 +13,7 @@ import CancelAppointment from './cancel-appointment'
 import { EllipsisVertical } from 'lucide-react'
 
 export default function AppointmentAction({ id, appointment }: { id: number; appointment: Appointment }) {
-  const { isAdmin, isDoctor } = useRole()
+  const { isAdmin, isNurse, isDoctor } = useRole()
   const user = useAuthStore((state) => state.user)
 
   const isAssignedDoctor = useMemo(
@@ -33,7 +33,7 @@ export default function AppointmentAction({ id, appointment }: { id: number; app
           <Separator />
           <ViewAppointment id={id} />
 
-          {(isAdmin || isAssignedDoctor) && (
+          {(isAdmin || isNurse || isAssignedDoctor) && (
             <>
               <Separator />
               <ApproveAppointment id={id} appointment={appointment} />
