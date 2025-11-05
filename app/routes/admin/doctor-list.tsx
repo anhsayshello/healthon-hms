@@ -53,7 +53,7 @@ export default function DoctorList() {
           <TableBody>
             {dataDoctors &&
               dataDoctors.length > 0 &&
-              dataDoctors.map((doctor) => <DoctorTableRow key={doctor.uid} doctor={doctor} />)}
+              dataDoctors.map((doctor) => <DoctorRow key={doctor.uid} doctor={doctor} />)}
           </TableBody>
         </Table>
       </CardWrapper>
@@ -62,7 +62,7 @@ export default function DoctorList() {
   )
 }
 
-function DoctorTableRow({ doctor }: { doctor: Doctor }) {
+function DoctorRow({ doctor }: { doctor: Doctor }) {
   return (
     <Dialog>
       <TableRow>

@@ -12,7 +12,7 @@ export default function SearchInput({ onSearch }: { onSearch?: (query: string) =
   }, [value])
 
   return (
-    <InputGroup className='w-full sm:w-80 lg:w-90 bg-background'>
+    <InputGroup className='w-full md:w-80 lg:w-90 bg-background'>
       <InputGroupInput placeholder='Search...' value={text} onChange={(e) => setText(e.target.value)} />
       <InputGroupAddon>
         <Search />

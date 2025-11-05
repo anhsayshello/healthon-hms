@@ -44,7 +44,7 @@ export default function AppointmentRecords({
   return (
     <CardWrapper>
       <div className='flex flex-col md:flex-row gap-3 items-center justify-between'>
-        <div className='flex flex-wrap items-center gap-3 sm:gap-1.5 md:gap-3'>
+        <div className='flex items-center gap-3 sm:gap-1.5 md:gap-3'>
           <div className='text-xl font-semibold'>{isDashboard ? 'Recent' : 'Appointment'} Record</div>
           <Badge variant='outline' className='bg-background'>
             {totalRecords} {totalRecords > 1 ? 'records' : 'record'}

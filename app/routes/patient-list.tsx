@@ -54,7 +54,7 @@ export default function PatientList() {
           <TableBody>
             {dataPatients &&
               dataPatients.length > 0 &&
-              dataPatients.map((patient) => <PatientTableRow key={patient.uid} patient={patient} />)}
+              dataPatients.map((patient) => <PatientRow key={patient.uid} patient={patient} />)}
           </TableBody>
         </Table>
       </CardWrapper>
@@ -63,7 +63,7 @@ export default function PatientList() {
   )
 }
 
-function PatientTableRow({ patient }: { patient: Patient }) {
+function PatientRow({ patient }: { patient: Patient }) {
   const { isAdmin } = useRole()
 
   return (

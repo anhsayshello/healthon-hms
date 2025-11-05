@@ -1,20 +1,20 @@
 import {
   LayoutDashboard,
-  UserIcon,
-  UserRound,
   User,
   type LucideProps,
   ListOrdered,
   SquareActivity,
   Receipt,
-  Users,
   Pill,
   Bell,
   Logs,
   Settings,
   SquareLibrary,
   Pin,
-  X
+  X,
+  HeartPulse,
+  Users2,
+  Users
 } from 'lucide-react'
 
 import {
@@ -76,28 +76,28 @@ const SIDEBAR_LINKS = [
         name: 'Users',
         path: path.admin.users,
         access: [RoleEnum.ADMIN],
-        icon: UserIcon,
+        icon: Users,
         tooltip: 'users'
       },
       {
         name: 'Doctors',
         path: path.record.doctors,
         access: [RoleEnum.ADMIN],
-        icon: UserIcon,
+        icon: Users,
         tooltip: 'doctors'
       },
       {
         name: 'Patients',
         path: path.record.patients,
         access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
-        icon: UserRound,
+        icon: Users2,
         tooltip: 'patients'
       },
       {
         name: 'Staffs',
         path: path.record.staffs,
         access: [RoleEnum.ADMIN, RoleEnum.DOCTOR],
-        icon: UserRound,
+        icon: Users,
         tooltip: 'staffs'
       },
       {
@@ -106,6 +106,13 @@ const SIDEBAR_LINKS = [
         access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.PATIENT],
         icon: ListOrdered,
         tooltip: 'appointments'
+      },
+      {
+        name: 'Vital Signs',
+        path: path.nurse.vitalSigns,
+        access: [RoleEnum.NURSE],
+        icon: HeartPulse,
+        tooltip: 'vital signs'
       },
       {
         name: 'Medical Records',
@@ -120,13 +127,6 @@ const SIDEBAR_LINKS = [
         access: [RoleEnum.ADMIN, RoleEnum.DOCTOR],
         icon: Receipt,
         tooltip: 'billing overview'
-      },
-      {
-        name: 'Patient Management',
-        path: path.nurse.patientManagement,
-        access: [RoleEnum.NURSE],
-        icon: Users,
-        tooltip: 'patient management'
       },
       {
         name: 'Administer Medications',
