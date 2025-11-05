@@ -1,4 +1,3 @@
-import type { AdminDashboardStatistic } from '@/types/admin.type'
 import type { Doctor, Weekday } from '@/types/doctor.type'
 import type { FirebaseUserRecord } from '@/types/index.type'
 import type { StaffRole } from '@/types/role.type'
@@ -6,7 +5,6 @@ import type { Staff } from '@/types/staff.type'
 import http from '@/utils/http'
 
 const adminApi = {
-  getAdminDashboardStatistic: () => http.get<AdminDashboardStatistic>('admin/statistic'),
   getFiresbaseUsers: (nextPageToken?: string) =>
     http.get<{ data: FirebaseUserRecord[]; nextPageToken?: string }>('admin/users', { params: { nextPageToken } }),
   setStaffRole: (body: { uid: string; role: StaffRole }) => http.patch<{ message: string }>('admin/role', body),

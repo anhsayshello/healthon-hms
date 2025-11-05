@@ -3,18 +3,18 @@ import type { Route } from './+types/dashboard'
 import useRole from '@/hooks/use-role'
 import DoctorDashboard from './doctor/dashboard'
 import PatientDashboard from './patient/dashboard'
-import AdminDashboard from './admin/dashboard'
+import StaffDashboard from './staff/dashboard'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Dashboard' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export default function Dashboard() {
-  const { isAdmin, isPatient, isDoctor } = useRole()
+  const { isStaff, isPatient, isDoctor } = useRole()
 
   return (
     <>
-      {isAdmin && <AdminDashboard />}
+      {isStaff && <StaffDashboard />}
       {isPatient && <PatientDashboard />}
       {isDoctor && <DoctorDashboard />}
     </>

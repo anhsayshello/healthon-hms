@@ -9,10 +9,10 @@ import CardWrapper from '@/components/shared/card-wrapper'
 import AvailableDoctor from '@/components/appointments/available-doctor'
 import type { Doctor } from '@/types/doctor.type'
 import AppointmentRecords from '@/components/appointments/appointment-records'
-import useAdminStatistic from '@/hooks/useAdminStatistic'
 import { useAuthStore } from '@/stores/useAuthStore'
+import useStaffStatistic from '@/hooks/useStaffStatistic'
 
-export default function AdminDashboard() {
+export default function StaffDashboard() {
   const user = useAuthStore((state) => state.user)
   const {
     totalPatients,
@@ -24,7 +24,7 @@ export default function AdminDashboard() {
     last5Records,
     availableDoctors,
     isPending
-  } = useAdminStatistic()
+  } = useStaffStatistic()
 
   const cardData = useMemo(
     () => [
