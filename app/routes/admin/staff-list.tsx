@@ -51,7 +51,7 @@ export default function StaffList() {
           <TableBody>
             {dataStaffs &&
               dataStaffs.length > 0 &&
-              dataStaffs.map((staff) => <StaffTableRow key={staff.uid} staff={staff} />)}
+              dataStaffs.map((staff) => <StaffRow key={staff.uid} staff={staff} />)}
           </TableBody>
         </Table>
       </CardWrapper>
@@ -60,7 +60,7 @@ export default function StaffList() {
   )
 }
 
-function StaffTableRow({ staff }: { staff: Staff }) {
+function StaffRow({ staff }: { staff: Staff }) {
   return (
     <Dialog>
       <TableRow>

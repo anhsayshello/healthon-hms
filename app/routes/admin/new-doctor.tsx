@@ -4,7 +4,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { JOB_TYPE, WORKING_DAYS } from '@/lib/schemas'
 import { DoctorFormSchema } from '@/lib/schemas/doctor-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dices, UserRoundPlus } from 'lucide-react'
+import { UserRoundPlus } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
@@ -21,11 +21,12 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
+import GenerateRandomData from '@/components/shared/generate-random-data'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 export default function NewDoctor() {
   const isMobile = useIsMobile()
@@ -59,7 +60,6 @@ export default function NewDoctor() {
         }
       }
     )
-    console.log(data)
   }
 
   const handleGenerateRandomData = useDebouncedCallback(() => {
@@ -101,18 +101,11 @@ export default function NewDoctor() {
           <DialogHeader>
             <div className='flex items-center justify-between'>
               <DialogTitle>Create Doctor</DialogTitle>
-              <Button
-                className='cursor-pointer'
-                onClick={() => {
-                  setIsGeneratingData(true)
-                  handleGenerateRandomData()
-                }}
-                disabled={isGeneratingData}
-              >
-                {isGeneratingData && <Spinner />}
-                <span>{isGeneratingData ? 'Generating...' : 'Generate random data'}</span>
-                {!isGeneratingData && <Dices />}
-              </Button>
+              <GenerateRandomData
+                handleGenerateRandomData={handleGenerateRandomData}
+                isGeneratingData={isGeneratingData}
+                setIsGeneratingData={setIsGeneratingData}
+              />
             </div>
             <DialogDescription></DialogDescription>
           </DialogHeader>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { FieldGroup } from '@/components/ui/field'
 import { STAFF_ROLES } from '@/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dices, UserRoundPlus } from 'lucide-react'
+import { UserRoundPlus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { faker } from '@faker-js/faker'
 import type z from 'zod'
@@ -16,13 +16,14 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
 import { StaffFormSchema } from '@/lib/schemas/staff-form'
 import useCreateStaff from '@/hooks/useCreateStaff'
 import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
+import GenerateRandomData from '@/components/shared/generate-random-data'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 export default function NewStaff() {
   const isMobile = useIsMobile()
@@ -84,18 +85,11 @@ export default function NewStaff() {
         <DialogHeader>
           <div className='flex items-center justify-between'>
             <DialogTitle>Create Staff</DialogTitle>
-            <Button
-              className='cursor-pointer'
-              onClick={() => {
-                setIsGeneratingData(true)
-                handleGenerateRandomData()
-              }}
-              disabled={isGeneratingData}
-            >
-              {isGeneratingData && <Spinner />}
-              <span>{isGeneratingData ? 'Generating...' : 'Generate random data'}</span>
-              {!isGeneratingData && <Dices />}
-            </Button>
+            <GenerateRandomData
+              handleGenerateRandomData={handleGenerateRandomData}
+              isGeneratingData={isGeneratingData}
+              setIsGeneratingData={setIsGeneratingData}
+            />
           </div>
           <DialogDescription></DialogDescription>
         </DialogHeader>
