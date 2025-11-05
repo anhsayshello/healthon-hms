@@ -6,9 +6,9 @@ export default function useUpdateAppointment() {
   const { mutate, isPending } = useMutation({
     mutationFn: appointmentApi.updateAppointmentDetail,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'appointment'] })
-      queryClient.invalidateQueries({ queryKey: ['patient', 'appointment'] })
-      queryClient.invalidateQueries({ queryKey: ['doctor', 'appointment'] })
+      queryClient.invalidateQueries({ queryKey: ['appointments'] })
+      queryClient.invalidateQueries({ queryKey: ['patient', 'appointments'] })
+      queryClient.invalidateQueries({ queryKey: ['doctor', 'appointments'] })
       queryClient.invalidateQueries({ queryKey: ['appointment', 'detail'] })
     }
   })
