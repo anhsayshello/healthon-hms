@@ -14,13 +14,15 @@ export default [
   layout('./layouts/protected-layout.tsx', [
     route(path.dashboard, 'routes/dashboard.tsx'),
     route(path.admin.users, 'routes/admin/firebase-user-management.tsx'),
-    route(path.record.doctors, 'routes/admin/doctor-list.tsx'),
-    route(path.record.patients, 'routes/patient-list.tsx'),
-    route(path.record.staffs, 'routes/admin/staff-list.tsx'),
+    route(path.record.appointments, 'routes/appointments.tsx'),
+    route(path.record.doctors, 'routes/admin/doctor-records.tsx'),
+    route(path.record.patients, 'routes/patient-records.tsx'),
+    route(path.record.staffs, 'routes/admin/staff-records.tsx'),
     route(path.record.medicalRecords, 'routes/medical-records.tsx'),
+    route(path.record.medicalRecordDetail, 'routes/medical-record/medical-record-detail.tsx'),
     route(path.nurse.vitalSigns, 'routes/nurse/vital-signs-records.tsx'),
-    route(path.patient.profile, 'routes/patient/profile.tsx'),
-    route(path.record.appointments, 'routes/appointments.tsx')
+    route(path.lab.services, 'routes/admin/lab-services.tsx'),
+    route(path.patient.profile, 'routes/patient/profile.tsx')
   ]),
 
   layout('./layouts/registration-layout.tsx', [route(path.patient.register, 'routes/patient/registration.tsx')])

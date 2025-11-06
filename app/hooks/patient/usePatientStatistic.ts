@@ -1,22 +1,20 @@
+import patientApi from '@/apis/patient.api'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useRole from './use-role'
-import staffApi from '@/apis/staff.api'
+import useRole from '../use-role'
 
-export default function useStaffStatistic() {
+export default function usePatientStatistic() {
   const idToken = useAuthStore((state) => state.idToken)
-  const { isStaff } = useRole()
+  const { isPatient } = useRole()
 
   const { data, isPending } = useQuery({
-    queryKey: ['staff', 'statistic', idToken],
-    queryFn: () => staffApi.getStaffDashboardStatistic(),
+    queryKey: ['patient', 'statistic', idToken],
+    queryFn: () => patientApi.getPatientDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,
-    enabled: isStaff
+    enabled: isPatient
   })
-
-  const totalPatients = data?.data.totalPatients
-  const totalDoctors = data?.data.totalDoctors
+  const dataPatient = data?.data.data
   const appointmentsCounts = data?.data.appointmentCounts
   const totalAppointments = data?.data.totalAppointments
   const totalRecords = data?.data.totalRecords
@@ -24,9 +22,10 @@ export default function useStaffStatistic() {
   const last5Records = data?.data.last5Records
   const availableDoctors = data?.data.availableDoctors
 
+  console.log(totalRecords, 'records')
+
   return {
-    totalPatients,
-    totalDoctors,
+    dataPatient,
     appointmentsCounts,
     totalAppointments,
     totalRecords,

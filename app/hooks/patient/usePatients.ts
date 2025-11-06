@@ -1,6 +1,6 @@
 import patientApi from '@/apis/patient.api'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useRole from './use-role'
+import useRole from '../use-role'
 import type { SearchQueryParams } from '@/types/index.type'
 
 export default function usePatients(params: SearchQueryParams) {

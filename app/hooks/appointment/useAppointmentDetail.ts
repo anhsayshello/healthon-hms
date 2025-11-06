@@ -8,7 +8,7 @@ export default function useAppointmentDetail(id: number, enabled: boolean) {
     queryFn: () => appointmentApi.getAppointmentDetail(id),
     enabled
   })
-
+  console.log(data)
   const dataAppointment = useMemo(() => data?.data, [data])
 
   return { dataAppointment, isPending }

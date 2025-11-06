@@ -19,11 +19,15 @@ const path = {
     staffs: '/record/staffs',
     appointments: '/record/appointments',
     medicalRecords: '/record/medical-records',
+    medicalRecordDetail: '/record/medical-records/:medicalId',
     billingOverview: '/record/billing'
   },
   nurse: {
     vitalSigns: '/nurse/vital-signs',
     administerMedications: '/nurse/administer-medications'
+  },
+  lab: {
+    services: '/lab/services'
   },
   patient: {
     register: '/patient/register',

@@ -1,6 +1,6 @@
 import nurseApi from '@/apis/nurse.api'
 import { useQuery } from '@tanstack/react-query'
-import useRole from './use-role'
+import useRole from '../use-role'
 import type { SearchQueryParams } from '@/types/index.type'
 
 export default function useVitalSignsToday(params: SearchQueryParams) {

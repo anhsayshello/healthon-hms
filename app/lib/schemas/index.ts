@@ -55,3 +55,9 @@ export const STAFF_ROLES = [
   { label: 'Lab Technician', value: 'LAB_TECHNICIAN' },
   { label: 'Cashier', value: 'CASHIER' }
 ]
+
+export const CURRENCY = [
+  { label: 'VND', value: 'VND' },
+  { label: 'USD', value: 'USD' },
+  { label: 'EUR', value: 'EUR' }
+]
