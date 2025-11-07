@@ -1,6 +1,6 @@
 import type { Route } from './+types/profile'
 import { UpdatePatient } from './new-patient'
-import usePatientProfile from '@/hooks/usePatientProfile'
+import usePatientProfile from '@/hooks/patient/usePatientProfile'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Profile' }, { name: 'description', content: 'Welcome to React Router!' }]
