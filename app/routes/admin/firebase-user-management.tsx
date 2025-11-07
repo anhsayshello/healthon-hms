@@ -5,8 +5,8 @@ import CardWrapper from '@/components/shared/card-wrapper'
 import { Spinner } from '@/components/ui/spinner'
 import { Copy } from 'lucide-react'
 import type { FirebaseUserRecord } from '@/types/index.type'
-import UserAction from './user-action'
-import useFirebaseUsers from '@/hooks/useFirebaseUsers'
+import UserAction from '../../components/admin/user-action'
+import useFirebaseUsers from '@/hooks/admin/useFirebaseUsers'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 
@@ -21,7 +21,7 @@ const tableColumns = [
   { header: 'Email', key: 'email' },
   { header: 'Email verified', key: 'email-verified' },
   { header: 'Access', key: 'disabled' },
-  { header: 'Last login', key: 'last-login' },
+  { header: 'Signed in', key: 'signed-in' },
   { header: 'Action', key: 'action' }
 ]
 
@@ -123,7 +123,7 @@ function UserTableRow({ data }: { data: FirebaseUserRecord }) {
       </TableCell>
       <TableCell>{formatLastSignIn(data.metadata.lastSignInTime)}</TableCell>
       <TableCell>
-        <UserAction uid={data.uid} email={data.email} role={role} disabled={disabled} />
+        <UserAction uid={data.uid} email={data.email} role={role} disabled={disabled} showDisabledButton />
       </TableCell>
     </TableRow>
   )
