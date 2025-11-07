@@ -9,7 +9,6 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/componen
 import { Activity, Heart, Ruler, Thermometer, Weight, Wind, type LucideIcon } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import NewLabRequest from '@/components/lab/new-lab-request'
-import useLabTestsByMedicalId from '@/hooks/lab/useLabTestsByMedicalId'
 import type { LabTest } from '@/types/lab.type'
 import { useState } from 'react'
 import {
@@ -30,7 +29,6 @@ export function meta({}: Route.MetaArgs) {
 
 export default function MedicalRecordDetail() {
   const { dataMedicalRecord, isPending } = useMedicalRecord()
-  const { dataLabTestsByMedicalId } = useLabTestsByMedicalId()
 
   if (isPending) {
     return (
@@ -124,7 +122,7 @@ export default function MedicalRecordDetail() {
           <div className='flex justify-end'>
             <NewLabRequest />
           </div>
-          {dataLabTestsByMedicalId?.map((labTest) => (
+          {dataMedicalRecord?.lab_test?.map((labTest) => (
             <LabTestCard labTest={labTest} />
           ))}
         </TabsContent>

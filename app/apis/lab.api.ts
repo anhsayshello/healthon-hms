@@ -8,7 +8,6 @@ const labApi = {
   getLabServices: (params: SearchQueryParams) => http.get<PaginatedResponse<Service>>('lab/services', { params }),
   createLabRequest: (body: { service_id: number; medical_id: number }) => http.post('lab/requests', body),
   getLabTestRequests: (params: SearchQueryParams) => http.get<PaginatedResponse<LabTest>>('lab/requests', { params }),
-  getLabTestsByMedicalId: (id: string) => http.get<LabTest[]>(`lab/tests/medical/${id}`),
   cancelLabRequest: ({ id, notes }: { id: number; notes: string }) => http.post(`lab/requests/${id}/cancel`, { notes }),
   startLabTest: (id: number) => http.post(`lab/tests/${id}/start`),
   finishLabTest: ({ id, result }: { id: number; result: string }) => http.post(`lab/tests/${id}/finish`, { result })
