@@ -1,17 +1,17 @@
-import type { Route } from './+types/doctor-list'
+import type { Route } from './+types/doctor-records'
 import CardWrapper from '@/components/shared/card-wrapper'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import useDoctors from '@/hooks/useDoctors'
+import useDoctors from '@/hooks/doctor/useDoctors'
 import { Spinner } from '@/components/ui/spinner'
 import UserInfo from '@/components/shared/user-info'
 import useQueryParams from '@/hooks/useQueryParams'
 import TableMetadata from '@/components/shared/table-metadata'
 import AppPagination from '@/components/shared/app-pagination'
-import NewDoctor from './new-doctor'
-import UserAction from './user-action'
+import NewDoctor from '../../components/admin/new-doctor'
+import UserAction from '../../components/admin/user-action'
 import type { Doctor } from '@/types/doctor.type'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import UserDetailsDialog from './user-details-dialog'
+import UserDetailsDialog from '../../components/shared/user-details-dialog'
 import { RoleEnum } from '@/types/role.type'
 import InfoItem from '@/components/shared/info-item'
 import { Badge } from '@/components/ui/badge'
@@ -29,14 +29,14 @@ const tableColumns = [
   { header: 'Action', key: 'action' }
 ]
 
-export default function DoctorList() {
+export default function DoctorRecords() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
   const { dataDoctors, currentPage, totalPages, totalRecords, isPending } = useDoctors({ query, page, limit })
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Doctor' totalRecords={totalRecords} onSearch={handleSearch}>
+        <TableMetadata title='Doctor Record' totalRecords={totalRecords} onSearch={handleSearch}>
           <NewDoctor />
         </TableMetadata>
         <Table className='bg-background'>

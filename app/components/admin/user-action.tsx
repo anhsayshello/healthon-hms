@@ -11,12 +11,14 @@ export default function UserAction({
   uid,
   email,
   role,
-  disabled
+  disabled,
+  showDisabledButton = false
 }: {
   uid: string
   email: string
   role?: Role
   disabled?: boolean
+  showDisabledButton?: boolean
 }) {
   return (
     <Popover>
@@ -35,8 +37,12 @@ export default function UserAction({
               <Separator />
             </>
           )}
-          <SetUserAccess uid={uid} disabled={disabled} />
-          <Separator />
+          {showDisabledButton && (
+            <>
+              <SetUserAccess uid={uid} disabled={disabled as boolean} />
+              <Separator />
+            </>
+          )}
           <DeleteUser uid={uid} email={email} />
         </div>
       </PopoverContent>

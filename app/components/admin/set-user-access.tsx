@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
-import useUpdateUserAccess from '@/hooks/useUpdateUserAccess'
+import useUpdateUserAccess from '@/hooks/admin/useUpdateUserAccess'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function SetUserAccess({ uid, disabled }: { uid: string; disabled: boolean }) {

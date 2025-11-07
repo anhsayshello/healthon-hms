@@ -20,7 +20,7 @@ import z from 'zod'
 import { DeleteUserSchema } from '@/lib/schemas/admin-form'
 import { Spinner } from '@/components/ui/spinner'
 import { Alert, AlertTitle } from '@/components/ui/alert'
-import useDeleteUser from '@/hooks/useDeleteUser'
+import useDeleteUser from '@/hooks/admin/useDeleteUser'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function DeleteUser({ uid, email }: { uid: string; email: string }) {

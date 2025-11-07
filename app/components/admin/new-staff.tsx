@@ -12,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDebouncedCallback } from 'use-debounce'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -19,7 +20,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { StaffFormSchema } from '@/lib/schemas/staff-form'
-import useCreateStaff from '@/hooks/useCreateStaff'
+import useCreateStaff from '@/hooks/staff/useCreateStaff'
 import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
 import GenerateRandomData from '@/components/shared/generate-random-data'
@@ -63,7 +64,7 @@ export default function NewStaff() {
       form.setValue('address', faker.location.streetAddress())
       form.setValue('department', faker.commerce.department())
       form.setValue('photo_url', faker.image.avatar())
-      form.setValue('role', faker.helpers.arrayElements(['ADMIN', 'NURSE', 'LAB_TECHNICIAN', 'CASHIER'])[0])
+      form.setValue('role', faker.helpers.arrayElement(['ADMIN', 'NURSE', 'LAB_TECHNICIAN', 'CASHIER']))
 
       form.clearErrors()
     } catch (error) {
@@ -138,7 +139,9 @@ export default function NewStaff() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <Button variant={'outline'}>Cancel</Button>
+          <DialogClose>
+            <Button variant={'outline'}>Cancel</Button>
+          </DialogClose>
           <Button className='cursor-pointer' form='form-create-staff' disabled={isPending}>
             {isPending && <Spinner />}
             Create

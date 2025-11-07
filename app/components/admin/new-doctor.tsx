@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 import type { Weekday } from '@/types/doctor.type'
 import { useDebouncedCallback } from 'use-debounce'
-import useCreateDoctor from '@/hooks/useCreateDoctor'
+import useCreateDoctor from '@/hooks/doctor/useCreateDoctor'
 import {
   Dialog,
   DialogContent,

@@ -23,7 +23,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { RoleEnum, type StaffRole } from '@/types/role.type'
 import { cn } from '@/lib/utils'
 
-import useUpdateStaffRole from '@/hooks/useUpdateStaffRole'
+import useUpdateStaffRole from '@/hooks/admin/useUpdateStaffRole'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 const ROLE_PERMISSIONS = [
