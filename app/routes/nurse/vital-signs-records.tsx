@@ -9,7 +9,7 @@ import AppPagination from '@/components/shared/app-pagination'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import formatDate from '@/helpers/formatDate'
 import type { Appointment } from '@/types/appointment.type'
-import useVitalSignsToday from '@/hooks/useVitalSignsToday'
+import useVitalSignsToday from '@/hooks/nurse/useVitalSignsToday'
 import NewVitalSign from './new-vital-signs'
 import { Badge } from '@/components/ui/badge'
 
@@ -20,7 +20,6 @@ export function meta({}: Route.MetaArgs) {
 const tableColumns = [
   { header: 'Patient info', key: 'patient-info' },
   { header: 'Date of birth', key: 'dob' },
-  { header: 'Address', key: 'address' },
   { header: 'Doctor', key: 'doctor' },
   { header: 'Time', key: 'time' },
   { header: 'Type', key: 'type' },
@@ -38,7 +37,7 @@ export default function VitalSignsRecords() {
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Vital Signs' totalRecords={totalRecords} onSearch={handleSearch} />
+        <TableMetadata title='Today Vital Signs' totalRecords={totalRecords} onSearch={handleSearch} />
         <Table className='bg-background'>
           <TableHeader>
             <TableRow>
@@ -79,7 +78,6 @@ function VitalSignsRow({ appointment }: { appointment: Appointment }) {
           </TableCell>
         </DialogTrigger>
         <TableCell>{formatDate(appointment.patient.date_of_birth)}</TableCell>
-        <TableCell>{appointment.reason ?? appointment.note}</TableCell>
         <TableCell className='cursor-pointer'>
           <UserInfo
             photoUrl={appointment.doctor.photo_url}
