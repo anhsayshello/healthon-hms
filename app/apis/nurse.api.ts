@@ -1,5 +1,6 @@
 import type { Appointment } from '@/types/appointment.type'
-import type { PaginatedResponse, SearchQueryParams, VitalSigns } from '@/types/index.type'
+import type { PaginatedResponse, SearchQueryParams } from '@/types/index.type'
+import type { VitalSigns } from '@/types/medical.type'
 import http from '@/utils/http'
 
 const nurseApi = {
