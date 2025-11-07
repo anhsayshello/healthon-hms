@@ -5,5 +5,5 @@ export const AppointmentFormSchema = z.object({
   appointment_date: z.date(),
   time: z.iso.time(),
   type: z.string().nonempty('Please specify the type of appointment.'),
-  note: z.string().max(300, 'Note must not exceed 300 characters.').optional()
+  reason: z.string().max(300, 'Reason must not exceed 300 characters.').nonempty('Reason is required.')
 })
