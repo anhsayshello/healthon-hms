@@ -2,6 +2,7 @@ import type { StaffRole } from './role.type'
 type Status = 'ACTIVE' | 'INACTIVE' | 'DORMANT'
 import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
 import type { Doctor } from './doctor.type'
+import type { LabTest } from './lab.type'
 
 export interface Staff {
   uid: string
@@ -17,6 +18,8 @@ export interface Staff {
   photo_url?: string
   created_at: string
   updated_at: string
+
+  lab_test?: LabTest[]
 }
 
 export interface StaffDashboardStatistic {
