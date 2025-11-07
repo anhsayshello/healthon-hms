@@ -1,9 +1,9 @@
 import type { Route } from './+types/dashboard'
 
 import useRole from '@/hooks/use-role'
-import DoctorDashboard from './doctor/dashboard'
-import PatientDashboard from './patient/dashboard'
-import StaffDashboard from './staff/dashboard'
+import DoctorDashboard from './doctor/doctor-dashboard'
+import PatientDashboard from './patient/patient-dashboard'
+import StaffDashboard from './staff/staff-dashboard'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Dashboard' }, { name: 'description', content: 'Welcome to React Router!' }]
