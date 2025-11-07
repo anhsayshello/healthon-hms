@@ -14,12 +14,12 @@ export const StaffFormSchema = z.object({
     .max(50, "Last name can'\t be more than 50 characters"),
   phone: z.string().min(10).max(20),
   address: z.string().nonempty('Address is required'),
-  department: z.string().trim().max(100, 'Department name cannot exceed 100 characters').optional(),
+  department: z.string().trim().max(100, 'Department name must not exceed 100 characters').optional(),
   license_number: z
     .string()
     .trim()
     .min(2, 'License number must be at least 2 characters')
-    .max(50, 'License number cannot exceed 50 characters'),
+    .max(50, 'License number must not exceed 50 characters'),
   photo_url: z.url('Please enter a valid URL').or(z.literal('')),
   role: z.enum(['ADMIN', 'NURSE', 'LAB_TECHNICIAN', 'CASHIER'], 'Please select an appropriate role')
 })
