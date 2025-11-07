@@ -1,82 +1,44 @@
-import AppointmentRecords from '@/components/appointments/appointment-records'
+import type { Route } from './+types/appointments'
 
-import { useMemo } from 'react'
+import AppointmentRecords from '@/components/appointments/appointment-records'
 import AppPagination from '@/components/shared/app-pagination'
-import useDoctorAppointments from '@/hooks/useDoctorAppointments'
-import usePatientAppointments from '@/hooks/usePatientAppointments'
+import useDoctorAppointments from '@/hooks/doctor/useDoctorAppointments'
+import usePatientAppointments from '@/hooks/patient/usePatientAppointments'
 import useQueryParams from '@/hooks/useQueryParams'
-import useAppointmentFilter from '@/hooks/useAppointmentFilter'
-import useAppointments from '@/hooks/useAppointments'
+import useAppointmentFilter from '@/hooks/appointment/useAppointmentFilter'
+import useAppointments from '@/hooks/appointment/useAppointments'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { RoleEnum } from '@/types/role.type'
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Appointments' }, { name: 'description', content: 'Welcome to React Router!' }]
+}
 
 export default function Appointments() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
   const { view, status } = useAppointmentFilter()
+  const role = useAuthStore((state) => state.role)
 
-  const { dataGeneralAppointments, isGeneralPendingAppointments } = useAppointments({
-    query,
-    page,
-    limit,
-    view,
-    status
-  })
-  const { dataPatientAppointments, isPendingPatientAppointments } = usePatientAppointments({
-    query,
-    page,
-    limit,
-    view,
-    status
-  })
+  const params = { query, page, limit, view, status }
+  const generalQuery = useAppointments(params)
+  const patientQuery = usePatientAppointments(params)
+  const doctorQuery = useDoctorAppointments(params)
 
-  const { dataDoctorAppointments, isPendingDoctorAppointments } = useDoctorAppointments({
-    query,
-    page,
-    limit,
-    view,
-    status
-  })
+  const activeQuery = role === RoleEnum.DOCTOR ? doctorQuery : role === RoleEnum.PATIENT ? patientQuery : generalQuery
 
-  const isPending = isGeneralPendingAppointments || isPendingPatientAppointments || isPendingDoctorAppointments
-
-  const currentPage = useMemo(
-    () =>
-      dataGeneralAppointments?.data.currentPage ??
-      dataPatientAppointments?.data.currentPage ??
-      dataDoctorAppointments?.data.currentPage ??
-      1,
-    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
-  )
-  const totalPages = useMemo(
-    () =>
-      dataGeneralAppointments?.data.totalPages ??
-      dataPatientAppointments?.data.totalPages ??
-      dataDoctorAppointments?.data.totalPages ??
-      0,
-    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
-  )
-  const totalRecords = useMemo(
-    () =>
-      dataGeneralAppointments?.data.totalRecords ??
-      dataPatientAppointments?.data.totalRecords ??
-      dataDoctorAppointments?.data.totalRecords ??
-      0,
-    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
-  )
-  const dataAppoinments = useMemo(
-    () =>
-      dataGeneralAppointments?.data.data ??
-      dataPatientAppointments?.data.data ??
-      dataDoctorAppointments?.data.data ??
-      [],
-    [dataGeneralAppointments, dataPatientAppointments, dataDoctorAppointments]
-  )
+  const dataAppointments = activeQuery.data?.data.data ?? []
+  const currentPage = activeQuery.data?.data.currentPage ?? 1
+  const totalPages = activeQuery.data?.data.totalPages ?? 0
+  const totalRecords = activeQuery.data?.data.totalRecords ?? 0
+  const isPending = activeQuery.isPending
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
-      {dataAppoinments && (
+      {dataAppointments && (
         <>
           <AppointmentRecords
             onSearch={handleSearch}
-            data={dataAppoinments}
+            data={dataAppointments}
             isPending={isPending}
             totalRecords={totalRecords}
           />
