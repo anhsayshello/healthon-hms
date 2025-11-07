@@ -1,5 +1,5 @@
+import useSignInWithGoogle from '@/hooks/auth/useSignInWithGoogle'
 import { Button } from '../ui/button'
-import useSignInWithGoogle from '@/hooks/useSignInWithGoogle'
 import { Spinner } from '../ui/spinner'
 
 export default function GoogleAuthButton() {

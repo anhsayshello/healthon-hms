@@ -7,7 +7,7 @@ import { Calendar } from '../ui/calendar'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 import { CalendarIcon } from 'lucide-react'
-import { format } from 'date-fns'
+import { format, startOfDay } from 'date-fns'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field'
 import type { HTMLInputTypeAttribute } from 'react'
 import { InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea } from '../ui/input-group'
@@ -36,6 +36,7 @@ function InputField({
   fieldState: ControllerFieldState
 }) {
   const { label, name, placeholder, inputType, fieldType, options, isDob = true } = props
+  const today = startOfDay(new Date())
 
   switch (fieldType ?? inputType) {
     case 'date':
@@ -55,9 +56,9 @@ function InputField({
               mode='single'
               selected={field.value}
               onSelect={field.onChange}
-              startMonth={isDob ? undefined : new Date()}
-              endMonth={!isDob ? undefined : new Date()}
-              disabled={(date) => (isDob ? date > new Date() : date <= new Date() || date < new Date('1900-01-01'))}
+              startMonth={isDob ? undefined : today}
+              endMonth={isDob ? today : new Date(2050, 12)}
+              disabled={(date) => (isDob ? date > today || date < new Date('1900-01-01') : date < today)}
               aria-invalid={fieldState.invalid}
               captionLayout='dropdown'
             />
@@ -122,7 +123,6 @@ function InputField({
               inputType === 'time'
           })}
           step='1'
-          // disabled={name === 'email'}
           placeholder={placeholder}
           type={inputType}
           id={field.name}

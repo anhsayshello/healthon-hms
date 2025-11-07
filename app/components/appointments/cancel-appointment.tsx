@@ -19,7 +19,7 @@ import { AppointmentStatusEnum, type Appointment } from '@/types/appointment.typ
 import { Button } from '../ui/button'
 import CustomField from '../shared/custom-field'
 import { toast } from 'sonner'
-import useUpdateAppointment from '@/hooks/useUpdateAppointment'
+import useUpdateAppointment from '@/hooks/appointment/useUpdateAppointment'
 import AppointmentSummaryCard from './appointment-summary-card'
 import { AlertCircle, CalendarX2 } from 'lucide-react'
 

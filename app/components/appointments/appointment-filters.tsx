@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import useAppointmentFilter from '@/hooks/useAppointmentFilter'
+import useAppointmentFilter from '@/hooks/appointment/useAppointmentFilter'
 import { AppointmentStatusEnum, type AppointmentStatus } from '@/types/appointment.type'
 
 export default function AppointmentFilters() {

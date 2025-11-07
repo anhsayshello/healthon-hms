@@ -22,8 +22,8 @@ import UserInfo from '../shared/user-info'
 import { Spinner } from '../ui/spinner'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { type Doctor } from '@/types/doctor.type'
-import useCreateAppointment from '@/hooks/useCreateAppointment'
-import useDoctors from '@/hooks/useDoctors'
+import useCreateAppointment from '@/hooks/appointment/useCreateAppointment'
+import useDoctors from '@/hooks/doctor/useDoctors'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
 
@@ -42,7 +42,7 @@ export default function BookAppoinment() {
       appointment_date: new Date(),
       time: '08:00:00',
       type: '',
-      note: ''
+      reason: ''
     }
   })
 
@@ -52,7 +52,7 @@ export default function BookAppoinment() {
         { ...data, appointment_date: data.appointment_date.toISOString() },
         {
           onSuccess: () => {
-            toast.success('Appointment create successfully')
+            toast.success(`Added appointment with Dr. ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}`)
             setOpen(false)
           }
         }
@@ -158,11 +158,10 @@ export default function BookAppoinment() {
               </div>
               <CustomField
                 control={form.control}
-                isRequired={false}
-                label='Note'
-                name='note'
+                label='Reason'
+                name='reason'
                 fieldType='textarea'
-                placeholder='Note'
+                placeholder='Describe your symptoms or reason for this appointment'
               />
               <DialogFooter>
                 <Button variant={'outline'}>Cancel</Button>

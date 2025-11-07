@@ -1,7 +1,7 @@
 import { Form } from '@/components/ui/form'
 import AuthFormField from './auth-form-field'
 import AuthSubmitButton from './auth-submit-button'
-import useSendMagicLink from '@/hooks/useSendMagicLink'
+import useSendMagicLink from '@/hooks/auth/useSendMagicLink'
 
 export default function MagicLinkForm() {
   const { form, onSubmit, isPending } = useSendMagicLink()

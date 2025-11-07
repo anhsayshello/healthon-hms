@@ -11,16 +11,12 @@ interface Props {
   note: string
 }
 
-const CardIcon = ({ icon: Icon }: { icon: LucideIcon }) => {
-  return <Icon size={20} />
-}
-
-export default function StatCard({ title, value, icon, className }: Props) {
+export default function StatCard({ title, value, icon: Icon, className }: Props) {
   return (
     <Card className={cn('w-full', className)}>
       <CardHeader className='flex items-center justify-between capitalize'>
         <div className='tracking-tight font-medium text-sm'>{title}</div>
-        <CardIcon icon={icon} />
+        <Icon size={20} />
       </CardHeader>
       <CardContent>
         <div className='text-2xl font-semibold'>{value}</div>

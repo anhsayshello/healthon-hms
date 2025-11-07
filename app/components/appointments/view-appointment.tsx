@@ -24,8 +24,8 @@ import { cn } from '@/lib/utils'
 import useRole from '@/hooks/use-role'
 import Timestamps from '../shared/time-stamps'
 import PatientInformation from '../shared/patient-information'
-import useUpdateAppointment from '@/hooks/useUpdateAppointment'
-import useAppointmentDetail from '@/hooks/useAppointmentDetail'
+import useUpdateAppointment from '@/hooks/appointment/useUpdateAppointment'
+import useAppointmentDetail from '@/hooks/appointment/useAppointmentDetail'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
 import formatDate from '@/helpers/formatDate'
@@ -151,10 +151,10 @@ function AppointmentInformation({
   appointmentDate: string
   appointmentTime: string
   appointmentStatus: AppointmentStatus
-  appointmentReason?: string
+  appointmentReason: string
   appointmentNote?: string
 }) {
-  const { isAdmin, isDoctor } = useRole()
+  const { isAdmin, isNurse } = useRole()
   const [isUpdate, setIsUpdate] = useState(false)
   const [reason, setReason] = useState(appointmentReason ?? '')
   const [status, setStatus] = useState<AppointmentStatus>(appointmentStatus)
@@ -178,7 +178,7 @@ function AppointmentInformation({
     <div className='space-y-3'>
       <div className='flex items-center gap-6'>
         <h3 className='text-sm font-semibold'>Appointment Information</h3>
-        {!isUpdate && (isAdmin || isDoctor) && (
+        {!isUpdate && (isAdmin || isNurse) && (
           <Button variant='ghost' onClick={() => setIsUpdate(true)} className='cursor-pointer'>
             <SquarePen size={18} />
           </Button>
@@ -261,7 +261,7 @@ function AppointmentInformation({
           </div>
         )}
 
-        {appointmentReason && !isUpdate && (
+        {!isUpdate && (
           <div className='flex items-start'>
             <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
               <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
@@ -270,6 +270,7 @@ function AppointmentInformation({
             <span className='font-medium grow'>{appointmentReason}</span>
           </div>
         )}
+
         {isUpdate && (
           <div className='flex items-start'>
             <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>

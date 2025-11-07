@@ -17,9 +17,9 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useUserCredential } from '@/stores/useUserCredentialStore'
 import ProfileAvatar from './profile-avatar'
-import useSignOut from '@/hooks/useSignOut'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
+import useSignOut from '@/hooks/auth/useSignOut'
 
 // User Menu Component
 const UserMenu = () => {

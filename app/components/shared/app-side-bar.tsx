@@ -14,7 +14,8 @@ import {
   X,
   HeartPulse,
   Users2,
-  Users
+  Users,
+  FlaskConical
 } from 'lucide-react'
 
 import {
@@ -134,6 +135,13 @@ const SIDEBAR_LINKS = [
         access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
         icon: Pill,
         tooltip: 'adminster medications'
+      },
+      {
+        name: 'Lab Services',
+        path: path.lab.services,
+        access: [RoleEnum.ADMIN],
+        icon: FlaskConical,
+        tooltip: 'lab services'
       },
       {
         name: 'Records',
