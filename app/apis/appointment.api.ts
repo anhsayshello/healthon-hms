@@ -12,7 +12,7 @@ const appointmentApi = {
   createNewAppointment: (
     body: Omit<
       Appointment,
-      'id' | 'patient_id' | 'status' | 'patient' | 'doctor' | 'reason' | 'created_at' | 'updated_at'
+      'id' | 'patient_id' | 'status' | 'patient' | 'doctor' | 'note' | 'medical' | 'created_at' | 'updated_at'
     >
   ) => http.post<Appointment>('appointment', body),
   updateAppointmentDetail: ({
