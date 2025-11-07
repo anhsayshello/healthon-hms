@@ -11,7 +11,7 @@ import CustomField from '@/components/shared/custom-field'
 import { BLOOD_GROUP, GENDER, MARITAL_STATUS, RELATION } from '@/lib/schemas'
 import { useEffect } from 'react'
 import { Spinner } from '@/components/ui/spinner'
-import useUpsertPatient from '@/hooks/useUpsertPatient'
+import useUpsertPatient from '@/hooks/patient/useUpsertPatient'
 
 interface Props {
   data: Patient | null

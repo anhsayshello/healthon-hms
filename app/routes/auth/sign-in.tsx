@@ -8,13 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Form } from '@/components/ui/form'
 import AuthFormField from '@/components/auth/auth-form-field'
 import MagicLinkForm from '@/components/auth/magic-link-form'
-import useSignInWithEmailAndPassword from '@/hooks/useSignInWithEmailAndPassword'
 import AuthHeader from '@/components/auth/auth-header'
 import { AuthSwitch } from '@/components/auth/auth-switch'
 import AuthSubmitButton from '@/components/auth/auth-submit-button'
 import { useEffect } from 'react'
-import useHandleMagicLinkRedirect from '@/hooks/useHandleMagicLinkRedirect'
 import { Spinner } from '@/components/ui/spinner'
+import useSignInWithEmailAndPassword from '@/hooks/auth/useSignInWithEmailAndPassword'
+import useHandleMagicLinkRedirect from '@/hooks/auth/useHandleMagicLinkRedirect'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Sign in' }, { name: 'description', content: 'Welcome to React Router!' }]

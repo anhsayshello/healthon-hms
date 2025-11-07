@@ -13,7 +13,7 @@ import {
 import { FieldGroup } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
 import { useIsMobile } from '@/hooks/use-mobile'
-import useCreatVitalSigns from '@/hooks/useCreateVitalSigns'
+import useCreatVitalSigns from '@/hooks/nurse/useCreateVitalSigns'
 import { VitalSignsSchema } from '@/lib/schemas/vital-signs-form'
 import { faker } from '@faker-js/faker'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -58,7 +58,7 @@ export default function NewVitalSigns({ appointment_id, patientFirstName, patien
       form.setValue('body_temperature', faker.number.float({ min: 30, max: 45, fractionDigits: 1 }))
       form.setValue('systolic', faker.number.int({ min: 50, max: 250 }))
       form.setValue('diastolic', faker.number.int({ min: 30, max: 150 }))
-      form.setValue('heart_rate', `${faker.number.int({ max: 200 })}`)
+      form.setValue('heart_rate', faker.number.int({ min: 30, max: 250 }))
       form.setValue('respiratory_rate', faker.number.int({ min: 5, max: 60 }))
       form.setValue('oxygen_saturation', faker.number.int({ min: 50, max: 100 }))
       form.setValue('weight', faker.number.float({ min: 1, max: 500, fractionDigits: 1 }))

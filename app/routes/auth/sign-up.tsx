@@ -11,7 +11,7 @@ import MagicLinkForm from '@/components/auth/magic-link-form'
 import AuthHeader from '@/components/auth/auth-header'
 import { AuthSwitch } from '@/components/auth/auth-switch'
 import AuthSubmitButton from '@/components/auth/auth-submit-button'
-import useCreateUserWithEmailAndPassword from '@/hooks/useCreateUserWithEmailAndPassword'
+import useCreateUserWithEmailAndPassword from '@/hooks/auth/useCreateUserWithEmailAndPassword'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Sign up' }, { name: 'description', content: 'Welcome to React Router!' }]
