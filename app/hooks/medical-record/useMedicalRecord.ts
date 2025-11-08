@@ -11,6 +11,8 @@ export default function useMedicalRecord() {
     enabled: !!medicalId
   })
 
+  console.log(data)
+
   const dataMedicalRecord = data?.data
 
   return { dataMedicalRecord, isPending }
