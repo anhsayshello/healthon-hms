@@ -6,13 +6,13 @@ import appointmentApi from '@/apis/appointment.api'
 
 export default function useAppointments(params: AppointmentParams) {
   const user = useAuthStore((state) => state.user)
-  const { isAdmin, isNurse } = useRole()
+  const { isAdmin, isNurse, isLabTechnician } = useRole()
 
   const { data, isPending } = useQuery({
     queryKey: ['appointments', user?.uid, params],
     queryFn: () => appointmentApi.getAppointments(params),
     placeholderData: keepPreviousData,
-    enabled: isAdmin || isNurse
+    enabled: isAdmin || isNurse || isLabTechnician
   })
 
   return { data, isPending }
