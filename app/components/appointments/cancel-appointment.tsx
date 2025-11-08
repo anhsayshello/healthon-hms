@@ -96,7 +96,7 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
           <DialogClose asChild>
             <Button variant='outline'>Keep</Button>
           </DialogClose>
-          <Button variant='destructive' form='form-cancel-appointment' disabled={isPending}>
+          <Button className='cursor-pointer' variant='destructive' form='form-cancel-appointment' disabled={isPending}>
             {isPending && <Spinner />}
             Cancel
           </Button>
