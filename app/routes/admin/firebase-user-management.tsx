@@ -9,6 +9,7 @@ import UserAction from '../../components/admin/user-action'
 import useFirebaseUsers from '@/hooks/admin/useFirebaseUsers'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
+import { formatDateTime } from '@/helpers/formatDateTime'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'User Management' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -78,11 +79,6 @@ function UserTableRow({ data }: { data: FirebaseUserRecord }) {
   const role = data.customClaims?.role
   const disabled = data.disabled
 
-  const formatLastSignIn = (time?: string) => {
-    if (!time) return 'null'
-    return new Date(time).toLocaleString()
-  }
-
   const handleCopyUid = async () => {
     try {
       await navigator.clipboard.writeText(data.uid)
@@ -121,7 +117,7 @@ function UserTableRow({ data }: { data: FirebaseUserRecord }) {
           <span className='text-green-500'>enabled</span>
         )}
       </TableCell>
-      <TableCell>{formatLastSignIn(data.metadata.lastSignInTime)}</TableCell>
+      <TableCell>{formatDateTime(data.metadata.lastSignInTime)}</TableCell>
       <TableCell>
         <UserAction uid={data.uid} email={data.email} role={role} disabled={disabled} showDisabledButton />
       </TableCell>

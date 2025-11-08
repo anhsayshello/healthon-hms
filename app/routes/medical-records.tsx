@@ -15,6 +15,7 @@ import useTodayMedicalRecords from '@/hooks/medical-record/useTodayMedicalRecord
 import { useAuthStore } from '@/stores/useAuthStore'
 import { RoleEnum } from '@/types/role.type'
 import type { MedicalRecord } from '@/types/medical.type'
+import { formatDateTime } from '@/helpers/formatDateTime'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Medical Record' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -23,6 +24,7 @@ export function meta({}: Route.MetaArgs) {
 const tableColumns = [
   { header: 'Id', key: 'id' },
   { header: 'Patient info', key: 'patient-info' },
+  { header: 'Date & Time', key: 'date-time' },
   { header: 'Diagnosis', key: 'diagnosis' },
   { header: 'Lab Test', key: 'lab-test' },
   { header: 'Action', key: 'action' }
@@ -90,6 +92,7 @@ function MedicalRow({ medicalRecord }: { medicalRecord: MedicalRecord }) {
           description={medicalRecord?.patient?.gender}
         />
       </TableCell>
+      <TableCell>{formatDateTime(medicalRecord.created_at)}</TableCell>
       <TableCell>
         <Button onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecord.id}` })}>
           <Swords />

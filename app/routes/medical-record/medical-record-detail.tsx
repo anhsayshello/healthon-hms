@@ -11,23 +11,18 @@ import { Spinner } from '@/components/ui/spinner'
 import NewLabRequest from '@/components/lab/new-lab-request'
 import type { LabTest } from '@/types/lab.type'
 import { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import LabTestStatusIndicator from '@/components/lab/lab-status-indicator'
-import formatDate from '@/helpers/formatDate'
-import EmptyLabTestData from './empty-lab-test-data'
+import { formatDateTime } from '@/helpers/formatDateTime'
+import useRole from '@/hooks/use-role'
+import LabTestDetail from '../lab/lab-test-detail'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Patient Examination' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export default function MedicalRecordDetail() {
+  const { isDoctor } = useRole()
   const { dataMedicalRecord, isPending } = useMedicalRecord()
 
   if (isPending) {
@@ -119,9 +114,11 @@ export default function MedicalRecordDetail() {
         </TabsContent>
         <TabsContent value='prescription'>Prescription</TabsContent>
         <TabsContent value='lab-test' className='space-y-4'>
-          <div className='flex justify-end'>
-            <NewLabRequest />
-          </div>
+          {isDoctor && (
+            <div className='flex justify-end'>
+              <NewLabRequest />
+            </div>
+          )}
           {dataMedicalRecord?.lab_test?.map((labTest) => (
             <LabTestCard labTest={labTest} />
           ))}
@@ -146,20 +143,11 @@ function LabTestCard({ labTest }: { labTest: LabTest }) {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <p className='text-sm text-muted-foreground'>Created at: {formatDate(labTest.created_at)}</p>
+            <p className='text-sm text-muted-foreground'>Created at: {formatDateTime(labTest.created_at)}</p>
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent>
-        {!labTest.result && <EmptyLabTestData status={labTest.status} />}
-        {/* <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
-        </DialogHeader> */}
-      </DialogContent>
+      <LabTestDetail labTest={labTest} />
     </Dialog>
   )
 }
