@@ -11,6 +11,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDebouncedCallback } from 'use-debounce'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -73,8 +74,8 @@ export default function NewLabService() {
       </DialogTrigger>
       <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
-          <div className='flex items-center justify-between'>
-            <DialogTitle>New Lab Service</DialogTitle>
+          <div className='flex justify-between'>
+            <DialogTitle className='font-semibold'>New Lab Service</DialogTitle>
             <GenerateRandomData
               handleGenerateRandomData={handleGenerateRandomData}
               isGeneratingData={isGeneratingData}
@@ -112,7 +113,9 @@ export default function NewLabService() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <Button variant={'outline'}>Cancel</Button>
+          <DialogClose>
+            <Button variant={'outline'}>Cancel</Button>
+          </DialogClose>
           <Button className='cursor-pointer' form='form-create-staff' disabled={isPending}>
             {isPending && <Spinner />}
             Create
