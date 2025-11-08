@@ -15,7 +15,9 @@ import {
   HeartPulse,
   Users2,
   Users,
-  FlaskConical
+  FlaskConical,
+  Tags,
+  Beaker
 } from 'lucide-react'
 
 import {
@@ -90,7 +92,7 @@ const SIDEBAR_LINKS = [
       {
         name: 'Patients',
         path: path.record.patients,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN],
         icon: Users2,
         tooltip: 'patients'
       },
@@ -104,7 +106,7 @@ const SIDEBAR_LINKS = [
       {
         name: 'Appointments',
         path: path.record.appointments,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.PATIENT],
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN, RoleEnum.PATIENT],
         icon: ListOrdered,
         tooltip: 'appointments'
       },
@@ -116,9 +118,30 @@ const SIDEBAR_LINKS = [
         tooltip: 'vital signs'
       },
       {
+        name: 'Lab Requests',
+        path: path.lab.requests,
+        access: [RoleEnum.LAB_TECHNICIAN],
+        icon: Beaker,
+        tooltip: 'lab requests'
+      },
+      {
+        name: 'Lab Tests',
+        path: path.lab.tests,
+        access: [RoleEnum.LAB_TECHNICIAN],
+        icon: FlaskConical,
+        tooltip: 'lab tests'
+      },
+      {
+        name: 'Lab Services',
+        path: path.lab.services,
+        access: [RoleEnum.LAB_TECHNICIAN],
+        icon: Tags,
+        tooltip: 'lab services'
+      },
+      {
         name: 'Medical Records',
         path: path.record.medicalRecords,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN],
         icon: SquareActivity,
         tooltip: 'medical records'
       },
@@ -136,13 +159,7 @@ const SIDEBAR_LINKS = [
         icon: Pill,
         tooltip: 'adminster medications'
       },
-      {
-        name: 'Lab Services',
-        path: path.lab.services,
-        access: [RoleEnum.ADMIN],
-        icon: FlaskConical,
-        tooltip: 'lab services'
-      },
+
       {
         name: 'Records',
         path: path.patient.records,
