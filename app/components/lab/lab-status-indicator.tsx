@@ -1,6 +1,6 @@
 import { Badge } from '../ui/badge'
 import { cn } from '@/lib/utils'
-import type { LabTestStatus } from '@/types/lab.type'
+import { LabTestStatusEnum, type LabTestStatus } from '@/types/lab.type'
 
 const status_color = {
   CANCELLED: 'bg-red-600/15 text-red-600',
@@ -11,8 +11,12 @@ const status_color = {
 
 export default function LabTestStatusIndicator({ status }: { status: LabTestStatus }) {
   return (
-    <Badge variant='secondary' className={cn('py-1 px-2 capitalize', status_color[status])}>
-      {status.toLocaleLowerCase()}
+    <Badge variant='secondary' className={cn('py-1 px-2', status_color[status])}>
+      {status === LabTestStatusEnum.IN_PROGRESS ? (
+        <span>In progress</span>
+      ) : (
+        <span className='capitalize'>{status.toLocaleLowerCase()}</span>
+      )}
     </Badge>
   )
 }
