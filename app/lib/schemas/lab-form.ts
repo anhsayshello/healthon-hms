@@ -10,3 +10,7 @@ export const LabServiceForm = z.object({
 export const LabRequestForm = z.object({
   service_id: z.coerce.number('Lab service is required.')
 })
+
+export const LabTestForm = z.object({
+  result: z.string().max(300, 'Result must not excedd 300 characters').nonempty('Lab result is required.')
+})
