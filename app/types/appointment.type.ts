@@ -1,5 +1,6 @@
 import type { Doctor } from './doctor.type'
-import type { MedicalRecord, SearchQueryParams } from './index.type'
+import type { SearchQueryParams } from './index.type'
+import type { MedicalRecord } from './medical.type'
 import type { Patient } from './patient.type'
 
 export type AppointmentStatus = 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'

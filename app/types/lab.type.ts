@@ -2,6 +2,13 @@ import type { MedicalRecord, Payment } from './medical.type'
 import type { Staff } from './staff.type'
 
 export type LabTestStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
+export enum LabTestStatusEnum {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED'
+}
+
 export type Currency = 'VND' | 'USD' | 'EUR'
 
 export interface Service {

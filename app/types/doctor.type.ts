@@ -1,4 +1,5 @@
 import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
+import type { Diagnosis, MedicalRecord } from './medical.type'
 
 type JobType = 'FULL' | 'PART'
 export interface Doctor {
@@ -14,9 +15,12 @@ export interface Doctor {
   photo_url?: string
   availability_status?: string
   type: JobType
+
   working_days: WorkingDays[]
   appointments: Appointment[]
-  diagnosis: string
+  medical_records: MedicalRecord[]
+  diagnosis: Diagnosis[]
+
   created_at: string
   updated_at: string
 }

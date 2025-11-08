@@ -41,6 +41,7 @@ export interface MedicalRecord {
 
   appointment?: Appointment
   patient?: Patient
+  doctor?: Doctor
   lab_test?: LabTest[]
   vital_signs?: VitalSigns[]
   diagnosis?: Diagnosis[]
@@ -49,7 +50,6 @@ export interface MedicalRecord {
 
 export interface VitalSigns {
   id: number
-  patient_id: string
   medical_id: number
   body_temperature: number
   systolic: number
@@ -67,7 +67,6 @@ export interface VitalSigns {
 
 export interface Diagnosis {
   id: number
-  patient_id: string
   medical_id: number
   doctor_id: string
   symptoms: string
