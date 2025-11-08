@@ -9,7 +9,7 @@ export default function UserInfo({
   size
 }: {
   photoUrl?: string
-  firstName: string
+  firstName?: string
   lastName: string
   email?: string
   description?: string
