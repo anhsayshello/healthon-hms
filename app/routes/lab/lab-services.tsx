@@ -9,7 +9,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 
 import useLabServices from '@/hooks/lab/useLabServices'
 import type { Service } from '@/types/lab.type'
-import NewLabService from '@/components/admin/new-lab-service'
+import NewLabService from '@/components/lab/new-lab-service'
 import formatDate from '@/helpers/formatDate'
 import formatNumber from '@/helpers/formatNumber'
 
@@ -32,7 +32,7 @@ export default function LabServices() {
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Lab Services' totalRecords={totalRecords} onSearch={handleSearch}>
+        <TableMetadata title='Lab Service' totalRecords={totalRecords} onSearch={handleSearch}>
           <NewLabService />
         </TableMetadata>
         <Table className='bg-background'>
