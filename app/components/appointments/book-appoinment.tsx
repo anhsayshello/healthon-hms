@@ -62,7 +62,7 @@ export default function BookAppoinment() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className='cursor-pointer'>
           <CalendarPlus2 />
           <span>Book Appoinment</span>
         </Button>
@@ -165,7 +165,7 @@ export default function BookAppoinment() {
               />
               <DialogFooter>
                 <Button variant={'outline'}>Cancel</Button>
-                <Button form='form-create-appointment' disabled={isCreating}>
+                <Button className='cursor-pointer' form='form-create-appointment' disabled={isCreating}>
                   {isCreating && <Spinner />}
                   <span>Confirm</span>
                 </Button>
