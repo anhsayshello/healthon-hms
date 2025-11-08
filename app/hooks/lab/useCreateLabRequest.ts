@@ -7,7 +7,7 @@ export default function useCreateLabRequest() {
   const { mutate, isPending } = useMutation({
     mutationFn: labApi.createLabRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lab', 'tests'] })
+      queryClient.invalidateQueries({ queryKey: ['medical-record'] })
     }
   })
 
