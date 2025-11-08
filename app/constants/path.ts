@@ -27,6 +27,8 @@ const path = {
     administerMedications: '/nurse/administer-medications'
   },
   lab: {
+    requests: '/lab/requests',
+    tests: '/lab/tests',
     services: '/lab/services'
   },
   patient: {
