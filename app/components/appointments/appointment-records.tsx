@@ -55,7 +55,7 @@ export default function AppointmentRecords({
             View All
           </Button>
         )}
-        <SearchInput onSearch={onSearch} />
+        {!isDashboard && <SearchInput onSearch={onSearch} />}
       </div>
       {!isDashboard && (
         <div className='flex flex-col md:flex-row items-center justify-between w-full gap-4'>
