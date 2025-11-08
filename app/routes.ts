@@ -21,7 +21,9 @@ export default [
     route(path.record.medicalRecords, 'routes/medical-records.tsx'),
     route(path.record.medicalRecordDetail, 'routes/medical-record/medical-record-detail.tsx'),
     route(path.nurse.vitalSigns, 'routes/nurse/vital-signs-records.tsx'),
-    route(path.lab.services, 'routes/admin/lab-services.tsx'),
+    route(path.lab.requests, 'routes/lab/lab-requests.tsx'),
+    route(path.lab.tests, 'routes/lab/lab-tests.tsx'),
+    route(path.lab.services, 'routes/lab/lab-services.tsx'),
     route(path.patient.profile, 'routes/patient/profile.tsx')
   ]),
 
