@@ -4,13 +4,13 @@ import useRole from '../use-role'
 import type { SearchQueryParams } from '@/types/index.type'
 
 export default function usePatients(params: SearchQueryParams) {
-  const { isDoctor, isAdmin, isNurse } = useRole()
+  const { isDoctor, isStaff } = useRole()
 
   const { data, isPending } = useQuery({
     queryKey: ['patients', params],
     queryFn: () => patientApi.getPatients(params),
     placeholderData: keepPreviousData,
-    enabled: isDoctor || isAdmin || isNurse
+    enabled: isDoctor || isStaff
   })
   const dataPatients = data?.data.data ?? []
   const currentPage = data?.data.currentPage ?? 1
