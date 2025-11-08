@@ -25,8 +25,10 @@ import formatNumber from '@/helpers/formatNumber'
 import { Item, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function NewLabRequest() {
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [selectedService, setSelectedService] = useState<Service>()
   const { medicalId } = useParams()
@@ -55,18 +57,15 @@ export default function NewLabRequest() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className='cursor-pointer'>
           <CirclePlus />
           <span>Lab Request</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={isMobile}>
         <DialogHeader>
           <DialogTitle>Request Lab Test</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </DialogDescription>
+          <DialogDescription>Specify the test type and add a note if needed before submitting.</DialogDescription>
         </DialogHeader>
         <form id='form-request-lab-test' onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
