@@ -16,7 +16,14 @@ const adminApi = {
     close_time: string
     doctor: Omit<
       Doctor,
-      'uid' | 'availability_status' | 'diagnosis' | 'working_days' | 'appointments' | 'created_at' | 'updated_at'
+      | 'uid'
+      | 'availability_status'
+      | 'diagnosis'
+      | 'working_days'
+      | 'appointments'
+      | 'medical_records'
+      | 'created_at'
+      | 'updated_at'
     >
   }) => http.post<Doctor>('admin/doctor', body),
   createStaff: (body: Omit<Staff, 'uid' | 'status' | 'created_at' | 'updated_at'>) => http.post('admin/staff', body)
