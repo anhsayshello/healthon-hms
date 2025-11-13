@@ -19,6 +19,7 @@ import { FieldGroup } from '../ui/field'
 import { Spinner } from '../ui/spinner'
 import CustomField from '../shared/custom-field'
 import { toast } from 'sonner'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function FinishLabTest({
   id,
@@ -29,6 +30,7 @@ export default function FinishLabTest({
   serviceName: string
   patientName: string
 }) {
+  const isMobile = useIsMobile()
   const { mutate, isPending } = useFinishLabTest()
   const form = useForm<z.infer<typeof LabTestForm>>({
     resolver: zodResolver(LabTestForm),
@@ -56,7 +58,7 @@ export default function FinishLabTest({
           <span>Enter Result</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={isMobile}>
         <DialogHeader>
           <DialogTitle>Finalize Lab Test</DialogTitle>
           <DialogDescription>
@@ -67,9 +69,10 @@ export default function FinishLabTest({
           <FieldGroup>
             <CustomField
               control={form.control}
-              label='Result'
+              label='Test Result'
               name='result'
               fieldType='textarea'
+              maxCharacters={1000}
               placeholder='Record the final lab result here...'
             />
           </FieldGroup>
