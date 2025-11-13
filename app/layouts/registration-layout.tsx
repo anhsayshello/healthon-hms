@@ -21,7 +21,7 @@ export default function RegistrationLayout() {
       <AppSidebar />
       <div className='w-full min-h-screen flex flex-col'>
         <Navbar />
-        <div className='max-w-7xl grow w-full mx-auto p-4 sm:px-6'>
+        <div className='max-w-7xl grow w-full mx-auto px-4 py-2 sm:px-6'>
           <Outlet />
         </div>
       </div>
