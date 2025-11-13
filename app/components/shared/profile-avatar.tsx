@@ -9,10 +9,17 @@ export default function ProfileAvatar({
 }: {
   photoUrl?: string
   name: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
 }) {
   return (
-    <Avatar className={cn({ 'w-8 h-8': size === 'sm', 'w-9 h-9': size === 'md', 'w-10 h-10': size === 'lg' })}>
+    <Avatar
+      className={cn({
+        'w-8.5 h-8.5': size === 'sm',
+        'w-9.5 h-9.5': size === 'md',
+        'w-10.5 h-10.5': size === 'lg',
+        'w-12 h-12': size === 'xl'
+      })}
+    >
       <AvatarImage src={photoUrl} />
       {name ? (
         <AvatarFallback>{getInitials(name)}</AvatarFallback>
