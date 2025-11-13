@@ -1,6 +1,6 @@
 import type { Appointment } from '@/types/appointment.type'
 import type { PaginatedResponse, SearchQueryParams } from '@/types/index.type'
-import type { VitalSigns } from '@/types/medical.type'
+import type { VitalSigns } from '@/types/medical-record.type'
 import http from '@/utils/http'
 
 const nurseApi = {
@@ -8,7 +8,7 @@ const nurseApi = {
     http.get<PaginatedResponse<Appointment>>('nurse/vital-signs', { params }),
   createVitalSigns: (body: {
     appointment_id: number
-    props: Omit<VitalSigns, 'id' | 'patient_id' | 'medical_id' | 'created_at' | 'updated_at' | 'medical_record'>
+    props: Omit<VitalSigns, 'id' | 'medical_record_id' | 'created_at' | 'updated_at' | 'medical_record'>
   }) => http.post<VitalSigns>('nurse/vital-signs', body)
 }
 
