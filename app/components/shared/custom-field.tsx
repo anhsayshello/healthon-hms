@@ -23,6 +23,7 @@ interface Props {
   inputType?: HTMLInputTypeAttribute
   options?: { label: string; value: string }[]
   isDob?: boolean
+  maxCharacters?: number
 }
 
 function InputField({
@@ -35,7 +36,7 @@ function InputField({
   props: Props
   fieldState: ControllerFieldState
 }) {
-  const { label, name, placeholder, inputType, fieldType, options, isDob = true } = props
+  const { label, name, placeholder, inputType, fieldType, options, isDob = true, maxCharacters } = props
   const today = startOfDay(new Date())
 
   switch (fieldType ?? inputType) {
@@ -110,7 +111,9 @@ function InputField({
             aria-invalid={fieldState.invalid}
           />
           <InputGroupAddon align='block-end'>
-            <InputGroupText className='tabular-nums'>{field.value.length}/300 characters</InputGroupText>
+            <InputGroupText className='tabular-nums'>
+              {field.value.length}/{maxCharacters} characters
+            </InputGroupText>
           </InputGroupAddon>
         </InputGroup>
       )
