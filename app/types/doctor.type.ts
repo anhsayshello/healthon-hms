@@ -1,5 +1,5 @@
 import type { Appointment, AppointmentsChart, AppointmentStatusCount } from './appointment.type'
-import type { Diagnosis, MedicalRecord } from './medical.type'
+import type { Diagnosis, MedicalRecord } from './medical-record.type'
 
 type JobType = 'FULL' | 'PART'
 export interface Doctor {
@@ -19,7 +19,7 @@ export interface Doctor {
   working_days: WorkingDays[]
   appointments: Appointment[]
   medical_records: MedicalRecord[]
-  diagnosis: Diagnosis[]
+  diagnoses: Diagnosis[]
 
   created_at: string
   updated_at: string

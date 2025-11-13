@@ -1,6 +1,6 @@
 import type { Doctor } from './doctor.type'
 import type { SearchQueryParams } from './index.type'
-import type { MedicalRecord } from './medical.type'
+import type { MedicalRecord } from './medical-record.type'
 import type { Patient } from './patient.type'
 
 export type AppointmentStatus = 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'
@@ -40,7 +40,7 @@ export interface Appointment {
   created_at: string
   updated_at: string
 
-  medical: MedicalRecord[]
+  medical_records: MedicalRecord[]
 }
 
 export type ViewType = 'all' | 'today'
