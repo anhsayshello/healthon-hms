@@ -61,3 +61,12 @@ export const CURRENCY = [
   { label: 'USD', value: 'USD' },
   { label: 'EUR', value: 'EUR' }
 ]
+
+export const MEDICATION_UNIT_TYPES = [
+  { label: 'Tablet', value: 'TABLET' },
+  { label: 'Capsule', value: 'CAPSULE' },
+  { label: 'Vial', value: 'VIAL' },
+  { label: 'Tube', value: 'TUBE' },
+  { label: 'Bottle', value: 'BOTTLE' },
+  { label: 'Injection', value: 'INJECTION' }
+]

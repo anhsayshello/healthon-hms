@@ -1,5 +1,4 @@
 import z from 'zod'
-import dayjs from 'dayjs'
 
 export const DoctorFormSchema = z.object({
   email: z.email(),
