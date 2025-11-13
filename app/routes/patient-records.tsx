@@ -14,10 +14,10 @@ import UserDetailsDialog from '../components/shared/user-details-dialog'
 import { RoleEnum } from '@/types/role.type'
 import { PatientBasicInfo, PatientEmergencyContact, PatientMedicalInfo } from '@/components/shared/patient-information'
 import formatDate from '@/helpers/formatDate'
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Patient Table' }, { name: 'description', content: 'Welcome to React Router!' }]
+  return [{ title: 'Patient Records' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 const tableColumns = [
@@ -30,19 +30,19 @@ const tableColumns = [
 ]
 
 export default function PatientRecords() {
-  const { isAdmin, isNurse, isDoctor } = useRole()
+  const { isAdmin, isStaff, isDoctor } = useRole()
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
   const { dataPatients, currentPage, totalPages, totalRecords, isPending } = usePatients({ query, page, limit })
 
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Patient Record' totalRecords={totalRecords} onSearch={handleSearch} />
+        <TableMetadata title='Patient Table' totalRecords={totalRecords} onSearch={handleSearch} />
         <Table className='bg-background'>
           <TableHeader>
             <TableRow>
               {isAdmin && tableColumns.map((column) => <TableHead key={column.key}>{column.header}</TableHead>)}
-              {(isDoctor || isNurse) &&
+              {(isDoctor || (isStaff && !isAdmin)) &&
                 tableColumns.map((column) => {
                   return column.key !== 'action' && <TableHead key={column.key}>{column.header}</TableHead>
                 })}

@@ -1,6 +1,6 @@
 import type { Route } from './+types/dashboard'
 
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 import DoctorDashboard from './doctor/doctor-dashboard'
 import PatientDashboard from './patient/patient-dashboard'
 import StaffDashboard from './staff/staff-dashboard'

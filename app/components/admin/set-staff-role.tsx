@@ -11,7 +11,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 import { Separator } from '@/components/ui/separator'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Controller, useForm } from 'react-hook-form'

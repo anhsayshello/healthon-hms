@@ -13,10 +13,10 @@ import type { Staff } from '@/types/staff.type'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import UserDetailsDialog from '../../components/shared/user-details-dialog'
 import InfoItem from '@/components/shared/info-item'
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Staff Table' }, { name: 'description', content: 'Welcome to React Router!' }]
+  return [{ title: 'Staff Records' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 const tableColumns = [
@@ -36,7 +36,7 @@ export default function StaffRecords() {
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Staff Record' totalRecords={totalRecords} onSearch={handleSearch}>
+        <TableMetadata title='Staff Table' totalRecords={totalRecords} onSearch={handleSearch}>
           <NewStaff />
         </TableMetadata>
         <Table className='bg-background'>
