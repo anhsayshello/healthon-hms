@@ -36,7 +36,7 @@ export default function NewLabService() {
     defaultValues: {
       service_name: '',
       description: '',
-      currency: 'VND'
+      price: ''
     }
   })
 
@@ -84,7 +84,7 @@ export default function NewLabService() {
           </div>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <form id='form-create-staff' onSubmit={form.handleSubmit(onSubmit)}>
+        <form id='form-create-lab-service' onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <CustomField control={form.control} label='Name' name='service_name' placeholder='Enter service name' />
             <div className='flex items-start gap-6 lg:gap-8'>
@@ -100,6 +100,7 @@ export default function NewLabService() {
                 label='Currency'
                 name='currency'
                 fieldType='select'
+                placeholder='Select currency'
                 options={CURRENCY}
               />
             </div>
@@ -108,6 +109,7 @@ export default function NewLabService() {
               label='Description'
               name='description'
               fieldType='textarea'
+              maxCharacters={500}
               placeholder='Enter description'
             />
           </FieldGroup>
@@ -116,7 +118,7 @@ export default function NewLabService() {
           <DialogClose>
             <Button variant={'outline'}>Cancel</Button>
           </DialogClose>
-          <Button className='cursor-pointer' form='form-create-staff' disabled={isPending}>
+          <Button className='cursor-pointer' form='form-create-lab-service' disabled={isPending}>
             {isPending && <Spinner />}
             Create
           </Button>
