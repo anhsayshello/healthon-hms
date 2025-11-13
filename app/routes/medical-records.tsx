@@ -14,7 +14,7 @@ import useMedicalRecords from '@/hooks/medical-record/useMedicalRecords'
 import useTodayMedicalRecords from '@/hooks/medical-record/useTodayMedicalRecords'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { RoleEnum } from '@/types/role.type'
-import type { MedicalRecord } from '@/types/medical.type'
+import type { MedicalRecord } from '@/types/medical-record.type'
 import { formatDateTime } from '@/helpers/formatDateTime'
 
 export function meta({}: Route.MetaArgs) {
@@ -22,7 +22,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const tableColumns = [
-  { header: 'Id', key: 'id' },
+  { header: 'ID', key: 'id' },
   { header: 'Patient info', key: 'patient-info' },
   { header: 'Date & Time', key: 'date-time' },
   { header: 'Diagnosis', key: 'diagnosis' },
