@@ -1,7 +1,7 @@
 import medicalRecordApi from '@/apis/medical-record.api'
 import type { SearchQueryParams } from '@/types/index.type'
 import { useQuery } from '@tanstack/react-query'
-import useRole from '../use-role'
+import useRole from '../useRole'
 
 export default function useMedicalRecords(params: SearchQueryParams) {
   const { isDoctor, isPatient } = useRole()

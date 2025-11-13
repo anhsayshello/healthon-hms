@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useRole from '../use-role'
+import useRole from '../useRole'
 import { useAuthStore } from '@/stores/useAuthStore'
 import type { AppointmentParams } from '@/types/appointment.type'
 import appointmentApi from '@/apis/appointment.api'

@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/useAuthStore'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useRole from '../use-role'
+import useRole from '../useRole'
 import doctorApi from '@/apis/doctor.api'
 
 export default function useDoctorStatistic() {

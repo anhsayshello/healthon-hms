@@ -1,6 +1,6 @@
 import doctorApi from '@/apis/doctor.api'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useRole from '../use-role'
+import useRole from '../useRole'
 import type { SearchQueryParams } from '@/types/index.type'
 
 export default function useDoctors(params: SearchQueryParams) {
