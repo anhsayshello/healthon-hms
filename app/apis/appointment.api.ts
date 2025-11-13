@@ -3,22 +3,18 @@ import type { PaginatedResponse } from '@/types/index.type'
 import http from '@/utils/http'
 
 const appointmentApi = {
-  getAppointmentDetail: (id: number) => http.get<Appointment>(`appointment/${id}`),
   getAppointments: (params: AppointmentParams) => http.get<PaginatedResponse<Appointment>>('appointment', { params }),
+  getAppointmentById: (id: number) => http.get<Appointment>(`appointment/${id}`),
   getDoctorAppointments: (params: AppointmentParams) =>
     http.get<PaginatedResponse<Appointment>>('appointment/doctor', { params }),
   getPatientAppointments: (params: AppointmentParams) =>
     http.get<PaginatedResponse<Appointment>>('appointment/patient', { params }),
-  createNewAppointment: (
-    body: Omit<
-      Appointment,
-      'id' | 'patient_id' | 'status' | 'patient' | 'doctor' | 'note' | 'medical' | 'created_at' | 'updated_at'
-    >
-  ) => http.post<Appointment>('appointment', body),
-  updateAppointmentDetail: ({
+  createAppointment: (body: Pick<Appointment, 'doctor_id' | 'appointment_date' | 'time' | 'type' | 'reason'>) =>
+    http.post<Appointment>('appointment', body),
+  updateAppointment: ({
+    reason,
     id,
     status,
-    reason,
     note
   }: {
     id: number
