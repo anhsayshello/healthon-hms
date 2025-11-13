@@ -17,7 +17,7 @@ import InfoItem from '@/components/shared/info-item'
 import { Badge } from '@/components/ui/badge'
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Doctor Table' }, { name: 'description', content: 'Welcome to React Router!' }]
+  return [{ title: 'Doctor Records' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 const tableColumns = [
@@ -36,7 +36,7 @@ export default function DoctorRecords() {
   return (
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
-        <TableMetadata title='Doctor Record' totalRecords={totalRecords} onSearch={handleSearch}>
+        <TableMetadata title='Doctor Table' totalRecords={totalRecords} onSearch={handleSearch}>
           <NewDoctor />
         </TableMetadata>
         <Table className='bg-background'>
