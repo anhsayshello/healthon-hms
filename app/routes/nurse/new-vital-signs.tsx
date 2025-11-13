@@ -18,7 +18,7 @@ import { VitalSignsSchema } from '@/lib/schemas/vital-signs-form'
 import { faker } from '@faker-js/faker'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { HeartHandshake } from 'lucide-react'
+import { HeartPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -76,7 +76,7 @@ export default function NewVitalSigns({ appointment_id, patientFirstName, patien
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <HeartHandshake />
+          <HeartPlus />
           <span>Take Vital Signs</span>
         </Button>
       </DialogTrigger>
