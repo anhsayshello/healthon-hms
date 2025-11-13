@@ -26,6 +26,8 @@ export interface UserCredentialExtended extends UserCredential {
   _tokenResponse: GoogleTokenResponse
 }
 
+export type Currency = 'VND' | 'USD' | 'EUR'
+
 export interface SearchQueryParams {
   query?: string
   limit?: string
