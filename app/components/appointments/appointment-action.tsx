@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '../ui/separator'
 
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 import { type Appointment } from '@/types/appointment.type'
 import { Button } from '../ui/button'
 import { useAuthStore } from '@/stores/useAuthStore'
@@ -13,7 +13,7 @@ import CancelAppointment from './cancel-appointment'
 import { EllipsisVertical } from 'lucide-react'
 
 export default function AppointmentAction({ id, appointment }: { id: number; appointment: Appointment }) {
-  const { isAdmin, isNurse, isDoctor } = useRole()
+  const { isPatient, isAdmin, isNurse, isDoctor } = useRole()
   const user = useAuthStore((state) => state.user)
 
   const isAssignedDoctor = useMemo(
@@ -39,8 +39,12 @@ export default function AppointmentAction({ id, appointment }: { id: number; app
               <ApproveAppointment id={id} appointment={appointment} />
             </>
           )}
-          <Separator />
-          <CancelAppointment id={id} appointment={appointment} />
+          {(isPatient || isAdmin || isNurse || isAssignedDoctor) && (
+            <>
+              <Separator />
+              <CancelAppointment id={id} appointment={appointment} />
+            </>
+          )}
         </div>
       </PopoverContent>
     </Popover>
