@@ -19,7 +19,7 @@ const path = {
     staffs: '/record/staffs',
     appointments: '/record/appointments',
     medicalRecords: '/record/medical-records',
-    medicalRecordDetail: '/record/medical-records/:medicalId',
+    medicalRecordDetail: '/record/medical-records/:medicalRecordId',
     billingOverview: '/record/billing'
   },
   nurse: {
@@ -30,6 +30,9 @@ const path = {
     requests: '/lab/requests',
     tests: '/lab/tests',
     services: '/lab/services'
+  },
+  cashier: {
+    medication: '/medication'
   },
   patient: {
     register: '/patient/register',
