@@ -161,6 +161,7 @@ export default function BookAppoinment() {
                 label='Reason'
                 name='reason'
                 fieldType='textarea'
+                maxCharacters={300}
                 placeholder='Describe your symptoms or reason for this appointment'
               />
               <DialogFooter>
