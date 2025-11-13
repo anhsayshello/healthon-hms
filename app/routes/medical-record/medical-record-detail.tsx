@@ -1,21 +1,23 @@
-import type { Route } from '../+types/medical-record-detail'
-import useMedicalRecord from '@/hooks/medical-record/useMedicalRecord'
+import type { Route } from '../medical-record/+types/medical-record-detail'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PatientBasicInfo, PatientEmergencyContact, PatientMedicalInfo } from '@/components/shared/patient-information'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { getInitials } from '@/components/shared/profile-avatar'
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Activity, Heart, Ruler, Thermometer, Weight, Wind, type LucideIcon } from 'lucide-react'
+import { Activity, Heart, Ruler, Thermometer, Weight, Wind } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import NewLabRequest from '@/components/lab/new-lab-request'
-import type { LabTest } from '@/types/lab.type'
-import { useState } from 'react'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import LabTestStatusIndicator from '@/components/lab/lab-status-indicator'
-import { formatDateTime } from '@/helpers/formatDateTime'
-import useRole from '@/hooks/use-role'
-import LabTestDetail from '../lab/lab-test-detail'
+import useRole from '@/hooks/useRole'
+import type { Patient } from '@/types/patient.type'
+import { Item } from '@/components/ui/item'
+import useMedicalRecordById from '@/hooks/medical-record/useMedicalRecordById'
+import NewDiagnosis from '../../components/medical-record/new-diagnosis'
+import DiagnosisCard from '../../components/medical-record/diagnosis-card'
+import NewPrescription from '@/components/medical-record/new-prescription'
+import PrescriptionCard from '@/components/medical-record/prescription-card'
+import { AppointmentStatusEnum } from '@/types/appointment.type'
+import VitalCard from '@/components/medical-record/vital-card'
+import LabTestCard from '@/components/medical-record/lab-test-card'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Patient Examination' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -23,7 +25,9 @@ export function meta({}: Route.MetaArgs) {
 
 export default function MedicalRecordDetail() {
   const { isDoctor } = useRole()
-  const { dataMedicalRecord, isPending } = useMedicalRecord()
+  const { dataMedicalRecord, isPending } = useMedicalRecordById()
+
+  const isModify = isDoctor && dataMedicalRecord?.appointment?.status === AppointmentStatusEnum.SCHEDULED
 
   if (isPending) {
     return (
@@ -48,7 +52,7 @@ export default function MedicalRecordDetail() {
             Vital Signs
           </TabsTrigger>
           <TabsTrigger className='truncate' value='lab-test'>
-            Lab Tests
+            Lab Test
           </TabsTrigger>
           <TabsTrigger className='truncate' value='diagnosis'>
             Diagnosis
@@ -57,37 +61,39 @@ export default function MedicalRecordDetail() {
             Prescription
           </TabsTrigger>
         </TabsList>
-        <TabsContent value='patient-info' className='px-6'>
+        <TabsContent value='patient-info'>
           {dataMedicalRecord?.patient && (
-            <div className='space-y-5'>
-              <div className='flex items-start gap-5'>
-                <div className='relative'>
-                  <Avatar className={'w-20 h-20 border-2 border-primary'}>
-                    <AvatarImage src={dataMedicalRecord.patient?.photo_url} />
-                    <AvatarFallback>{getInitials(dataMedicalRecord.patient?.last_name ?? '')}</AvatarFallback>
-                  </Avatar>
+            <Item variant={'outline'} className='md:p-5'>
+              <div className='space-y-5'>
+                <div className='flex items-start gap-5'>
+                  <div className='relative'>
+                    <Avatar className={'w-20 h-20 border-2 border-primary'}>
+                      <AvatarImage src={dataMedicalRecord.patient?.photo_url} />
+                      <AvatarFallback>{getInitials(dataMedicalRecord.patient?.last_name ?? '')}</AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <div className='flex-1 space-y-0.5'>
+                    <h3 className='text-xl font-semibold'>
+                      {dataMedicalRecord.patient?.first_name} {dataMedicalRecord.patient?.last_name}
+                    </h3>
+                    <p className='text-sm text-muted-foreground'>{dataMedicalRecord.patient?.email}</p>
+                  </div>
                 </div>
-                <div className='flex-1 space-y-0.5'>
-                  <h3 className='text-xl font-semibold'>
-                    {dataMedicalRecord.patient?.first_name} {dataMedicalRecord.patient?.last_name}
-                  </h3>
-                  <p className='text-sm text-muted-foreground'>{dataMedicalRecord.patient?.email}</p>
+                <Separator />
+                <div>
+                  <h4 className='font-semibold mb-3 text-lg'>Basic Info</h4>
+                  <PatientBasicInfo patient={dataMedicalRecord.patient} />
+                </div>
+                <div>
+                  <h4 className='font-semibold mb-3 text-lg'>Emergency Contact</h4>
+                  <PatientEmergencyContact patient={dataMedicalRecord.patient} />
+                </div>
+                <div>
+                  <h4 className='font-semibold mb-3 text-lg'>Medical Information</h4>
+                  <PatientMedicalInfo patient={dataMedicalRecord.patient} />
                 </div>
               </div>
-              <Separator />
-              <div>
-                <h4 className='font-semibold mb-3 text-lg'>Basic Info</h4>
-                <PatientBasicInfo patient={dataMedicalRecord.patient} />
-              </div>
-              <div>
-                <h4 className='font-semibold mb-3 text-lg'>Emergency Contact</h4>
-                <PatientEmergencyContact patient={dataMedicalRecord.patient} />
-              </div>
-              <div>
-                <h4 className='font-semibold mb-3 text-lg'>Medical Information</h4>
-                <PatientMedicalInfo patient={dataMedicalRecord.patient} />
-              </div>
-            </div>
+            </Item>
           )}
         </TabsContent>
         <TabsContent value='vital-signs'>
@@ -112,69 +118,38 @@ export default function MedicalRecordDetail() {
             </div>
           ))}
         </TabsContent>
-        <TabsContent value='prescription'>Prescription</TabsContent>
         <TabsContent value='lab-test' className='space-y-4'>
-          {isDoctor && (
+          {isModify && (
             <div className='flex justify-end'>
               <NewLabRequest />
             </div>
           )}
-          {dataMedicalRecord?.lab_test?.map((labTest) => (
-            <LabTestCard labTest={labTest} />
+          {dataMedicalRecord?.patient &&
+            dataMedicalRecord?.lab_tests?.map((labTest) => (
+              <LabTestCard key={labTest.id} labTest={labTest} patient={dataMedicalRecord.patient as Patient} />
+            ))}
+        </TabsContent>
+        <TabsContent value='diagnosis' className='space-y-4'>
+          {isModify && (
+            <div className='flex justify-end'>
+              <NewDiagnosis />
+            </div>
+          )}
+          {dataMedicalRecord?.diagnoses?.map((diagnosis) => (
+            <DiagnosisCard key={diagnosis.id} diagnosis={diagnosis} isModify={isModify} />
           ))}
         </TabsContent>
-        <TabsContent value='diagnosis'>Diagnosis</TabsContent>
+        <TabsContent value='prescription' className='space-y-4'>
+          {isModify && (
+            <div className='flex justify-end'>
+              <NewPrescription />
+            </div>
+          )}
+          {dataMedicalRecord?.prescriptions?.map((prescription) => (
+            <PrescriptionCard key={prescription.id} prescription={prescription} isModify={isModify} />
+          ))}
+        </TabsContent>
       </Tabs>
     </div>
-  )
-}
-
-function LabTestCard({ labTest }: { labTest: LabTest }) {
-  const [open, setOpen] = useState(false)
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Card className='cursor-pointer'>
-          <CardHeader>
-            <CardTitle>{labTest.service?.service_name}</CardTitle>
-            <CardAction>
-              <LabTestStatusIndicator status={labTest.status} />
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <p className='text-sm text-muted-foreground'>Created at: {formatDateTime(labTest.created_at)}</p>
-          </CardContent>
-        </Card>
-      </DialogTrigger>
-      <LabTestDetail labTest={labTest} />
-    </Dialog>
-  )
-}
-
-function VitalCard({
-  icon: Icon,
-  label,
-  value,
-  unit
-}: {
-  icon: LucideIcon
-  label: string
-  value: number | string
-  unit: string
-}) {
-  return (
-    <Card className='gap-3'>
-      <CardHeader>
-        <CardTitle className='flex items-center gap-2'>
-          <Icon />
-          <span>{label}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className='flex items-end gap-2'>
-        <div className='text-xl font-bold'>{value}</div>
-        <div className='text-sm'>{unit}</div>
-      </CardContent>
-    </Card>
   )
 }
