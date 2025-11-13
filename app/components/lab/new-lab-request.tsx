@@ -31,7 +31,7 @@ export default function NewLabRequest() {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [selectedService, setSelectedService] = useState<Service>()
-  const { medicalId } = useParams()
+  const { medicalRecordId } = useParams()
 
   const { dataLabServices, isPending: isLoadingServices } = useLabServices({ limit: '1000' })
   const { mutate, isPending } = useCreateLabRequest()
@@ -41,9 +41,9 @@ export default function NewLabRequest() {
   })
 
   const onSubmit = (data: z.infer<typeof LabRequestForm>) => {
-    if (medicalId) {
+    if (medicalRecordId) {
       mutate(
-        { medical_id: Number(medicalId), service_id: data.service_id },
+        { medical_record_id: Number(medicalRecordId), service_id: data.service_id },
         {
           onSuccess: () => {
             setOpen(false)
