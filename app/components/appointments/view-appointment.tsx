@@ -10,7 +10,8 @@ import {
   SquarePen,
   Vault,
   ScanSearch,
-  Syringe
+  Syringe,
+  Cctv
 } from 'lucide-react'
 import AppointmentStatusIndicator from './appointment-status-indicator'
 import { Separator } from '../ui/separator'
@@ -19,21 +20,23 @@ import { Spinner } from '../ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Textarea } from '../ui/textarea'
-import ProfileAvatar from '../shared/profile-avatar'
 import { cn } from '@/lib/utils'
-import useRole from '@/hooks/use-role'
+import useRole from '@/hooks/useRole'
 import Timestamps from '../shared/time-stamps'
 import PatientInformation from '../shared/patient-information'
-import useUpdateAppointment from '@/hooks/appointment/useUpdateAppointment'
-import useAppointmentDetail from '@/hooks/appointment/useAppointmentDetail'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
 import formatDate from '@/helpers/formatDate'
+import useUpdateAppointmentById from '@/hooks/appointment/useUpdateAppointment'
+import UserInfo from '../shared/user-info'
+import { useNavigate } from 'react-router'
+import path from '@/constants/path'
+import useAppointmentById from '@/hooks/appointment/useAppointmentById'
 
 export default function ViewAppointment({ id }: { id: number }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
-  const { dataAppointment, isPending } = useAppointmentDetail(id, open)
+  const { dataAppointment, isPending } = useAppointmentById(id, open)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -60,16 +63,17 @@ export default function ViewAppointment({ id }: { id: number }) {
             <Spinner />
           </div>
         ) : dataAppointment ? (
-          <div className='space-y-5'>
+          <div className='space-y-4 sm:space-y-5'>
             {/* Appointment Info */}
             <AppointmentInformation
-              id={dataAppointment.id}
+              appointmentId={dataAppointment.id}
               appointmentType={dataAppointment.type}
               appointmentDate={dataAppointment.appointment_date}
               appointmentTime={dataAppointment.time}
               appointmentStatus={dataAppointment.status}
               appointmentReason={dataAppointment.reason}
               appointmentNote={dataAppointment.note}
+              medicalRecordId={dataAppointment.medical_records[0]?.id}
             />
 
             <Separator />
@@ -77,23 +81,17 @@ export default function ViewAppointment({ id }: { id: number }) {
             {/* Doctor Info */}
             <div className='space-y-3'>
               <h3 className='text-sm font-semibold flex items-center gap-2'>
-                <Stethoscope className='w-4 h-4' />
+                <Stethoscope size={18} />
                 Doctor
               </h3>
-              <div className='flex items-start gap-3'>
-                <ProfileAvatar
-                  photoUrl={dataAppointment?.doctor?.photo_url}
-                  name={dataAppointment?.doctor?.last_name}
-                  size='lg'
-                />
-                <div className='space-y-0.5'>
-                  <p className='font-medium leading-5'>
-                    Dr. {dataAppointment?.doctor?.first_name} {dataAppointment?.doctor?.last_name}
-                  </p>
-                  <p className='text-xs text-gray-600'>{dataAppointment?.doctor?.specialization}</p>
-                  <p className='text-xs text-gray-600'>ID: {dataAppointment?.doctor?.uid}</p>
-                </div>
-              </div>
+              <UserInfo
+                firstName={dataAppointment.doctor.first_name}
+                lastName={dataAppointment.doctor.last_name}
+                photoUrl={dataAppointment.doctor.photo_url}
+                description={dataAppointment.doctor.specialization}
+                uid={dataAppointment.doctor.uid}
+                size='lg'
+              />
             </div>
 
             <Separator />
@@ -101,7 +99,7 @@ export default function ViewAppointment({ id }: { id: number }) {
             {/* Patient Info */}
             <div className='space-y-3'>
               <h3 className='text-sm font-semibold flex items-center gap-2'>
-                <User className='w-4 h-4' />
+                <User size={18} />
                 Patient
               </h3>
               <div className='col-span-2'>
@@ -138,32 +136,35 @@ function EmptyAppointment() {
 }
 
 function AppointmentInformation({
-  id,
+  appointmentId,
   appointmentType,
   appointmentDate,
   appointmentTime,
   appointmentStatus,
   appointmentReason,
-  appointmentNote
+  appointmentNote,
+  medicalRecordId
 }: {
-  id: number
+  appointmentId: number
   appointmentType: string
   appointmentDate: string
   appointmentTime: string
   appointmentStatus: AppointmentStatus
   appointmentReason: string
   appointmentNote?: string
+  medicalRecordId?: number
 }) {
+  const navigate = useNavigate()
   const { isAdmin, isNurse } = useRole()
   const [isUpdate, setIsUpdate] = useState(false)
   const [reason, setReason] = useState(appointmentReason ?? '')
   const [status, setStatus] = useState<AppointmentStatus>(appointmentStatus)
 
-  const { mutate, isPending } = useUpdateAppointment()
+  const { mutate, isPending } = useUpdateAppointmentById()
 
   const handleAction = () => {
     mutate(
-      { id, status, reason },
+      { id: appointmentId, status, reason },
       {
         onSuccess: () => toast.success('Updated appointment successfully'),
         onError: () => {
@@ -184,121 +185,133 @@ function AppointmentInformation({
           </Button>
         )}
       </div>
-      <div className='space-y-3 text-sm'>
-        <div className='flex items-center'>
-          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-            <Syringe className='w-4 h-4 text-muted-foreground' />
-            <span className='text-muted-foreground'>Type:</span>
+      <div className='grid grid-cols-2'>
+        <div className='space-y-3 text-sm'>
+          <div className='flex items-center'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <Syringe size={16} className='text-muted-foreground' />
+              <span className='text-muted-foreground'>Type:</span>
+            </div>
+            <span className='font-medium grow capitalize'>{appointmentType}</span>
           </div>
-          <span className='font-medium grow capitalize'>{appointmentType}</span>
-        </div>
-        <div className='flex items-center'>
-          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-            <Calendar className='w-4 h-4 text-muted-foreground' />
-            <span className='text-muted-foreground'>Date:</span>
+          <div className='flex items-center'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <Calendar size={16} className='text-muted-foreground' />
+              <span className='text-muted-foreground'>Date:</span>
+            </div>
+            <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
           </div>
-          <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
-        </div>
-        <div className='flex items-center'>
-          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-            <Clock className='w-4 h-4 text-muted-foreground' />
-            <span className='text-muted-foreground'>Time:</span>
+          <div className='flex items-center'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <Clock size={16} className='text-muted-foreground' />
+              <span className='text-muted-foreground'>Time:</span>
+            </div>
+            <span className='font-medium grow'>{appointmentTime}</span>
           </div>
-          <span className='font-medium grow'>{appointmentTime}</span>
-        </div>
-        <div className='flex items-start'>
-          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-            <SquareActivity className='w-4 h-4 text-muted-foreground' />
-            <span className='text-muted-foreground'>Status:</span>
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <SquareActivity size={16} className='text-muted-foreground' />
+              <span className='text-muted-foreground'>Status:</span>
+            </div>
+            {!isUpdate ? (
+              <AppointmentStatusIndicator status={appointmentStatus} />
+            ) : (
+              <div className='flex items-center gap-2 flex-wrap'>
+                <Button
+                  variant='ghost'
+                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                  onClick={() => setStatus(AppointmentStatusEnum.SCHEDULED)}
+                  disabled={isPending || status === AppointmentStatusEnum.SCHEDULED}
+                >
+                  <AppointmentStatusIndicator status={AppointmentStatusEnum.SCHEDULED} />
+                </Button>
+                <Button
+                  variant='ghost'
+                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                  onClick={() => setStatus(AppointmentStatusEnum.PENDING)}
+                  disabled={isPending || status === AppointmentStatusEnum.PENDING}
+                >
+                  <AppointmentStatusIndicator status={AppointmentStatusEnum.PENDING} />
+                </Button>
+                <Button
+                  variant='ghost'
+                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                  onClick={() => setStatus(AppointmentStatusEnum.CANCELLED)}
+                  disabled={isPending || status === AppointmentStatusEnum.CANCELLED}
+                >
+                  <AppointmentStatusIndicator status={AppointmentStatusEnum.CANCELLED} />
+                </Button>
+                <Button
+                  variant='ghost'
+                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                  onClick={() => setStatus(AppointmentStatusEnum.COMPLETED)}
+                  disabled={isPending || status === AppointmentStatusEnum.COMPLETED}
+                >
+                  <AppointmentStatusIndicator status={AppointmentStatusEnum.COMPLETED} />
+                </Button>
+              </div>
+            )}
           </div>
-          {!isUpdate ? (
-            <AppointmentStatusIndicator status={appointmentStatus} />
-          ) : (
-            <div className='flex items-center gap-2 flex-wrap'>
-              <Button
-                variant='ghost'
-                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                onClick={() => setStatus(AppointmentStatusEnum.SCHEDULED)}
-                disabled={isPending || status === AppointmentStatusEnum.SCHEDULED}
-              >
-                <AppointmentStatusIndicator status={AppointmentStatusEnum.SCHEDULED} />
-              </Button>
-              <Button
-                variant='ghost'
-                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                onClick={() => setStatus(AppointmentStatusEnum.PENDING)}
-                disabled={isPending || status === AppointmentStatusEnum.PENDING}
-              >
-                <AppointmentStatusIndicator status={AppointmentStatusEnum.PENDING} />
-              </Button>
-              <Button
-                variant='ghost'
-                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                onClick={() => setStatus(AppointmentStatusEnum.CANCELLED)}
-                disabled={isPending || status === AppointmentStatusEnum.CANCELLED}
-              >
-                <AppointmentStatusIndicator status={AppointmentStatusEnum.CANCELLED} />
-              </Button>
-              <Button
-                variant='ghost'
-                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                onClick={() => setStatus(AppointmentStatusEnum.COMPLETED)}
-                disabled={isPending || status === AppointmentStatusEnum.COMPLETED}
-              >
-                <AppointmentStatusIndicator status={AppointmentStatusEnum.COMPLETED} />
-              </Button>
+
+          {appointmentNote && (
+            <div className='flex items-start'>
+              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+                <FileText size={16} className='text-muted-foreground mt-0.5' />
+                <span className='text-muted-foreground'>Note:</span>
+              </div>
+              <span className='font-medium grow'>{appointmentNote}</span>
+            </div>
+          )}
+
+          {!isUpdate && (
+            <div className='flex items-start'>
+              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+                <FileText size={16} className='text-muted-foreground mt-0.5' />
+                <span className='text-muted-foreground'>Reason:</span>
+              </div>
+              <span className='font-medium grow'>{appointmentReason}</span>
+            </div>
+          )}
+
+          {isUpdate && (
+            <div className='flex items-start'>
+              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+                <FileText size={16} className='text-muted-foreground mt-0.5' />
+                <span className='text-muted-foreground'>Reason:</span>
+              </div>
+              <Textarea
+                disabled={isPending}
+                className='max-h-30 text-sm'
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              />
+            </div>
+          )}
+
+          {isUpdate && (
+            <div className='flex items-center pt-3'>
+              <div className='shrink-0 w-21 lg:w-21.5'></div>
+              <div className='flex items-center gap-3'>
+                <Button onClick={() => setIsUpdate(false)} size='sm' className='text-destructive' variant='outline'>
+                  Cancel
+                </Button>
+                <Button disabled={isPending} size='sm' onClick={handleAction}>
+                  {isPending && <Spinner />}
+                  Confirm
+                </Button>
+              </div>
             </div>
           )}
         </div>
 
-        {appointmentNote && (
-          <div className='flex items-start'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
-              <span className='text-muted-foreground'>Note:</span>
-            </div>
-            <span className='font-medium grow'>{appointmentNote}</span>
-          </div>
-        )}
-
-        {!isUpdate && (
-          <div className='flex items-start'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
-              <span className='text-muted-foreground'>Reason:</span>
-            </div>
-            <span className='font-medium grow'>{appointmentReason}</span>
-          </div>
-        )}
-
-        {isUpdate && (
-          <div className='flex items-start'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <FileText className='w-4 h-4 text-muted-foreground mt-0.5' />
-              <span className='text-muted-foreground'>Reason:</span>
-            </div>
-            <Textarea
-              disabled={isPending}
-              className='max-h-30 text-sm'
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
-          </div>
-        )}
-
-        {isUpdate && (
-          <div className='flex items-center pt-3'>
-            <div className='shrink-0 w-21 lg:w-21.5'></div>
-            <div className='flex items-center gap-3'>
-              <Button onClick={() => setIsUpdate(false)} size='sm' className='text-destructive' variant='outline'>
-                Cancel
-              </Button>
-              <Button disabled={isPending} size='sm' onClick={handleAction}>
-                {isPending && <Spinner />}
-                Confirm
-              </Button>
-            </div>
-          </div>
+        {medicalRecordId && (
+          <Button
+            variant={'link'}
+            onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecordId}` })}
+          >
+            <Cctv />
+            <span>View Medical Record</span>
+          </Button>
         )}
       </div>
     </div>
