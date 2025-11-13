@@ -1,4 +1,6 @@
-import type { MedicalRecord, Payment } from './medical.type'
+import type { Currency } from './index.type'
+import type { MedicalRecord } from './medical-record.type'
+import type { LabBill } from './payment.type'
 import type { Staff } from './staff.type'
 
 export type LabTestStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
@@ -8,8 +10,6 @@ export enum LabTestStatusEnum {
   CANCELLED = 'CANCELLED',
   COMPLETED = 'COMPLETED'
 }
-
-export type Currency = 'VND' | 'USD' | 'EUR'
 
 export interface Service {
   id: number
@@ -39,19 +39,4 @@ export interface LabTest {
   technician?: Staff
   service?: Service
   medical_record?: MedicalRecord
-}
-
-export interface LabBill {
-  id: number
-  bill_id: number
-  service_id: number
-  service_date: string
-  quantity: number
-  unit_cost: number
-  total_cost: number
-  created_at: string
-  updated_at: string
-
-  service?: Service
-  payment?: Payment
 }
