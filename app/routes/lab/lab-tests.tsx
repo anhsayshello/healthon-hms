@@ -15,6 +15,7 @@ import { formatDateTime } from '@/helpers/formatDateTime'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useState } from 'react'
 import LabTestDetail from './lab-test-detail'
+import type { Patient } from '@/types/patient.type'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Lab Tests' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -94,7 +95,7 @@ function LabTestRow({ labTest }: { labTest: LabTest }) {
         <TableCell>{formatDateTime(labTest.test_date)}</TableCell>
       </TableRow>
       <DialogContent showCloseButton={isMobile}>
-        <LabTestDetail labTest={labTest} />
+        <LabTestDetail labTest={labTest} patient={labTest.medical_record?.patient as Patient} />
       </DialogContent>
     </Dialog>
   )
