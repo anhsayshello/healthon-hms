@@ -18,7 +18,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const tableColumns = [
-  { header: 'Id', key: 'id' },
+  { header: 'ID', key: 'id' },
   { header: 'Name', key: 'name' },
   { header: 'Price', key: 'price' },
   { header: 'Currency', key: 'currency' },
