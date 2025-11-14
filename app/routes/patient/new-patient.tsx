@@ -86,15 +86,18 @@ export default function NewPatient({ data, type }: Props) {
     <Card className='w-full gap-2 lg:px-3 lg:py-6 rounded-lg'>
       <CardHeader>
         <CardTitle className='text-2xl'>{type === 'create' ? 'Patient Registration' : 'Patient Profile'}</CardTitle>
-
         <CardDescription>
-          {type === 'create'
-            ? 'Please provide all the information below to help us understand better and provide good and quality service to you.'
-            : 'You can update your personal and medical information below to help us keep your profile accurate and up-to-date.'}
+          {type === 'update' && <p>ID: {data?.uid}</p>}
+          <p>
+            {type === 'create'
+              ? 'Please provide all the information below to help us understand better and provide good and quality service to you.'
+              : 'You can update your personal and medical information below to help us keep your profile accurate and up-to-date.'}
+          </p>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className='text-xl font-semibold mt-5 mb-4'>Personal Information</div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <div className='flex items-start gap-6 lg:gap-8'>
