@@ -28,7 +28,13 @@ export default [
     route(path.lab.tests, 'routes/lab/lab-tests.tsx'),
     route(path.lab.services, 'routes/lab/lab-services.tsx'),
 
-    route(path.cashier.medication, 'routes/cashier/medication-list.tsx')
+    route(path.cashier.payments, 'routes/cashier/payment-records.tsx'),
+    route(path.cashier.paymentDetail, 'routes/cashier/payment-detail.tsx'),
+    route(path.cashier.receiptDetail, 'routes/cashier/receipt-detail.tsx'),
+    route(path.cashier.receiptOverview, 'routes/cashier/receipt-records.tsx'),
+    route(path.cashier.medication, 'routes/cashier/medication-list.tsx'),
+
+    route(path.notifications, 'routes/notifications.tsx')
   ]),
 
   layout('./layouts/registration-layout.tsx', [route(path.patient.register, 'routes/patient/registration.tsx')])
