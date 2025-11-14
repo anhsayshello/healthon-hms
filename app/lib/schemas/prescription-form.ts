@@ -7,9 +7,7 @@ export const PrescriptionFormSchema = (stock_quantity: number) =>
       .number('Quantity is required')
       .int('Quantity must be an integer')
       .positive('Quantity must be at least 1')
-      .refine((val) => val <= stock_quantity, {
-        message: `Prescription quantity cannot exceed available stock (${stock_quantity}) units`
-      }),
+      .max(stock_quantity, `Prescription quantity cannot exceed available stock (${stock_quantity}) units`),
     dosage: z.string().trim().nonempty('Dosage is required').max(100, 'Dosage must not exceed 100 characters'),
     frequency: z.string().trim().nonempty('Frequency is required').max(100, 'Frequency must not exceed 100 characters'),
     duration: z.string().trim().nonempty('Duration is required').max(100, 'Duration must not exceed 100 characters'),
