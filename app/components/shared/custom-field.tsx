@@ -69,7 +69,7 @@ function InputField({
     case 'select':
       return (
         <Select name={field.name} value={field.value} onValueChange={field.onChange}>
-          <SelectTrigger id={field.name} aria-invalid={fieldState.invalid} className='w-full'>
+          <SelectTrigger id={field.name} aria-invalid={fieldState.invalid} className='w-full bg-background'>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent>
@@ -121,7 +121,7 @@ function InputField({
     default:
       return (
         <Input
-          className={cn('text-sm', {
+          className={cn('text-sm bg-background', {
             'bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none':
               inputType === 'time'
           })}
