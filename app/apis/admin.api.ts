@@ -22,6 +22,7 @@ const adminApi = {
       | 'working_days'
       | 'appointments'
       | 'medical_records'
+      | 'diagnoses'
       | 'created_at'
       | 'updated_at'
     >
