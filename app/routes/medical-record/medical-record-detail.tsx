@@ -18,6 +18,7 @@ import PrescriptionCard from '@/components/medical-record/prescription-card'
 import { AppointmentStatusEnum } from '@/types/appointment.type'
 import VitalCard from '@/components/medical-record/vital-card'
 import LabTestCard from '@/components/medical-record/lab-test-card'
+import CompleteConsultation from '../doctor/complete-consultation'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Patient Examination' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -27,7 +28,7 @@ export default function MedicalRecordDetail() {
   const { isDoctor } = useRole()
   const { dataMedicalRecord, isPending } = useMedicalRecordById()
 
-  const isModify = isDoctor && dataMedicalRecord?.appointment?.status === AppointmentStatusEnum.SCHEDULED
+  const isModify = isDoctor && dataMedicalRecord?.appointment?.status === AppointmentStatusEnum.IN_CONSULTATION
 
   if (isPending) {
     return (
@@ -39,9 +40,16 @@ export default function MedicalRecordDetail() {
 
   return (
     <div className='space-y-6'>
-      <div>
-        <div className='text-xl font-semibold'>Medical Record</div>
-        <div className='text-muted-foreground'>Patiend ID: {dataMedicalRecord?.patient_id}</div>
+      <div className='flex items-center justify-between'>
+        <div className='overflow-hidden'>
+          <div className='text-xl font-semibold'>Medical Record</div>
+          <div className='text-muted-foreground truncate'>Patiend ID: {dataMedicalRecord?.patient_id}</div>
+        </div>
+        {isDoctor &&
+          dataMedicalRecord?.appointment_id &&
+          dataMedicalRecord.appointment?.status === AppointmentStatusEnum.IN_CONSULTATION && (
+            <CompleteConsultation appointment_id={dataMedicalRecord?.appointment_id} />
+          )}
       </div>
       <Tabs defaultValue='patient-info' className='w-full gap-6'>
         <TabsList className='w-full'>
