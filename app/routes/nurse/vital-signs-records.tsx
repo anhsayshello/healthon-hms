@@ -62,7 +62,9 @@ export default function VitalSignsRecords() {
 }
 
 function VitalSignsRow({ appointment }: { appointment: Appointment }) {
-  const hasVitalSigns = appointment.medical.some((record) => record.vital_signs && record.vital_signs.length > 0)
+  const hasVitalSigns = appointment.medical_records.some(
+    (record) => record.vital_signs && record.vital_signs.length > 0
+  )
 
   return (
     <Dialog>

@@ -6,7 +6,7 @@ import type { SearchQueryParams } from '@/types/index.type'
 export default function useVitalSignsToday(params: SearchQueryParams) {
   const { isNurse } = useRole()
   const { data, isPending } = useQuery({
-    queryKey: ['vital-signs'],
+    queryKey: ['vital-signs', params],
     queryFn: () => nurseApi.getVitalSignsToday(params),
     enabled: isNurse
   })
