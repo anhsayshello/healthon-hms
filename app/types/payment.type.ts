@@ -1,11 +1,25 @@
 import type { Appointment } from './appointment.type'
 import type { Service } from './lab.type'
-import type { Medication } from './medication.type'
+import type { Prescription } from './medical-record.type'
 import type { Patient } from './patient.type'
+import type { Staff } from './staff.type'
 
-type PaymentMethod = 'CASH' | 'CARD'
+type PaymentMethod = 'CASH' | 'CARD' | 'BANK_TRANSFER'
 
-type PaymentStatus = 'PAID' | 'UNPAID' | 'PART'
+type PaymentStatus = 'PAID' | 'UNPAID' | 'PARTIALLY_PAID' | 'REFUNDED'
+
+export enum PaymentMethodEnum {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  BANK_TRANSFER = 'BANK_TRANSFER'
+}
+
+export enum PaymentStatusEnum {
+  PAID = 'PAID',
+  UNPAID = 'UNPAID',
+  PARTIALLY_PAID = 'PARTIALLY_PAID',
+  REFUNDED = 'REFUNDED'
+}
 
 export interface Payment {
   id: number
@@ -16,6 +30,11 @@ export interface Payment {
   discount: number
   total_amount: number
   amount_paid: number
+  cashier_id?: string
+  notes?: string
+  refund_amount: number
+  change_amount: number
+
   payment_method: PaymentMethod
   status: PaymentStatus
   receipt_number: string
@@ -24,21 +43,34 @@ export interface Payment {
 
   appointment?: Appointment
   patient?: Patient
+  cashier?: Staff
+
   lab_bills?: LabBill[]
   prescription_bills?: PrescriptionBill[]
+  history?: PaymentHistory
+}
+
+export interface PaymentHistory {
+  id: number
+  payment_id: number
+  previous_status: PaymentStatus
+  new_status: PaymentStatus
+  changed_by: string
+  notes?: string
+  created_at: string
 }
 
 export interface PrescriptionBill {
   id: number
   payment_id: number
-  medication_id: number
+  prescription_id: number
   quantity: number
   unit_cost: number
   total_cost: number
   created_at: Date
   updated_at: Date
 
-  medication?: Medication
+  prescription?: Prescription
   payment?: Payment
 }
 
@@ -47,7 +79,6 @@ export interface LabBill {
   bill_id: number
   service_id: number
   service_date: string
-  quantity: number
   unit_cost: number
   total_cost: number
   created_at: string
