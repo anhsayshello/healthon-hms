@@ -27,6 +27,7 @@ import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
 import GenerateRandomData from '@/components/shared/generate-random-data'
 import { DialogTitle } from '@radix-ui/react-dialog'
+import { omit } from 'lodash'
 
 export default function NewDoctor() {
   const isMobile = useIsMobile()
@@ -52,7 +53,12 @@ export default function NewDoctor() {
 
   const onSubmit = (data: z.infer<typeof DoctorFormSchema>) => {
     mutate(
-      { working_days: data.working_days, start_time: data.start_time, close_time: data.close_time, doctor: data },
+      {
+        working_days: data.working_days,
+        start_time: data.start_time,
+        close_time: data.close_time,
+        doctor: omit(data, ['start_time', 'close_time', 'working_days'])
+      },
       {
         onSuccess: () => {
           form.reset()
