@@ -6,7 +6,7 @@ import LabTestStatusIndicator from '@/components/lab/lab-status-indicator'
 import { formatDateTime } from '@/helpers/formatDateTime'
 import type { Patient } from '@/types/patient.type'
 import CancelLabTestRequest from '@/components/lab/cancel-lab-test-request'
-import LabTestDetail from '@/routes/lab/lab-test-detail'
+import LabTestDetail from '@/components/lab/lab-test-detail'
 import useRole from '@/hooks/useRole'
 
 export default function LabTestCard({ labTest, patient }: { labTest: LabTest; patient: Patient }) {

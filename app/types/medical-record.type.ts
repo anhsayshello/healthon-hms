@@ -1,7 +1,9 @@
 import type { Appointment } from './appointment.type'
 import type { Doctor } from './doctor.type'
 import type { LabTest } from './lab.type'
+import type { Medication } from './medication.type'
 import type { Patient } from './patient.type'
+import type { PrescriptionBill } from './payment.type'
 
 export interface MedicalRecord {
   id: number
@@ -9,7 +11,6 @@ export interface MedicalRecord {
   appointment_id: number
   doctor_id: string
   treatment_plan?: string
-  lab_request?: string
   notes?: string
   created_at: string
   updated_at: string
@@ -58,7 +59,7 @@ export interface Diagnosis {
 export interface Prescription {
   id: number
   medical_record_id: number
-  prescription_id: number
+  medication_id: number
   quantity: number
   dosage: string
   frequency: string
@@ -68,5 +69,6 @@ export interface Prescription {
   updated_at: Date
 
   medical_record?: MedicalRecord
-  prescription?: Prescription
+  medication?: Medication
+  bills: PrescriptionBill
 }

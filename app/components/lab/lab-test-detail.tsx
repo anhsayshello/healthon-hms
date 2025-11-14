@@ -79,7 +79,7 @@ export default function LabTestDetail({ labTest, patient }: { labTest: LabTest; 
           <Item variant='outline'>
             <ItemContent className='max-h-30 overflow-y-auto'>
               <ItemTitle>Test Result</ItemTitle>
-              <div>{labTest.result}</div>
+              <div className='wrap-anywhere'>{labTest.result}</div>
             </ItemContent>
           </Item>
           <Separator />

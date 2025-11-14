@@ -14,7 +14,7 @@ import UserInfo from '@/components/shared/user-info'
 import { formatDateTime } from '@/helpers/formatDateTime'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useState } from 'react'
-import LabTestDetail from './lab-test-detail'
+import LabTestDetail from '../../components/lab/lab-test-detail'
 import type { Patient } from '@/types/patient.type'
 
 export function meta({}: Route.MetaArgs) {
