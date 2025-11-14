@@ -10,6 +10,7 @@ export interface Medication {
   unit_type: string
   manufacturer?: string | null
   stock_quantity: number
+  min_stock_level?: number
   created_at: Date
   updated_at: Date
 
