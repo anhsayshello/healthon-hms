@@ -5,18 +5,16 @@ import {
   ListOrdered,
   SquareActivity,
   Receipt,
-  Pill,
   Bell,
   Logs,
-  Settings,
-  SquareLibrary,
   HeartPulse,
   Users2,
   Users,
   FlaskConical,
   Beaker,
   Cross,
-  Syringe
+  Syringe,
+  CreditCard
 } from 'lucide-react'
 import path from './path'
 
@@ -69,7 +67,7 @@ export const SIDEBAR_LINKS = [
       {
         name: 'Patients',
         path: path.record.patients,
-        access: ALL_ROLE,
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN, RoleEnum.CASHIER],
         icon: Users2,
         tooltip: 'patients'
       },
@@ -125,46 +123,31 @@ export const SIDEBAR_LINKS = [
       {
         name: 'Medical Records',
         path: path.record.medicalRecords,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN],
+        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.PATIENT, RoleEnum.NURSE, RoleEnum.LAB_TECHNICIAN],
         icon: SquareActivity,
         tooltip: 'medical records'
       },
       {
-        name: 'Billing Overview',
-        path: path.record.billingOverview,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR],
+        name: 'Payments',
+        path: path.cashier.payments,
+        access: [RoleEnum.CASHIER],
+        icon: CreditCard,
+        tooltip: 'Create bills for completed appointments'
+      },
+      {
+        name: 'Receipts Overview',
+        path: path.cashier.receiptOverview,
+        access: [RoleEnum.ADMIN, RoleEnum.CASHIER],
         icon: Receipt,
-        tooltip: 'billing overview'
-      },
-      {
-        name: 'Administer Medications',
-        path: path.nurse.administerMedications,
-        access: [RoleEnum.ADMIN, RoleEnum.DOCTOR, RoleEnum.NURSE],
-        icon: Pill,
-        tooltip: 'adminster medications'
-      },
-
-      {
-        name: 'Records',
-        path: path.patient.records,
-        access: [RoleEnum.PATIENT],
-        icon: SquareLibrary,
-        tooltip: 'records'
-      },
-      {
-        name: 'Prescriptions',
-        path: path.patient.prescriptions,
-        access: [RoleEnum.PATIENT],
-        icon: Pill,
-        tooltip: 'prescriptions'
-      },
-      {
-        name: 'Billing',
-        path: path.patient.billing,
-        access: [RoleEnum.PATIENT],
-        icon: Receipt,
-        tooltip: 'billing'
+        tooltip: 'View issued receipts'
       }
+      // {
+      //   name: 'Billing',
+      //   path: path.patient.billing,
+      //   access: [RoleEnum.PATIENT],
+      //   icon: Receipt,
+      //   tooltip: 'billing'
+      // }
     ]
   },
   {
@@ -183,14 +166,14 @@ export const SIDEBAR_LINKS = [
         access: [RoleEnum.ADMIN],
         icon: Logs,
         tooltip: 'audit logs'
-      },
-      {
-        name: 'Settings',
-        path: path.admin.settings,
-        access: [RoleEnum.ADMIN],
-        icon: Settings,
-        tooltip: 'settings'
       }
+      // {
+      //   name: 'Settings',
+      //   path: path.admin.settings,
+      //   access: [RoleEnum.ADMIN],
+      //   icon: Settings,
+      //   tooltip: 'settings'
+      // }
     ]
   }
 ]

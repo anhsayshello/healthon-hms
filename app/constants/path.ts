@@ -19,8 +19,7 @@ const path = {
     staffs: '/record/staffs',
     appointments: '/record/appointments',
     medicalRecords: '/record/medical-records',
-    medicalRecordDetail: '/record/medical-records/:medicalRecordId',
-    billingOverview: '/record/billing'
+    medicalRecordDetail: '/record/medical-records/:medicalRecordId'
   },
   nurse: {
     vitalSigns: '/nurse/vital-signs',
@@ -32,7 +31,11 @@ const path = {
     services: '/lab/services'
   },
   cashier: {
-    medication: '/medication'
+    medication: '/medications',
+    payments: '/payments',
+    paymentDetail: '/payments/:paymentId',
+    receiptDetail: '/receipts/:receiptId',
+    receiptOverview: '/receipts'
   },
   patient: {
     register: '/patient/register',

@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils'
 import { useSidebarPinnedStore } from '@/stores/useSidebarPinnedStore'
 import { Toggle } from '@/components/ui/toggle'
 import { SIDEBAR_LINKS } from '@/constants/sidebar-links'
+import { useDebouncedCallback } from 'use-debounce'
 
 export default function AppSidebar() {
   const role = useAuthStore((state) => state.role)
@@ -95,11 +96,18 @@ interface Props {
 }
 
 function SidebarLink({ el }: { el: Props }) {
-  const { state, open, openMobile } = useSidebar()
+  const { state, open, openMobile, setOpenMobile } = useSidebar()
   const role = useAuthStore((state) => state.role)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
+
+  const handleCloseMobile = useDebouncedCallback(() => setOpenMobile(false), 50)
+
+  const handleNavigate = (path: string) => {
+    navigate({ pathname: path })
+    handleCloseMobile()
+  }
 
   return (
     <div>
@@ -111,7 +119,7 @@ function SidebarLink({ el }: { el: Props }) {
             <SidebarMenuButton
               className='cursor-pointer'
               asChild
-              onClick={() => navigate({ pathname: item.path })}
+              onClick={() => handleNavigate(item.path)}
               isActive={item.path === '/' ? pathname === '/' : pathname.startsWith(item.path)}
             >
               <div>
