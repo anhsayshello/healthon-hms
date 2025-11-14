@@ -13,6 +13,8 @@ export default function AppointmentFilters() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value='all'>All</SelectItem>
+          <SelectItem value={AppointmentStatusEnum.CONSULTATION_COMPLETED}>Consultation Completed</SelectItem>
+          <SelectItem value={AppointmentStatusEnum.IN_CONSULTATION}>In Consultation</SelectItem>
           <SelectItem value={AppointmentStatusEnum.SCHEDULED}>Scheduled</SelectItem>
           <SelectItem value={AppointmentStatusEnum.PENDING}>Pending</SelectItem>
           <SelectItem value={AppointmentStatusEnum.COMPLETED}>Completed</SelectItem>
