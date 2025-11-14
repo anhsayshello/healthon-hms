@@ -6,16 +6,20 @@ import UserInfo from '@/components/shared/user-info'
 import useQueryParams from '@/hooks/useQueryParams'
 import TableMetadata from '@/components/shared/table-metadata'
 import AppPagination from '@/components/shared/app-pagination'
-import { Button } from '@/components/ui/button'
-import { Swords } from 'lucide-react'
-import { useNavigate } from 'react-router'
-import path from '@/constants/path'
 import useMedicalRecords from '@/hooks/medical-record/useMedicalRecords'
-import useTodayMedicalRecords from '@/hooks/medical-record/useTodayMedicalRecords'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { RoleEnum } from '@/types/role.type'
 import type { MedicalRecord } from '@/types/medical-record.type'
 import { formatDateTime } from '@/helpers/formatDateTime'
+import useDoctorMedicalRecords from '@/hooks/medical-record/useDoctorMedicalRecords'
+import StartConsultation from './doctor/start-consultation'
+import useRole from '@/hooks/useRole'
+import { AppointmentStatusEnum } from '@/types/appointment.type'
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router'
+import path from '@/constants/path'
+import { ScanEye } from 'lucide-react'
+import AppointmentStatusIndicator from '@/components/appointments/appointment-status-indicator'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Medical Record' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -24,9 +28,9 @@ export function meta({}: Route.MetaArgs) {
 const tableColumns = [
   { header: 'ID', key: 'id' },
   { header: 'Patient info', key: 'patient-info' },
+  { header: 'Doctor', key: 'doctor' },
   { header: 'Date & Time', key: 'date-time' },
-  { header: 'Diagnosis', key: 'diagnosis' },
-  { header: 'Lab Test', key: 'lab-test' },
+  { header: 'Status', key: 'status' },
   { header: 'Action', key: 'action' }
 ]
 
@@ -39,7 +43,7 @@ export default function MedicalRecords() {
     limit
   }
   const generalQuery = useMedicalRecords(params)
-  const doctorQuery = useTodayMedicalRecords(params)
+  const doctorQuery = useDoctorMedicalRecords(params)
 
   const activeQuery = role === RoleEnum.DOCTOR ? doctorQuery : generalQuery
 
@@ -79,7 +83,9 @@ export default function MedicalRecords() {
 }
 
 function MedicalRow({ medicalRecord }: { medicalRecord: MedicalRecord }) {
+  const { isDoctor } = useRole()
   const navigate = useNavigate()
+  console.log(medicalRecord)
 
   return (
     <TableRow>
@@ -92,12 +98,28 @@ function MedicalRow({ medicalRecord }: { medicalRecord: MedicalRecord }) {
           description={medicalRecord?.patient?.gender}
         />
       </TableCell>
+      <TableCell>
+        <UserInfo
+          photoUrl={medicalRecord?.doctor?.photo_url}
+          firstName={medicalRecord?.doctor?.first_name}
+          lastName={medicalRecord?.doctor?.last_name ?? ''}
+          description={medicalRecord?.doctor?.specialization}
+        />
+      </TableCell>
       <TableCell>{formatDateTime(medicalRecord.created_at)}</TableCell>
       <TableCell>
-        <Button onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecord.id}` })}>
-          <Swords />
-          <span>Examine</span>
-        </Button>
+        {medicalRecord.appointment?.status && <AppointmentStatusIndicator status={medicalRecord.appointment?.status} />}
+      </TableCell>
+      <TableCell>
+        {isDoctor && medicalRecord.appointment?.status === AppointmentStatusEnum.SCHEDULED && (
+          <StartConsultation appointment_id={medicalRecord.appointment_id} medical_record_id={medicalRecord.id} />
+        )}
+        {medicalRecord.appointment?.status !== AppointmentStatusEnum.SCHEDULED && (
+          <Button onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecord.id}` })}>
+            <ScanEye />
+            <span>View consultation</span>
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   )
