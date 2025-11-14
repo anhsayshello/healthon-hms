@@ -70,3 +70,9 @@ export const MEDICATION_UNIT_TYPES = [
   { label: 'Bottle', value: 'BOTTLE' },
   { label: 'Injection', value: 'INJECTION' }
 ]
+
+export const PAYMENT_METHODS = [
+  { label: 'Cash', value: 'CASH' },
+  { label: 'Card', value: 'CARD' },
+  { label: 'Bank Transfer', value: 'BANK_TRANSFER' }
+]
