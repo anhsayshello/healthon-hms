@@ -6,8 +6,8 @@ const URL = 'medical-record'
 
 const medicalRecordApi = {
   getMedicalRecords: (params: SearchQueryParams) => http.get<PaginatedResponse<MedicalRecord>>(URL, { params }),
-  getTodayMedicalRecords: (params: SearchQueryParams) =>
-    http.get<PaginatedResponse<MedicalRecord>>(`${URL}/today`, { params }),
+  getDoctorMedicalRecords: (params: SearchQueryParams) =>
+    http.get<PaginatedResponse<MedicalRecord>>(`${URL}/doctor`, { params }),
   getMedicalRecordById: (id: string) => http.get<MedicalRecord>(`${URL}/${id}`),
 
   //diagnosis
@@ -24,7 +24,10 @@ const medicalRecordApi = {
 
   //prescription
   createPrescription: (
-    body: Omit<Prescription, 'id' | 'created_at' | 'updated_at' | 'medication' | 'medical_record'>
+    body: Pick<
+      Prescription,
+      'medical_record_id' | 'medication_id' | 'quantity' | 'dosage' | 'frequency' | 'duration' | 'instructions'
+    >
   ) => http.post(`${URL}/prescriptions`, body),
   updatePrescription: ({
     id,
