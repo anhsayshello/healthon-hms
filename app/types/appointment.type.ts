@@ -2,13 +2,22 @@ import type { Doctor } from './doctor.type'
 import type { SearchQueryParams } from './index.type'
 import type { MedicalRecord } from './medical-record.type'
 import type { Patient } from './patient.type'
+import type { Payment } from './payment.type'
 
-export type AppointmentStatus = 'CANCELLED' | 'PENDING' | 'SCHEDULED' | 'COMPLETED'
+export type AppointmentStatus =
+  | 'CANCELLED'
+  | 'PENDING'
+  | 'SCHEDULED'
+  | 'IN_CONSULTATION'
+  | 'CONSULTATION_COMPLETED'
+  | 'COMPLETED'
 
 export enum AppointmentStatusEnum {
   CANCELLED = 'CANCELLED',
   PENDING = 'PENDING',
   SCHEDULED = 'SCHEDULED',
+  IN_CONSULTATION = 'IN_CONSULTATION',
+  CONSULTATION_COMPLETED = 'CONSULTATION_COMPLETED',
   COMPLETED = 'COMPLETED'
 }
 
@@ -41,6 +50,7 @@ export interface Appointment {
   updated_at: string
 
   medical_records: MedicalRecord[]
+  payment: Payment
 }
 
 export type ViewType = 'all' | 'today'

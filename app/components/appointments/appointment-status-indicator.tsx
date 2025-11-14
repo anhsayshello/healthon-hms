@@ -6,7 +6,9 @@ const status_color = {
   CANCELLED: 'bg-red-600/15 text-red-600',
   COMPLETED: 'bg-emerald-600/15 text-emerald-600',
   PENDING: 'bg-yellow-600/15 text-yellow-600',
-  SCHEDULED: 'bg-blue-600/15 text-blue-600'
+  SCHEDULED: 'bg-blue-600/15 text-blue-600',
+  IN_CONSULTATION: 'bg-purple-600/15 text-purple-600',
+  CONSULTATION_COMPLETED: 'bg-teal-600/15 text-teal-600'
 }
 
 export default function AppointmentStatusIndicator({ status }: { status: AppointmentStatus }) {
