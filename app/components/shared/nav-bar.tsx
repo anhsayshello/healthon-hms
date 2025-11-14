@@ -20,13 +20,14 @@ import ProfileAvatar from './profile-avatar'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 import useSignOut from '@/hooks/auth/useSignOut'
+import useRole from '@/hooks/useRole'
 
 // User Menu Component
 const UserMenu = () => {
+  const { isPatient } = useRole()
   const { handleSignOut } = useSignOut()
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
-  const role = useAuthStore((state) => state.role)
   const userCred = useUserCredential((state) => state.userCred)
   const isMobile = useIsMobile()
 
@@ -54,7 +55,9 @@ const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate({ pathname: path.dashboard })}>Dashboard</DropdownMenuItem>
-        {role && <DropdownMenuItem onClick={() => {}}>Profile</DropdownMenuItem>}
+        {isPatient && (
+          <DropdownMenuItem onClick={() => navigate({ pathname: path.patient.profile })}>Profile</DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>
           <LogOut />
