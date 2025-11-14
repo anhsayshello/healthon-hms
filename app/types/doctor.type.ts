@@ -16,7 +16,7 @@ export interface Doctor {
   availability_status?: string
   type: JobType
 
-  working_days: WorkingDays[]
+  working_days: WorkingDay[]
   appointments: Appointment[]
   medical_records: MedicalRecord[]
   diagnoses: Diagnosis[]
@@ -27,7 +27,7 @@ export interface Doctor {
 
 export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
 
-export interface WorkingDays {
+export interface WorkingDay {
   id: number
   doctor_id: string
   day: Weekday
