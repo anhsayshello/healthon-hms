@@ -15,7 +15,8 @@ import useMedications from '@/hooks/medication/useMedications'
 import type { Medication } from '@/types/medication.type'
 import { useState } from 'react'
 import { formatDateTime } from '@/helpers/formatDateTime'
-import NewMedication from './new-medication'
+import NewMedication from '../../components/cashier/new-medication'
+import formatNumber from '@/helpers/formatNumber'
 
 const tableColumns = [
   { header: 'ID', key: 'id' },
@@ -67,7 +68,7 @@ function MedicationRow({ medication }: { medication: Medication }) {
       <TableRow onClick={() => setOpen(true)}>
         <TableCell>{medication.id}</TableCell>
         <TableCell>{medication.medication_name}</TableCell>
-        <TableCell>{medication.unit_price}</TableCell>
+        <TableCell>{formatNumber(medication.unit_price)}</TableCell>
         <TableCell>{medication.currency}</TableCell>
         <TableCell className='capitalize'>{medication.unit_type.toLocaleLowerCase()}</TableCell>
         <TableCell>{medication.stock_quantity}</TableCell>
