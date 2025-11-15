@@ -1,9 +1,9 @@
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import { auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import useVerifyUser from './useVerifyUser'
+import { auth } from '@/lib/firebase/client'
 
 export default function useHandleMagicLinkRedirect() {
   const [isVerifying, setVerifying] = useState(false)

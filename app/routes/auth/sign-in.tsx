@@ -26,6 +26,7 @@ export default function SignIn() {
 
   useEffect(() => {
     handleMagicLinkRedirect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
