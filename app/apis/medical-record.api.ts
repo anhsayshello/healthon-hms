@@ -8,6 +8,8 @@ const medicalRecordApi = {
   getMedicalRecords: (params: SearchQueryParams) => http.get<PaginatedResponse<MedicalRecord>>(URL, { params }),
   getDoctorMedicalRecords: (params: SearchQueryParams) =>
     http.get<PaginatedResponse<MedicalRecord>>(`${URL}/doctor`, { params }),
+  getPatientMedicalRecords: (params: SearchQueryParams) =>
+    http.get<PaginatedResponse<MedicalRecord>>(`${URL}/patient`, { params }),
   getMedicalRecordById: (id: string) => http.get<MedicalRecord>(`${URL}/${id}`),
 
   //diagnosis
