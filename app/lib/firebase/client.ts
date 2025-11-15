@@ -19,7 +19,7 @@ export const appCheck = initializeAppCheck(app, {
 })
 
 export const actionCodeSettings = {
-  url: 'http://localhost:5173/sign-in',
+  url: 'https://healthon.vercel.app/sign-in',
   handleCodeInApp: true
 }
 
