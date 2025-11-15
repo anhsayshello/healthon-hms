@@ -27,7 +27,8 @@ export default function useSignInWithGoogle() {
         } else toast.error(errorMessage)
       }
     } finally {
-      setTimeout(() => setIsPending(false), 5000)
+      // setTimeout(() => setIsPending(false), 5000)
+      setIsPending(false)
     }
   }, [])
 

@@ -27,7 +27,6 @@ export default function useCreateUserWithEmailAndPassword() {
     try {
       const userCred = await createUserWithEmailAndPassword(auth, data.email, data.password)
       verifyUser(userCred)
-      setTimeout(() => setIsPending(false), 5000)
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
