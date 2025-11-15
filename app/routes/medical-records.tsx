@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 import { ScanEye } from 'lucide-react'
 import AppointmentStatusIndicator from '@/components/appointments/appointment-status-indicator'
+import usePatientMedicalRecords from '@/hooks/medical-record/usePatientMedicalRecords'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Medical Record' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -44,8 +45,9 @@ export default function MedicalRecords() {
   }
   const generalQuery = useMedicalRecords(params)
   const doctorQuery = useDoctorMedicalRecords(params)
+  const patientQuery = usePatientMedicalRecords(params)
 
-  const activeQuery = role === RoleEnum.DOCTOR ? doctorQuery : generalQuery
+  const activeQuery = role === RoleEnum.DOCTOR ? doctorQuery : role === RoleEnum.PATIENT ? patientQuery : generalQuery
 
   const dataMedicalRecords = activeQuery.data?.data.data ?? []
   const currentPage = activeQuery.data?.data.currentPage ?? 1
