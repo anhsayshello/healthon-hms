@@ -32,6 +32,7 @@ export default function useVerifyUser() {
     }
 
     const idToken = await userCred.user.getIdToken()
+    console.log(idToken, 'idToken')
     const res = await authApi.verifyUser(idToken)
     console.log(res, 'res')
 
