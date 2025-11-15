@@ -58,6 +58,7 @@ export default function useSignInWithEmailAndPassword() {
       } else {
         console.log('Unknown error:', error)
       }
+    } finally {
       setIsPending(false)
     }
   }
