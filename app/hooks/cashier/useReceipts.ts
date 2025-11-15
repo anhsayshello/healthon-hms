@@ -4,11 +4,11 @@ import useRole from '../useRole'
 import cashierApi from '@/apis/cashier.api'
 
 export default function useReceipts(params: SearchQueryParams) {
-  const { isCashier } = useRole()
+  const { isAdmin, isCashier } = useRole()
   const { data, isPending } = useQuery({
     queryKey: ['receipts', params],
     queryFn: () => cashierApi.getReceipts(params),
-    enabled: isCashier
+    enabled: isCashier || isAdmin
   })
   const dataReceipts = data?.data.data ?? []
   const currentPage = data?.data.currentPage ?? 1
