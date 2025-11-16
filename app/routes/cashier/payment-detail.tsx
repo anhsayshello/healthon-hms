@@ -28,7 +28,8 @@ export function meta({}: Route.MetaArgs) {
 export default function PaymentDetail() {
   const navigate = useNavigate()
   const { dataPayment, isPending: isLoadingPayment } = usePaymentById()
-  const { mutate, isPending: isProcessing } = useProcessPayment()
+  const { mutate } = useProcessPayment()
+  const [isProcessing, setIsProcessing] = useState(false)
   const [totalAmount, setTotalAmount] = useState(0)
 
   useEffect(() => {
@@ -58,11 +59,13 @@ export default function PaymentDetail() {
         {
           onSuccess: () => {
             navigate({ pathname: `${path.cashier.receiptOverview}/${dataPayment.id}` })
+          },
+          onSettled: () => {
+            setTimeout(() => setIsProcessing(false), 1000)
           }
         }
       )
     }
-    console.log(data)
   }
 
   if (isLoadingPayment) {

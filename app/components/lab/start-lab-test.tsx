@@ -12,7 +12,7 @@ export default function StartLabTest({ id }: { id: number }) {
     setIsPending(true)
     mutate(id, {
       onSettled: () => {
-        setTimeout(() => setIsPending(false), 500)
+        setTimeout(() => setIsPending(false), 1000)
       }
     })
   }

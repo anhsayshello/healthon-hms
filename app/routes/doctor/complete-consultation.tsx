@@ -13,14 +13,19 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { BookCheck } from 'lucide-react'
+import { useState } from 'react'
 
 export default function CompleteConsultation({ appointment_id }: { appointment_id: number }) {
-  const { mutate, isPending } = useCompleteConsultation()
+  const { mutate } = useCompleteConsultation()
+  const [isPending, setIsPending] = useState(false)
 
   const onSubmit = () => {
     mutate(appointment_id, {
       onSuccess: (data) => {
         toast.success(data.data.message)
+      },
+      onSettled: () => {
+        setTimeout(() => setIsPending(false), 1000)
       }
     })
   }
