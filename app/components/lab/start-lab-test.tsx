@@ -2,11 +2,20 @@ import { TestTubeDiagonal } from 'lucide-react'
 import { Button } from '../ui/button'
 import useStartLabTest from '@/hooks/lab/useStartLabTest'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 export default function StartLabTest({ id }: { id: number }) {
-  const { mutate, isPending } = useStartLabTest()
+  const { mutate } = useStartLabTest()
+  const [isPending, setIsPending] = useState(false)
 
-  const handleStartTest = () => mutate(id)
+  const handleStartTest = () => {
+    setIsPending(true)
+    mutate(id, {
+      onSettled: () => {
+        setTimeout(() => setIsPending(false), 500)
+      }
+    })
+  }
 
   return (
     <Button onClick={handleStartTest} disabled={isPending} className='cursor-pointer'>

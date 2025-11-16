@@ -47,6 +47,7 @@ export default function BookAppoinment() {
   })
 
   const onSubmit = (data: z.infer<typeof AppointmentFormSchema>) => {
+    console.log(data)
     if (user?.uid) {
       mutate(
         { ...data, appointment_date: data.appointment_date.toISOString() },

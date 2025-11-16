@@ -132,11 +132,12 @@ export default function PaymentDetail() {
                   {prescriptionBill?.prescription?.medication?.medication_name}
                 </ItemTitle>
                 <ItemDescription>
-                  <p>
-                    {prescriptionBill.prescription?.dosage} - {prescriptionBill.prescription?.frequency} -{' '}
+                  <>
+                    {prescriptionBill.prescription?.dosage} -{prescriptionBill.prescription?.frequency} -
                     {prescriptionBill.prescription?.duration}
-                  </p>
-                  <p>Quantity: {prescriptionBill.quantity}</p>
+                    <br />
+                    Quantity: {prescriptionBill.quantity}
+                  </>
                 </ItemDescription>
               </ItemContent>
               <ItemActions className='font-semibold text-cyan-600'>

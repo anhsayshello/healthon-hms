@@ -185,135 +185,133 @@ function AppointmentInformation({
           </Button>
         )}
       </div>
-      <div className='grid grid-cols-2'>
-        <div className='space-y-3 text-sm'>
-          <div className='flex items-center'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <Syringe size={16} className='text-muted-foreground' />
-              <span className='text-muted-foreground'>Type:</span>
-            </div>
-            <span className='font-medium grow capitalize'>{appointmentType}</span>
+      <div className='space-y-3 text-sm'>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Syringe size={16} className='text-muted-foreground' />
+            <span className='text-muted-foreground'>Type:</span>
           </div>
-          <div className='flex items-center'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <Calendar size={16} className='text-muted-foreground' />
-              <span className='text-muted-foreground'>Date:</span>
-            </div>
-            <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
+          <span className='font-medium grow capitalize'>{appointmentType}</span>
+        </div>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Calendar size={16} className='text-muted-foreground' />
+            <span className='text-muted-foreground'>Date:</span>
           </div>
-          <div className='flex items-center'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <Clock size={16} className='text-muted-foreground' />
-              <span className='text-muted-foreground'>Time:</span>
-            </div>
-            <span className='font-medium grow'>{appointmentTime}</span>
+          <span className='font-medium grow'>{formatDate(appointmentDate)}</span>
+        </div>
+        <div className='flex items-center'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <Clock size={16} className='text-muted-foreground' />
+            <span className='text-muted-foreground'>Time:</span>
           </div>
-          <div className='flex items-start'>
-            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-              <SquareActivity size={16} className='text-muted-foreground' />
-              <span className='text-muted-foreground'>Status:</span>
-            </div>
-            {!isUpdate ? (
-              <AppointmentStatusIndicator status={appointmentStatus} />
-            ) : (
-              <div className='flex items-center gap-2 flex-wrap'>
-                <Button
-                  variant='ghost'
-                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                  onClick={() => setStatus(AppointmentStatusEnum.SCHEDULED)}
-                  disabled={isPending || status === AppointmentStatusEnum.SCHEDULED}
-                >
-                  <AppointmentStatusIndicator status={AppointmentStatusEnum.SCHEDULED} />
-                </Button>
-                <Button
-                  variant='ghost'
-                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                  onClick={() => setStatus(AppointmentStatusEnum.PENDING)}
-                  disabled={isPending || status === AppointmentStatusEnum.PENDING}
-                >
-                  <AppointmentStatusIndicator status={AppointmentStatusEnum.PENDING} />
-                </Button>
-                <Button
-                  variant='ghost'
-                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                  onClick={() => setStatus(AppointmentStatusEnum.CANCELLED)}
-                  disabled={isPending || status === AppointmentStatusEnum.CANCELLED}
-                >
-                  <AppointmentStatusIndicator status={AppointmentStatusEnum.CANCELLED} />
-                </Button>
-                <Button
-                  variant='ghost'
-                  className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
-                  onClick={() => setStatus(AppointmentStatusEnum.COMPLETED)}
-                  disabled={isPending || status === AppointmentStatusEnum.COMPLETED}
-                >
-                  <AppointmentStatusIndicator status={AppointmentStatusEnum.COMPLETED} />
-                </Button>
-              </div>
-            )}
+          <span className='font-medium grow'>{appointmentTime}</span>
+        </div>
+        <div className='flex items-start'>
+          <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+            <SquareActivity size={16} className='text-muted-foreground' />
+            <span className='text-muted-foreground'>Status:</span>
           </div>
-
-          {appointmentNote && (
-            <div className='flex items-start'>
-              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-                <FileText size={16} className='text-muted-foreground mt-0.5' />
-                <span className='text-muted-foreground'>Note:</span>
-              </div>
-              <span className='font-medium grow'>{appointmentNote}</span>
-            </div>
-          )}
-
-          {!isUpdate && (
-            <div className='flex items-start'>
-              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-                <FileText size={16} className='text-muted-foreground mt-0.5' />
-                <span className='text-muted-foreground'>Reason:</span>
-              </div>
-              <span className='font-medium grow'>{appointmentReason}</span>
-            </div>
-          )}
-
-          {isUpdate && (
-            <div className='flex items-start'>
-              <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
-                <FileText size={16} className='text-muted-foreground mt-0.5' />
-                <span className='text-muted-foreground'>Reason:</span>
-              </div>
-              <Textarea
-                disabled={isPending}
-                className='max-h-30 text-sm'
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-              />
-            </div>
-          )}
-
-          {isUpdate && (
-            <div className='flex items-center pt-3'>
-              <div className='shrink-0 w-21 lg:w-21.5'></div>
-              <div className='flex items-center gap-3'>
-                <Button onClick={() => setIsUpdate(false)} size='sm' className='text-destructive' variant='outline'>
-                  Cancel
-                </Button>
-                <Button disabled={isPending} size='sm' onClick={handleAction}>
-                  {isPending && <Spinner />}
-                  Confirm
-                </Button>
-              </div>
+          {!isUpdate ? (
+            <AppointmentStatusIndicator status={appointmentStatus} />
+          ) : (
+            <div className='flex items-center gap-2 flex-wrap'>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.SCHEDULED)}
+                disabled={isPending || status === AppointmentStatusEnum.SCHEDULED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.SCHEDULED} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.PENDING)}
+                disabled={isPending || status === AppointmentStatusEnum.PENDING}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.PENDING} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.CANCELLED)}
+                disabled={isPending || status === AppointmentStatusEnum.CANCELLED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.CANCELLED} />
+              </Button>
+              <Button
+                variant='ghost'
+                className={cn('!p-0 h-fit disabled:opacity-100 opacity-50', { 'disabled:opacity-50': isPending })}
+                onClick={() => setStatus(AppointmentStatusEnum.COMPLETED)}
+                disabled={isPending || status === AppointmentStatusEnum.COMPLETED}
+              >
+                <AppointmentStatusIndicator status={AppointmentStatusEnum.COMPLETED} />
+              </Button>
             </div>
           )}
         </div>
 
-        {medicalRecordId && (
-          <Button
-            variant={'link'}
-            onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecordId}` })}
-          >
-            <Cctv />
-            <span>View Medical Record</span>
-          </Button>
+        {appointmentNote && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText size={16} className='text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Note:</span>
+            </div>
+            <span className='font-medium grow'>{appointmentNote}</span>
+          </div>
+        )}
+
+        {!isUpdate && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText size={16} className='text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Reason:</span>
+            </div>
+            <span className='font-medium grow'>{appointmentReason}</span>
+          </div>
+        )}
+
+        {isUpdate && (
+          <div className='flex items-start'>
+            <div className='shrink-0 w-21 lg:w-21.5 flex items-center gap-2'>
+              <FileText size={16} className='text-muted-foreground mt-0.5' />
+              <span className='text-muted-foreground'>Reason:</span>
+            </div>
+            <Textarea
+              disabled={isPending}
+              className='max-h-30 text-sm'
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
+        )}
+
+        {isUpdate && (
+          <div className='flex items-center pt-3'>
+            <div className='shrink-0 w-21 lg:w-21.5'></div>
+            <div className='flex items-center gap-3'>
+              <Button onClick={() => setIsUpdate(false)} size='sm' className='text-destructive' variant='outline'>
+                Cancel
+              </Button>
+              <Button disabled={isPending} size='sm' onClick={handleAction}>
+                {isPending && <Spinner />}
+                Confirm
+              </Button>
+            </div>
+          </div>
         )}
       </div>
+
+      {medicalRecordId && (
+        <Button
+          variant={'link'}
+          onClick={() => navigate({ pathname: `${path.record.medicalRecords}/${medicalRecordId}` })}
+        >
+          <Cctv />
+          <span>View Medical Record</span>
+        </Button>
+      )}
     </div>
   )
 }

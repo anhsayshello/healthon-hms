@@ -47,7 +47,7 @@ export default function NewLabRequest() {
         {
           onSuccess: () => {
             setOpen(false)
-            toast.success('Sent lab test request')
+            toast.success(`Service requested ${selectedService?.service_name}`)
           }
         }
       )
