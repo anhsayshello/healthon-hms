@@ -12,6 +12,7 @@ export default function InitializePayment({ appointment_id }: { appointment_id: 
   const navigate = useNavigate()
 
   const handleInitialize = () => {
+    setIsPending(true)
     mutate(appointment_id, {
       onSuccess: (data) => {
         const paymentId = data.data.id

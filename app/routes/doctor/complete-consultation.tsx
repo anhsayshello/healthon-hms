@@ -20,6 +20,7 @@ export default function CompleteConsultation({ appointment_id }: { appointment_i
   const [isPending, setIsPending] = useState(false)
 
   const onSubmit = () => {
+    setIsPending(true)
     mutate(appointment_id, {
       onSuccess: (data) => {
         toast.success(data.data.message)

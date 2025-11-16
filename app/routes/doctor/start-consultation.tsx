@@ -19,6 +19,7 @@ export default function StartConsultation({
   const [isPending, setIsPending] = useState(false)
 
   const onSubmit = () => {
+    setIsPending(true)
     mutate(appointment_id, {
       onSuccess: (data) => {
         navigate({ pathname: `${path.record.medicalRecords}/${medical_record_id}` })

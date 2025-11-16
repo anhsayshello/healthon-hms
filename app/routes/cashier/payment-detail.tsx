@@ -30,6 +30,7 @@ export default function PaymentDetail() {
   const { dataPayment, isPending: isLoadingPayment } = usePaymentById()
   const { mutate } = useProcessPayment()
   const [isProcessing, setIsProcessing] = useState(false)
+
   const [totalAmount, setTotalAmount] = useState(0)
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function PaymentDetail() {
 
   const onSubmit = (data: z.infer<ReturnType<typeof PaymentFormSchema>>) => {
     if (dataPayment?.id) {
+      setIsProcessing(true)
       mutate(
         { id: dataPayment.id, props: data },
         {
@@ -66,6 +68,7 @@ export default function PaymentDetail() {
         }
       )
     }
+    console.log(data)
   }
 
   if (isLoadingPayment) {
