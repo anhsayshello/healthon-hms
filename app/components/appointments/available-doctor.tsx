@@ -1,4 +1,4 @@
-import type { Doctor, WorkingDays } from '@/types/doctor.type'
+import type { Doctor, WorkingDay } from '@/types/doctor.type'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import CardWrapper from '../shared/card-wrapper'
 import getToday from '@/helpers/getToday'
@@ -7,7 +7,7 @@ import UserInfo from '../shared/user-info'
 
 export default function AvailableDoctor({ data }: { data: Doctor[] }) {
   const today = getToday()
-  const availableTime = (days: WorkingDays[]) => {
+  const availableTime = (days: WorkingDay[]) => {
     const isWorkingDay = days.find((d) => d.day === today)
 
     return isWorkingDay ? `${isWorkingDay.start_time} - ${isWorkingDay.close_time}` : 'Not available'
