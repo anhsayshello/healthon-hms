@@ -128,11 +128,11 @@ export const SIDEBAR_LINKS = [
         tooltip: 'medical records'
       },
       {
-        name: 'Payments',
-        path: path.cashier.payments,
+        name: 'Billing',
+        path: path.cashier.billings,
         access: [RoleEnum.CASHIER],
         icon: CreditCard,
-        tooltip: 'Create bills for completed appointments'
+        tooltip: 'billing'
       },
       {
         name: 'Receipts Overview',
