@@ -17,13 +17,13 @@ import useCreatVitalSigns from '@/hooks/nurse/useCreateVitalSigns'
 import { VitalSignsSchema } from '@/lib/schemas/vital-signs-form'
 import { faker } from '@faker-js/faker'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DialogClose } from '@radix-ui/react-dialog'
 import { HeartPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 import type z from 'zod'
+import CancelButton from '@/components/shared/cancel-button'
 
 interface Props {
   appointment_id: number
@@ -147,9 +147,7 @@ export default function NewVitalSigns({ appointment_id, patientFirstName, patien
           </FieldGroup>
         </form>
         <DialogFooter className='mt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button form='form-add-vital-signs' disabled={isPending}>
             {isPending && <Spinner />}
             <span>Save</span>

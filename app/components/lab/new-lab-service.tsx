@@ -11,7 +11,6 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDebouncedCallback } from 'use-debounce'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -25,6 +24,7 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 import useCreateLabService from '@/hooks/lab/useCreateLabService'
 import { LabServiceForm } from '@/lib/schemas/lab-form'
 import { CURRENCY } from '@/lib/schemas'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewLabService() {
   const isMobile = useIsMobile()
@@ -115,9 +115,7 @@ export default function NewLabService() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-create-lab-service' disabled={isPending}>
             {isPending && <Spinner />}
             Create

@@ -48,7 +48,7 @@ export default function CancelLabTestRequest({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant={'outline'}>Keep</Button>
           </DialogClose>
           <Button variant={'destructive'} onClick={onSubmit} disabled={isPending} className='cursor-pointer'>
