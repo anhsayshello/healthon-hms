@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -28,6 +27,7 @@ import CustomField from '../shared/custom-field'
 import GenerateRandomData from '../shared/generate-random-data'
 import { useDebouncedCallback } from 'use-debounce'
 import { faker } from '@faker-js/faker'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewPrescription() {
   const isMobile = useIsMobile()
@@ -102,10 +102,7 @@ export default function NewPrescription() {
           <span>Add Prescription</span>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        showCloseButton={isMobile}
-        className='w-full md:max-w-xl max-h-[96vh] md:max-h-[90vh] overflow-y-auto'
-      >
+      <DialogContent showCloseButton={isMobile} className='w-full md:max-w-xl max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
           <div className='flex justify-between'>
             <div>
@@ -206,9 +203,7 @@ export default function NewPrescription() {
         </form>
 
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-request-lab-test' disabled={isPending}>
             {isPending && <Spinner />}
             Confirm

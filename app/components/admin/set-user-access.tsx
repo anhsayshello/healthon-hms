@@ -41,7 +41,7 @@ export default function SetUserAccess({ uid, disabled }: { uid: string; disabled
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='sm:max-w-md' showCloseButton={isMobile}>
+      <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-md' showCloseButton={isMobile}>
         <DialogHeader>
           <DialogTitle>{disabled ? 'Enable account' : 'Disable account'}</DialogTitle>
           <DialogDescription>

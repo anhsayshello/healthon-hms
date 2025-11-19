@@ -7,7 +7,6 @@ import { LabTestForm } from '@/lib/schemas/lab-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -20,6 +19,7 @@ import { Spinner } from '../ui/spinner'
 import CustomField from '../shared/custom-field'
 import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
+import CancelButton from '../shared/cancel-button'
 
 export default function FinishLabTest({
   id,
@@ -58,7 +58,7 @@ export default function FinishLabTest({
           <span>Enter Result</span>
         </Button>
       </DialogTrigger>
-      <DialogContent showCloseButton={isMobile}>
+      <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
           <DialogTitle>Finalize Lab Test</DialogTitle>
           <DialogDescription>
@@ -78,9 +78,7 @@ export default function FinishLabTest({
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-finish-lab-test' disabled={isPending}>
             {isPending && <Spinner />}
             Submit

@@ -24,10 +24,10 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 import { DiagnosisFormSchema } from '@/lib/schemas/diagnosis-form'
 import useCreateDiagnosis from '@/hooks/medical-record/useCreateDiagnosis'
 import { useParams } from 'react-router'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewDiagnosis() {
   const isMobile = useIsMobile()
-  const [open, setOpen] = useState(false)
   const { medicalRecordId } = useParams()
   const [isGeneratingData, setIsGeneratingData] = useState(false)
   const { mutate, isPending } = useCreateDiagnosis()
@@ -70,7 +70,7 @@ export default function NewDiagnosis() {
   }, 300)
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button className='cursor-pointer'>
           <CirclePlus />
@@ -128,9 +128,7 @@ export default function NewDiagnosis() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <Button variant={'outline'} onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-create-diagnosis' disabled={isPending}>
             {isPending && <Spinner />}
             Create

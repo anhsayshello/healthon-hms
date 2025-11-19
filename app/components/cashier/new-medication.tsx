@@ -11,7 +11,6 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDebouncedCallback } from 'use-debounce'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -25,6 +24,7 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 import { CURRENCY, MEDICATION_UNIT_TYPES } from '@/lib/schemas'
 import useCreateMedication from '@/hooks/medication/useCreateMedication'
 import { MedicationForm } from '@/lib/schemas/medication-form'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewMedication() {
   const isMobile = useIsMobile()
@@ -146,9 +146,7 @@ export default function NewMedication() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-create-medication' disabled={isPending}>
             {isPending && <Spinner />}
             Create

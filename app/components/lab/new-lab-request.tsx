@@ -132,7 +132,7 @@ export default function NewLabRequest() {
           </>
         )}
         <DialogFooter className='pt-2'>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant={'outline'}>Cancel</Button>
           </DialogClose>
           <Button className='cursor-pointer' form='form-request-lab-test' disabled={isPending}>

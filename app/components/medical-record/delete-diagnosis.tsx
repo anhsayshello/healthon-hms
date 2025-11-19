@@ -13,6 +13,7 @@ import { Spinner } from '@/components/ui/spinner'
 import useDeleteDiagnosis from '@/hooks/medical-record/useDeleteDiagnosis'
 import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import CancelButton from '../shared/cancel-button'
 
 export default function DeleteDiagnosis({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
@@ -43,9 +44,7 @@ export default function DeleteDiagnosis({ id }: { id: number }) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant={'outline'} onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
+          <CancelButton />
           <Button variant={'destructive'} onClick={onSubmit} disabled={isPending} className='cursor-pointer'>
             {isPending && <Spinner />}
             Delete

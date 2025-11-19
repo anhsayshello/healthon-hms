@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -21,6 +20,7 @@ import { toast } from 'sonner'
 import useUpdateAppointment from '@/hooks/appointment/useUpdateAppointment'
 import AppointmentSummaryCard from './appointment-summary-card'
 import { CalendarCheck2 } from 'lucide-react'
+import CancelButton from '../shared/cancel-button'
 
 export default function ApproveAppointment({ id, appointment }: { id: number; appointment: Appointment }) {
   const [open, setOpen] = useState(false)
@@ -84,9 +84,7 @@ export default function ApproveAppointment({ id, appointment }: { id: number; ap
         </form>
 
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button form='form-approve-appointment' className='cursor-pointer' disabled={isPending}>
             {isPending && <Spinner />}
             Confirm

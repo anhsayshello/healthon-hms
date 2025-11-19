@@ -26,6 +26,8 @@ import useCreateAppointment from '@/hooks/appointment/useCreateAppointment'
 import useDoctors from '@/hooks/doctor/useDoctors'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
+import { format } from 'date-fns'
+import CancelButton from '../shared/cancel-button'
 
 export default function BookAppoinment() {
   const user = useAuthStore((state) => state.user)
@@ -47,12 +49,13 @@ export default function BookAppoinment() {
   })
 
   const onSubmit = (data: z.infer<typeof AppointmentFormSchema>) => {
-    console.log(data)
+    console.log(data, 'data')
     if (user?.uid) {
       mutate(
-        { ...data, appointment_date: data.appointment_date.toISOString() },
+        { ...data, appointment_date: format(data.appointment_date, 'yyyy-MM-dd') },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
+            console.log(data)
             toast.success(`Added appointment with Dr. ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}`)
             setOpen(false)
           }
@@ -166,7 +169,7 @@ export default function BookAppoinment() {
                 placeholder='Describe your symptoms or reason for this appointment'
               />
               <DialogFooter>
-                <Button variant={'outline'}>Cancel</Button>
+                <CancelButton />
                 <Button className='cursor-pointer' form='form-create-appointment' disabled={isCreating}>
                   {isCreating && <Spinner />}
                   <span>Confirm</span>
