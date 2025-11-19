@@ -184,7 +184,7 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
       <div className='mt-3 flex items-center justify-between gap-6'>
         <Button className='flex-1 cursor-pointer' disabled={isPrinting} onClick={() => handlePrintPdf(dataReceipt.id)}>
           {isPrinting && <Spinner />}
-          <Printer />
+          {!isPrinting && <Printer />}
           <span>Print receipt</span>
         </Button>
         {!isDialog && (
