@@ -4,19 +4,23 @@ import type { Payment } from '@/types/payment.type'
 import http from '@/utils/http'
 
 const cashierApi = {
-  getAppointmentsForPayment: (params: SearchQueryParams) =>
-    http.get<PaginatedResponse<Appointment>>('cashier/payments', { params }),
-  initializePayment: (appointment_id: number) => http.post<Payment>('cashier/payments', { appointment_id }),
-  getPaymentById: (id: string) => http.get<Payment>(`cashier/payments/${id}`),
+  getAppointmentsForBilling: (params: SearchQueryParams) =>
+    http.get<PaginatedResponse<Appointment>>('cashier/billings', { params }),
+  createBilling: (appointment_id: number) => http.post<Payment>('cashier/billings', { appointment_id }),
+  getBillingById: (id: string) => http.get<Payment>(`cashier/billings/${id}`),
   processPayment: ({
     id,
     props
   }: {
     id: number
     props: Pick<Payment, 'payment_method' | 'amount_paid' | 'discount' | 'notes'>
-  }) => http.patch(`cashier/payments/${id}/process`, props),
+  }) => http.patch(`cashier/billings/${id}/payment`, props),
   getReceipts: (params: SearchQueryParams) => http.get<PaginatedResponse<Payment>>('cashier/receipts', { params }),
-  getReceiptById: (id: number) => http.get<Payment>(`cashier/receipts/${id}`)
+  getReceiptById: (id: number) => http.get<Payment>(`cashier/receipts/${id}`),
+  printReceiptPdf: (id: number) =>
+    http.get<Blob>(`cashier/receipts/${id}/pdf`, {
+      responseType: 'blob'
+    })
 }
 
 export default cashierApi
