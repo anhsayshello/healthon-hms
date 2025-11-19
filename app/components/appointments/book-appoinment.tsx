@@ -71,7 +71,7 @@ export default function BookAppoinment() {
           <span>Book Appoinment</span>
         </Button>
       </DialogTrigger>
-      <DialogContent showCloseButton={isMobile}>
+      <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
           <DialogTitle>Book Appoinment</DialogTitle>
           <DialogDescription>
