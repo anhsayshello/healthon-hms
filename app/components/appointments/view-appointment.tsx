@@ -37,6 +37,7 @@ export default function ViewAppointment({ id }: { id: number }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const { dataAppointment, isPending } = useAppointmentById(id, open)
+  console.log(dataAppointment, 'data-app')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -46,10 +47,7 @@ export default function ViewAppointment({ id }: { id: number }) {
           <div className='text-sm'>View</div>
         </Button>
       </DialogTrigger>
-      <DialogContent
-        showCloseButton={isMobile}
-        className='w-full md:max-w-2xl max-h-[96vh] md:max-h-[90vh] overflow-y-auto'
-      >
+      <DialogContent showCloseButton={isMobile} className='w-full md:max-w-2xl max-h-[90vh] overflow-y-auto'>
         {dataAppointment ? (
           <DialogHeader>
             <DialogTitle className='text-xl font-semibold'>Appointment Details</DialogTitle>

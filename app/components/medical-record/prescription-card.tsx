@@ -33,7 +33,7 @@ export default function PrescriptionCard({
 
       <CardContent className='pt-0'>
         <div className='space-y-3'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+          <div className='grid grid-cols-2 gap-3'>
             <div className='space-y-1'>
               <div className='flex gap-1.5 text-muted-foreground'>
                 <Package size={14} />

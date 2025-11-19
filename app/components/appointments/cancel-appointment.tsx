@@ -64,7 +64,7 @@ export default function CancelAppointment({ id, appointment }: { id: number; app
           <span className='text-destructive'>Cancel</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[480px]'>
+      <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-[480px]'>
         <DialogHeader>
           <DialogTitle>Cancel Appointment</DialogTitle>
           <DialogDescription>This action cannot be undone. Please provide a reason for cancellation.</DialogDescription>
