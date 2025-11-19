@@ -12,7 +12,6 @@ import { Spinner } from '@/components/ui/spinner'
 import { useDebouncedCallback } from 'use-debounce'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -25,6 +24,7 @@ import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
 import GenerateRandomData from '@/components/shared/generate-random-data'
 import { DialogTitle } from '@radix-ui/react-dialog'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewStaff() {
   const isMobile = useIsMobile()
@@ -139,9 +139,7 @@ export default function NewStaff() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-create-staff' disabled={isPending}>
             {isPending && <Spinner />}
             Create
