@@ -12,6 +12,7 @@ import { BLOOD_GROUP, GENDER, MARITAL_STATUS, RELATION } from '@/lib/schemas'
 import { useEffect } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 import useUpsertPatient from '@/hooks/patient/useUpsertPatient'
+import { format } from 'date-fns'
 
 interface Props {
   data: Patient | null
@@ -49,8 +50,7 @@ export default function NewPatient({ data, type }: Props) {
   })
 
   const onSubmit = async (data: z.infer<typeof PatientFormSchema>) => {
-    mutate({ ...data, date_of_birth: data.date_of_birth.toISOString() })
-    console.log(data.date_of_birth.toISOString())
+    mutate({ ...data, date_of_birth: format(data.date_of_birth, 'yyyy-MM-dd') })
   }
 
   useEffect(() => {
@@ -226,7 +226,7 @@ export default function NewPatient({ data, type }: Props) {
                 />
               </>
             )}
-            <Button disabled={isPending} className='w-full md:w-fit'>
+            <Button disabled={isPending} className='cursor-pointer w-full md:w-fit'>
               {isPending && <Spinner />}
               {type === 'create' ? 'Submit' : 'Update'}
             </Button>
