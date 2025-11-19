@@ -28,8 +28,8 @@ export default [
     route(path.lab.tests, 'routes/lab/lab-tests.tsx'),
     route(path.lab.services, 'routes/lab/lab-services.tsx'),
 
-    route(path.cashier.payments, 'routes/cashier/payment-records.tsx'),
-    route(path.cashier.paymentDetail, 'routes/cashier/payment-detail.tsx'),
+    route(path.cashier.billings, 'routes/cashier/billing-records.tsx'),
+    route(path.cashier.billingDetail, 'routes/cashier/billing-detail.tsx'),
     route(path.cashier.receiptDetail, 'routes/cashier/receipt-detail.tsx'),
     route(path.cashier.receiptOverview, 'routes/cashier/receipt-records.tsx'),
     route(path.cashier.medication, 'routes/cashier/medication-list.tsx'),
