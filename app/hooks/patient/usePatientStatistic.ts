@@ -4,11 +4,11 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import useRole from '../useRole'
 
 export default function usePatientStatistic() {
-  const idToken = useAuthStore((state) => state.idToken)
+  const user = useAuthStore((state) => state.user)
   const { isPatient } = useRole()
 
   const { data, isPending } = useQuery({
-    queryKey: ['patient', 'statistic', idToken],
+    queryKey: ['patient', 'statistic', user?.uid],
     queryFn: () => patientApi.getPatientDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,

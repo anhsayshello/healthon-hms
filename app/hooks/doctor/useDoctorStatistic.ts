@@ -4,11 +4,11 @@ import useRole from '../useRole'
 import doctorApi from '@/apis/doctor.api'
 
 export default function useDoctorStatistic() {
-  const idToken = useAuthStore((state) => state.idToken)
+  const user = useAuthStore((state) => state.user)
   const { isDoctor } = useRole()
 
   const { data, isPending } = useQuery({
-    queryKey: ['doctor', 'statistic', idToken],
+    queryKey: ['doctor', 'statistic', user?.uid],
     queryFn: () => doctorApi.getDoctorDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,

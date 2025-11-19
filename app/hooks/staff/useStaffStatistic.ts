@@ -4,11 +4,11 @@ import useRole from '../useRole'
 import staffApi from '@/apis/staff.api'
 
 export default function useStaffStatistic() {
-  const idToken = useAuthStore((state) => state.idToken)
+  const user = useAuthStore((state) => state.user)
   const { isStaff } = useRole()
 
   const { data, isPending } = useQuery({
-    queryKey: ['staff', 'statistic', idToken],
+    queryKey: ['staff', 'statistic', user?.uid],
     queryFn: () => staffApi.getStaffDashboardStatistic(),
     staleTime: Infinity,
     placeholderData: keepPreviousData,
