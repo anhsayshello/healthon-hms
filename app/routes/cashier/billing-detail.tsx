@@ -73,8 +73,8 @@ export default function PaymentDetail() {
     )
   }
   return (
-    <div className='flex items-start gap-6'>
-      <CardWrapper className='grow basis-3/5'>
+    <div className='flex flex-col xl:flex-row xl:items-start gap-6'>
+      <CardWrapper className='grow xl:basis-3/5'>
         <div className='space-y-4'>
           <h1 className='text-xl font-semibold'>Patient Information</h1>
           <div className='space-y-2 p-4 rounded-sm bg-background'>
@@ -150,7 +150,7 @@ export default function PaymentDetail() {
           )}
         </div>
       </CardWrapper>
-      <CardWrapper className='basis-2/5'>
+      <CardWrapper className='xl:basis-2/5'>
         <div className='space-y-4'>
           <h1 className='text-xl font-semibold'>Payment</h1>
           <div className='space-y-3 p-4 rounded-sm bg-background'>
