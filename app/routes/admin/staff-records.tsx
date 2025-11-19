@@ -37,7 +37,7 @@ export default function StaffRecords() {
     <div className='grow h-full flex flex-col gap-4 lg:gap-6 justify-between'>
       <CardWrapper>
         <TableMetadata title='Staff Table' totalRecords={totalRecords} onSearch={handleSearch}>
-          <NewStaff />
+          {isAdmin && <NewStaff />}
         </TableMetadata>
         <Table className='bg-background'>
           <TableHeader>
