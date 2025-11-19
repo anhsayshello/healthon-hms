@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import type z from 'zod'
 import { PaymentFormSchema } from '@/lib/schemas/payment-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CustomField from '@/components/shared/custom-field'
 import { Button } from '@/components/ui/button'
 import { FieldGroup } from '@/components/ui/field'
@@ -31,27 +31,21 @@ export default function PaymentDetail() {
   const { mutate } = useProcessPayment()
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const [totalAmount, setTotalAmount] = useState(0)
-
-  useEffect(() => {
-    if (dataBilling?.total_amount) {
-      setTotalAmount(dataBilling?.total_amount)
-    }
-  }, [dataBilling?.total_amount])
+  const subtotal = dataBilling?.subtotal ?? 0
 
   const form = useForm({
-    resolver: zodResolver(PaymentFormSchema(totalAmount)),
+    resolver: zodResolver(PaymentFormSchema(subtotal)),
     defaultValues: {
       discount: 0,
       amount_paid: 0,
       notes: ''
     }
   })
-  const discount = Number(form.watch('discount')) || 0
-  const amountPaid = Number(form.watch('amount_paid')) || 0
+  const discount = Number(form.watch('discount'))
+  const amountPaid = Number(form.watch('amount_paid'))
 
-  const finalAmount = totalAmount - discount
-  const changeAmount = amountPaid > finalAmount ? amountPaid - finalAmount : 0
+  const totalAmount = subtotal - discount
+  const changeAmount = amountPaid > totalAmount ? amountPaid - totalAmount : 0
 
   const onSubmit = (data: z.infer<ReturnType<typeof PaymentFormSchema>>) => {
     if (dataBilling?.id) {
@@ -162,7 +156,7 @@ export default function PaymentDetail() {
           <div className='space-y-3 p-4 rounded-sm bg-background'>
             <div className='flex items-center justify-between'>
               <div>Subtotal:</div>
-              <div>{formatNumber(dataBilling?.total_amount ?? 0)}</div>
+              <div>{formatNumber(dataBilling?.subtotal ?? 0)}</div>
             </div>
             <div className='flex items-center justify-between text-sm text-destructive'>
               <div>Discount:</div>
@@ -171,7 +165,7 @@ export default function PaymentDetail() {
             <Separator />
             <div className='flex items-center justify-between text-xl text-blue-500 font-semibold'>
               <div>Total:</div>
-              <div>{formatNumber(finalAmount)}</div>
+              <div>{formatNumber(totalAmount)}</div>
             </div>
           </div>
           <form id='form-process-payment' onSubmit={form.handleSubmit(onSubmit)}>
