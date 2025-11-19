@@ -28,6 +28,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import GenerateRandomData from '@/components/shared/generate-random-data'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { omit } from 'lodash'
+import CancelButton from '../shared/cancel-button'
 
 export default function NewDoctor() {
   const isMobile = useIsMobile()
@@ -212,7 +213,7 @@ export default function NewDoctor() {
           </FieldGroup>
         </form>
         <DialogFooter className='pt-2'>
-          <Button variant={'outline'}>Cancel</Button>
+          <CancelButton />
           <Button className='cursor-pointer' form='form-create-doctor' disabled={isPending}>
             {isPending && <Spinner />}
             Create
