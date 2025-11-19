@@ -10,13 +10,14 @@ import { Spinner } from '@/components/ui/spinner'
 import useQueryParams from '@/hooks/useQueryParams'
 import TableMetadata from '@/components/shared/table-metadata'
 import AppPagination from '@/components/shared/app-pagination'
-import { Dialog } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import useMedications from '@/hooks/medication/useMedications'
 import type { Medication } from '@/types/medication.type'
 import { useState } from 'react'
 import { formatDateTime } from '@/helpers/formatDateTime'
 import NewMedication from '../../components/cashier/new-medication'
 import formatNumber from '@/helpers/formatNumber'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 const tableColumns = [
   { header: 'ID', key: 'id' },
@@ -27,7 +28,7 @@ const tableColumns = [
   { header: 'Stock quantity', key: 'stock-quantity' },
   { header: 'Updated at', key: 'updated-at' }
 ]
-export default function LabServices() {
+export default function MedicationList() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
   const { dataMedications, currentPage, totalPages, totalRecords, isPending } = useMedications({ query, page, limit })
 
@@ -61,6 +62,7 @@ export default function LabServices() {
 }
 
 function MedicationRow({ medication }: { medication: Medication }) {
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
 
   return (
@@ -74,6 +76,13 @@ function MedicationRow({ medication }: { medication: Medication }) {
         <TableCell>{medication.stock_quantity}</TableCell>
         <TableCell>{formatDateTime(medication.updated_at)}</TableCell>
       </TableRow>
+      <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>Medication detail</DialogTitle>
+          <DialogDescription>ID: #{medication.id}</DialogDescription>
+          <div></div>
+        </DialogHeader>
+      </DialogContent>
     </Dialog>
   )
 }

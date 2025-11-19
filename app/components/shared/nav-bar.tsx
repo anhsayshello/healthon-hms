@@ -107,7 +107,7 @@ export default function Navbar() {
               className='flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer'
             >
               <div className='text-2xl'>{}</div>
-              <span className='hidden font-bold text-xl sm:inline-block'>shadcn.io</span>
+              <span className='hidden font-bold text-xl sm:inline-block'>healthon</span>
             </button>
             {/* Desktop navigation - icon only */}
           </div>

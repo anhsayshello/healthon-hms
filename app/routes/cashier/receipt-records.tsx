@@ -25,7 +25,7 @@ const tableColumns = [
   { header: 'Date', key: 'date' },
   { header: 'Cashier', key: 'cashier' },
   { header: 'Payment Method', key: 'payment-method' },
-  { header: 'Amount', key: 'amount' }
+  { header: 'Billed Total', key: 'billed-total' }
 ]
 
 export default function PaymentRecords() {
