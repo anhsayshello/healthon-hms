@@ -27,7 +27,7 @@ export default function NewBilling({ appointment_id }: { appointment_id: number 
   return (
     <Button onClick={handleInitialize} disabled={isPending} className='cursor-pointer'>
       {isPending && <Spinner />}
-      <CreditCard />
+      {!isPending && <CreditCard />}
       <span>{isPending ? 'Creating...' : 'Create bill'}</span>
     </Button>
   )
