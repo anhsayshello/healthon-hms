@@ -16,10 +16,6 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
   const navigate = useNavigate()
   const [isPrinting, setIsPrinting] = useState(false)
 
-  const finalTotal = (dataReceipt?.total_amount ?? 0) - (dataReceipt?.discount ?? 0)
-  const amountPaid = dataReceipt?.amount_paid ?? 0
-  const changeAmount = amountPaid - finalTotal
-
   const handlePrintPdf = async (id: number) => {
     setIsPrinting(true)
     try {
@@ -28,7 +24,7 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
 
       const a = document.createElement('a')
       a.href = url
-      a.download = `receipt-${id}.pdf`
+      a.download = `Receipt-${id}.pdf`
       a.click()
 
       URL.revokeObjectURL(url)
@@ -155,7 +151,7 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
         <div className='space-y-2 bg-background p-3 rounded-xs'>
           <div className='flex items-center justify-between'>
             <div>Subtotal:</div>
-            <div>{formatNumber(dataReceipt?.total_amount ?? 0)}</div>
+            <div>{formatNumber(dataReceipt.subtotal)}</div>
           </div>
           <div className='flex items-center justify-between text-sm text-destructive'>
             <div>Discount:</div>
@@ -164,15 +160,15 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
           <Separator />
           <div className='flex items-center justify-between text-xl text-blue-500 font-bold'>
             <div>Total:</div>
-            <div>{formatNumber(finalTotal)}</div>
+            <div>{formatNumber(dataReceipt.total_amount)}</div>
           </div>
           <div className='flex items-center justify-between'>
             <div>Amount paid:</div>
-            <div>{formatNumber(amountPaid)}</div>
+            <div>{formatNumber(dataReceipt.amount_paid)}</div>
           </div>
           <div className='flex items-center justify-between'>
             <div>Change:</div>
-            <div>{formatNumber(changeAmount)}</div>
+            <div>{formatNumber(dataReceipt.amount_paid - dataReceipt.total_amount)}</div>
           </div>
           <div className='flex items-center justify-between'>
             <div>Payment method:</div>
@@ -186,18 +182,18 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
         <p>Please retain this receipt for future reference and verification purposes.</p>
       </div>
       <div className='mt-3 flex items-center justify-between gap-6'>
-        <Button
-          className='bg-blue-600 flex-1 cursor-pointer'
-          disabled={isPrinting}
-          onClick={() => handlePrintPdf(dataReceipt.id)}
-        >
+        <Button className='flex-1 cursor-pointer' disabled={isPrinting} onClick={() => handlePrintPdf(dataReceipt.id)}>
           {isPrinting && <Spinner />}
-          <Printer className='text-white' />
-          <span className='text-white'>Print receipt</span>
+          <Printer />
+          <span>Print receipt</span>
         </Button>
         {!isDialog && (
-          <Button className='flex-1 cursor-pointer' onClick={() => navigate({ pathname: path.cashier.billings })}>
-            Back to Payments
+          <Button
+            variant={'outline'}
+            className='flex-1 cursor-pointer'
+            onClick={() => navigate({ pathname: path.cashier.billings })}
+          >
+            Back to Billing
           </Button>
         )}
       </div>
