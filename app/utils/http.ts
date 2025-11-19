@@ -24,9 +24,9 @@ class Http {
         config.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
 
         // await useAuthStore.persist.rehydrate()
-        const idTokten = useAuthStore.getState().idToken
-        if (idTokten) {
-          config.headers.Authorization = `Bearer ${idTokten}`
+        const idToken = await auth.currentUser?.getIdToken()
+        if (idToken) {
+          config.headers.Authorization = `Bearer ${idToken}`
         }
         return config
       },
@@ -41,14 +41,30 @@ class Http {
         console.log(url)
         return response
       },
-      async function (error) {
-        if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+      async (error) => {
+        const originalConfig = error.config
+
+        if (
+          error.response?.status !== HttpStatusCode.UnprocessableEntity &&
+          error.response?.status !== HttpStatusCode.Unauthorized
+        ) {
           handleApiError(error)
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {
-          await signOut(auth)
-          useAuthStore.getState().clearAuth()
-          useUserCredential.getState().clearUserCred()
+          if (!originalConfig._retry) {
+            originalConfig._retry = true
+
+            try {
+              await auth.currentUser?.getIdToken(true)
+              return this.instance(originalConfig)
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
+              handleApiError(error)
+              await signOut(auth)
+              useAuthStore.getState().clearAuth()
+              useUserCredential.getState().clearUserCred()
+            }
+          }
         }
         return Promise.reject(error)
       }
