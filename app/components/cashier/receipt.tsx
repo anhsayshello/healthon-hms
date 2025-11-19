@@ -7,13 +7,37 @@ import formatNumber from '@/helpers/formatNumber'
 import { Button } from '@/components/ui/button'
 import path from '@/constants/path'
 import type { Payment } from '@/types/payment.type'
+import Timestamps from '../shared/time-stamps'
+import cashierApi from '@/apis/cashier.api'
+import { useState } from 'react'
+import { Spinner } from '../ui/spinner'
 
 export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt: Payment; isDialog?: boolean }) {
   const navigate = useNavigate()
+  const [isPrinting, setIsPrinting] = useState(false)
 
   const finalTotal = (dataReceipt?.total_amount ?? 0) - (dataReceipt?.discount ?? 0)
   const amountPaid = dataReceipt?.amount_paid ?? 0
   const changeAmount = amountPaid - finalTotal
+
+  const handlePrintPdf = async (id: number) => {
+    setIsPrinting(true)
+    try {
+      const res = await cashierApi.printReceiptPdf(id)
+      const url = URL.createObjectURL(res.data)
+
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `receipt-${id}.pdf`
+      a.click()
+
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Failed to generate PDF:', error)
+    } finally {
+      setIsPrinting(false)
+    }
+  }
 
   return (
     <>
@@ -162,16 +186,23 @@ export default function Receipt({ dataReceipt, isDialog = false }: { dataReceipt
         <p>Please retain this receipt for future reference and verification purposes.</p>
       </div>
       <div className='mt-3 flex items-center justify-between gap-6'>
-        <Button className='bg-blue-600 flex-1 cursor-pointer'>
+        <Button
+          className='bg-blue-600 flex-1 cursor-pointer'
+          disabled={isPrinting}
+          onClick={() => handlePrintPdf(dataReceipt.id)}
+        >
+          {isPrinting && <Spinner />}
           <Printer className='text-white' />
           <span className='text-white'>Print receipt</span>
         </Button>
         {!isDialog && (
-          <Button className='flex-1 cursor-pointer' onClick={() => navigate({ pathname: path.cashier.payments })}>
+          <Button className='flex-1 cursor-pointer' onClick={() => navigate({ pathname: path.cashier.billings })}>
             Back to Payments
           </Button>
         )}
       </div>
+      <Separator />
+      <Timestamps createdAt={dataReceipt.created_at} updatedAt={dataReceipt.updated_at} />
     </>
   )
 }
