@@ -1,6 +1,6 @@
-import type { Route } from './+types/payment-detail'
+import type { Route } from './+types/billing-detail'
 import CardWrapper from '@/components/shared/card-wrapper'
-import usePaymentById from '@/hooks/cashier/usePaymentById'
+import usePaymentById from '@/hooks/cashier/useBillingById'
 import { Spinner } from '@/components/ui/spinner'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import AppointmentStatusIndicator from '@/components/appointments/appointment-status-indicator'
@@ -22,22 +22,22 @@ import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Payment Detail' }, { name: 'description', content: 'Welcome to React Router!' }]
+  return [{ title: 'Billing Detail' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export default function PaymentDetail() {
   const navigate = useNavigate()
-  const { dataPayment, isPending: isLoadingPayment } = usePaymentById()
+  const { dataBilling, isPending: isLoadingPayment } = usePaymentById()
   const { mutate } = useProcessPayment()
   const [isProcessing, setIsProcessing] = useState(false)
 
   const [totalAmount, setTotalAmount] = useState(0)
 
   useEffect(() => {
-    if (dataPayment?.total_amount) {
-      setTotalAmount(dataPayment?.total_amount)
+    if (dataBilling?.total_amount) {
+      setTotalAmount(dataBilling?.total_amount)
     }
-  }, [dataPayment?.total_amount])
+  }, [dataBilling?.total_amount])
 
   const form = useForm({
     resolver: zodResolver(PaymentFormSchema(totalAmount)),
@@ -54,13 +54,13 @@ export default function PaymentDetail() {
   const changeAmount = amountPaid > finalAmount ? amountPaid - finalAmount : 0
 
   const onSubmit = (data: z.infer<ReturnType<typeof PaymentFormSchema>>) => {
-    if (dataPayment?.id) {
+    if (dataBilling?.id) {
       setIsProcessing(true)
       mutate(
-        { id: dataPayment.id, props: data },
+        { id: dataBilling.id, props: data },
         {
           onSuccess: () => {
-            navigate({ pathname: `${path.cashier.receiptOverview}/${dataPayment.id}` })
+            navigate({ pathname: `${path.cashier.receiptOverview}/${dataBilling.id}` })
           },
           onSettled: () => {
             setTimeout(() => setIsProcessing(false), 1000)
@@ -87,35 +87,35 @@ export default function PaymentDetail() {
             <div className='flex items-center justify-between'>
               <p>Fullname:</p>
               <p className='font-medium'>
-                {dataPayment?.appointment?.patient.first_name} {dataPayment?.appointment?.patient.last_name}
+                {dataBilling?.appointment?.patient.first_name} {dataBilling?.appointment?.patient.last_name}
               </p>
             </div>
             <div className='flex items-center justify-between'>
               <p>Date of birth:</p>
-              <p className='font-medium'>{formatDate(dataPayment?.appointment?.patient.date_of_birth as string)}</p>
+              <p className='font-medium'>{formatDate(dataBilling?.appointment?.patient.date_of_birth as string)}</p>
             </div>
             <div className='flex items-center justify-between'>
               <p>Adress:</p>
-              <p className='font-medium'>{dataPayment?.appointment?.patient.address}</p>
+              <p className='font-medium'>{dataBilling?.appointment?.patient.address}</p>
             </div>
             <div className='flex items-center justify-between'>
               <p>Phone:</p>
-              <p className='font-medium'>{dataPayment?.appointment?.patient.phone}</p>
+              <p className='font-medium'>{dataBilling?.appointment?.patient.phone}</p>
             </div>
             <div className='flex items-center justify-between'>
               <p>Consultation Date:</p>
-              <p className='font-medium'>{formatDate(dataPayment?.appointment?.appointment_date as string)}</p>
+              <p className='font-medium'>{formatDate(dataBilling?.appointment?.appointment_date as string)}</p>
             </div>
             <div className='flex items-center justify-between'>
               <p>Status:</p>
-              <AppointmentStatusIndicator status={dataPayment?.appointment?.status as AppointmentStatus} />
+              <AppointmentStatusIndicator status={dataBilling?.appointment?.status as AppointmentStatus} />
             </div>
           </div>
         </div>
         <Separator />
         <div className='space-y-4'>
           <h1 className='text-xl font-semibold'>Lab Service</h1>
-          {dataPayment?.lab_bills?.map((labBill) => (
+          {dataBilling?.lab_bills?.map((labBill) => (
             <Item key={labBill.id} variant='outline' className='bg-cyan-600/10'>
               <ItemContent>
                 <ItemTitle>{labBill.service?.service_name}</ItemTitle>
@@ -126,12 +126,12 @@ export default function PaymentDetail() {
               </ItemActions>
             </Item>
           ))}
-          {dataPayment?.lab_bills?.length === 0 && <p className='text-muted-foreground text-sm'>No lab services</p>}
+          {dataBilling?.lab_bills?.length === 0 && <p className='text-muted-foreground text-sm'>No lab services</p>}
         </div>
         <Separator />
         <div className='space-y-4'>
           <h1 className='text-xl font-semibold'>Prescription</h1>
-          {dataPayment?.prescription_bills?.map((prescriptionBill) => (
+          {dataBilling?.prescription_bills?.map((prescriptionBill) => (
             <Item key={prescriptionBill.id} variant='outline' className='bg-cyan-600/10'>
               <ItemContent>
                 <ItemTitle className='capitalize'>
@@ -151,7 +151,7 @@ export default function PaymentDetail() {
               </ItemActions>
             </Item>
           ))}
-          {dataPayment?.prescription_bills?.length === 0 && (
+          {dataBilling?.prescription_bills?.length === 0 && (
             <p className='text-muted-foreground text-sm'>No prescription</p>
           )}
         </div>
@@ -162,7 +162,7 @@ export default function PaymentDetail() {
           <div className='space-y-3 p-4 rounded-sm bg-background'>
             <div className='flex items-center justify-between'>
               <div>Subtotal:</div>
-              <div>{formatNumber(dataPayment?.total_amount ?? 0)}</div>
+              <div>{formatNumber(dataBilling?.total_amount ?? 0)}</div>
             </div>
             <div className='flex items-center justify-between text-sm text-destructive'>
               <div>Discount:</div>

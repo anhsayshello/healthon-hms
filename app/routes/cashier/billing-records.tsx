@@ -1,4 +1,4 @@
-import type { Route } from './+types/payment-records'
+import type { Route } from './+types/billing-records'
 import CardWrapper from '@/components/shared/card-wrapper'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Spinner } from '@/components/ui/spinner'
@@ -6,8 +6,8 @@ import useQueryParams from '@/hooks/useQueryParams'
 import TableMetadata from '@/components/shared/table-metadata'
 import AppPagination from '@/components/shared/app-pagination'
 import type { Appointment } from '@/types/appointment.type'
-import InitializePayment from '../../components/cashier/initialize-payment'
-import useAppointmentsForBilling from '@/hooks/cashier/useAppointmentsForPayment'
+import InitializePayment from '../../components/cashier/new-billing'
+import useAppointmentsForBilling from '@/hooks/cashier/useAppointmentsForBillings'
 import UserInfo from '@/components/shared/user-info'
 import { useMemo } from 'react'
 import formatDate from '@/helpers/formatDate'
@@ -18,7 +18,7 @@ import path from '@/constants/path'
 import { ArrowRight } from 'lucide-react'
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Payment Records' }, { name: 'description', content: 'Welcome to React Router!' }]
+  return [{ title: 'Billing Records' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 const tableColumns = [
@@ -34,7 +34,7 @@ const tableColumns = [
 
 export default function PaymentRecords() {
   const { query, page, limit, handlePageChange, handleSearch } = useQueryParams()
-  const { dataAppointmentsForPayment, currentPage, totalPages, totalRecords, isPending } = useAppointmentsForBilling({
+  const { dataAppointmentsForBilling, currentPage, totalPages, totalRecords, isPending } = useAppointmentsForBilling({
     query,
     page,
     limit
@@ -52,13 +52,13 @@ export default function PaymentRecords() {
               ))}
             </TableRow>
           </TableHeader>
-          {dataAppointmentsForPayment && dataAppointmentsForPayment.length === 0 && (
+          {dataAppointmentsForBilling && dataAppointmentsForBilling.length === 0 && (
             <TableCaption className='text-center'>{isPending ? <Spinner /> : 'No data found'}</TableCaption>
           )}
           <TableBody>
-            {dataAppointmentsForPayment &&
-              dataAppointmentsForPayment.length > 0 &&
-              dataAppointmentsForPayment.map((appointment) => (
+            {dataAppointmentsForBilling &&
+              dataAppointmentsForBilling.length > 0 &&
+              dataAppointmentsForBilling.map((appointment) => (
                 <BillingRow key={appointment.id} appointment={appointment} />
               ))}
           </TableBody>
@@ -105,7 +105,7 @@ function BillingRow({ appointment }: { appointment: Appointment }) {
         {!hasPayment ? (
           <InitializePayment appointment_id={appointment.id} />
         ) : (
-          <Button onClick={() => navigate({ pathname: `${path.cashier.payments}/${appointment.payment.id}` })}>
+          <Button onClick={() => navigate({ pathname: `${path.cashier.billings}/${appointment.payment.id}` })}>
             <ArrowRight />
             Continue Payment
           </Button>
