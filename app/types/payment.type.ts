@@ -27,13 +27,14 @@ export interface Payment {
   appointment_id: number
   bill_date: string
   payment_date: string
+  subtotal: number
   discount: number
   total_amount: number
   amount_paid: number
-  cashier_id?: string
-  notes?: string
   refund_amount: number
   change_amount: number
+  cashier_id?: string
+  notes?: string
 
   payment_method: PaymentMethod
   status: PaymentStatus
