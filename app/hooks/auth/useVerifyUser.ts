@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 
 export default function useVerifyUser() {
   const navigate = useNavigate()
-  const { setIdToken, setUser, setRole } = useAuthStore()
+  const { setIsAuthenticated, setUser, setRole } = useAuthStore()
   const setUserCred = useUserCredential((state) => state.setUserCred)
 
   const verifyUser = async (userCred: UserCredential) => {
@@ -32,16 +32,12 @@ export default function useVerifyUser() {
     }
 
     const idToken = await userCred.user.getIdToken()
-    console.log(idToken, 'idToken')
     const res = await authApi.verifyUser(idToken)
-    console.log(res, 'res')
 
     if (res.status !== HttpStatusCode.Ok) return
     const idTokenResult = await userCred.user.getIdTokenResult()
-    console.log(idTokenResult)
     //
     const userData = res.data.data
-    console.log(userData)
     const role = idTokenResult.claims?.role as Role
     //
     const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
@@ -52,7 +48,7 @@ export default function useVerifyUser() {
     const photoUrl = tokenRes.photoUrl
     setUserCred({ email, firstName, lastName, photoUrl })
     //
-    setIdToken(idToken)
+    setIsAuthenticated(true)
     if (!role) {
       navigate({ pathname: path.patient.register })
     } else {
