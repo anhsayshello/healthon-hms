@@ -80,7 +80,7 @@ export default function NewVitalSigns({ appointment_id, patientFirstName, patien
           <span>Take Vital Signs</span>
         </Button>
       </DialogTrigger>
-      <DialogContent showCloseButton={isMobile}>
+      <DialogContent showCloseButton={isMobile} className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader>
           <div className='flex justify-between'>
             <div className='space-y-1'>
