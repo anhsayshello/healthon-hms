@@ -32,8 +32,8 @@ const path = {
   },
   cashier: {
     medication: '/medications',
-    payments: '/payments',
-    paymentDetail: '/payments/:paymentId',
+    billings: '/billings',
+    billingDetail: '/billings/:billingId',
     receiptDetail: '/receipts/:receiptId',
     receiptOverview: '/receipts'
   },
