@@ -4,7 +4,6 @@ import useCompleteConsultation from '@/hooks/doctor/useCompleteConsultation'
 import { toast } from 'sonner'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { BookCheck } from 'lucide-react'
 import { useState } from 'react'
+import CancelButton from '@/components/shared/cancel-button'
 
 export default function CompleteConsultation({ appointment_id }: { appointment_id: number }) {
   const { mutate } = useCompleteConsultation()
@@ -49,9 +49,7 @@ export default function CompleteConsultation({ appointment_id }: { appointment_i
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='pt-2'>
-          <DialogClose>
-            <Button variant={'outline'}>Cancel</Button>
-          </DialogClose>
+          <CancelButton />
           <Button className='cursor-pointer' onClick={onSubmit} disabled={isPending}>
             {isPending && <Spinner />}
             Confirm
