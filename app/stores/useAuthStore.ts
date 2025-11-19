@@ -4,11 +4,10 @@ import type { Patient } from '@/types/patient.type'
 import type { Role } from '@/types/role.type'
 
 type AuthStore = {
-  idToken: string | null
   isAuthenticated: boolean
   user: Patient | null
   role: Role | null
-  setIdToken: (idToken: string | null) => void
+  setIsAuthenticated: (isAuthenticated: boolean) => void
   setUser: (user: Patient | null) => void
   setRole: (role: Role | null) => void
   clearAuth: () => void
@@ -17,15 +16,13 @@ type AuthStore = {
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      idToken: null,
       isAuthenticated: false,
       user: null,
       role: null,
 
-      setIdToken: (idToken) => {
+      setIsAuthenticated: (isAuthenticated) => {
         set({
-          idToken,
-          isAuthenticated: Boolean(idToken)
+          isAuthenticated
         })
       },
       setUser: (user) =>
@@ -39,7 +36,6 @@ export const useAuthStore = create<AuthStore>()(
 
       clearAuth: () =>
         set({
-          idToken: null,
           isAuthenticated: false,
           user: null,
           role: null
