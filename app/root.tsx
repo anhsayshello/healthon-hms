@@ -39,6 +39,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 const queryClient = new QueryClient()
 
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {}
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
