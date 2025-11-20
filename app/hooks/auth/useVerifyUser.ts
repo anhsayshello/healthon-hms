@@ -5,7 +5,6 @@ import { useAuthStore } from '@/stores/useAuthStore'
 import { useUserCredential } from '@/stores/useUserCredentialStore'
 import type { GoogleTokenResponse, UserCredentialExtended } from '@/types/index.type'
 import type { Role } from '@/types/role.type'
-import { HttpStatusCode } from 'axios'
 import { FirebaseError } from 'firebase/app'
 import { sendEmailVerification, type UserCredential } from 'firebase/auth'
 import { useNavigate } from 'react-router'
@@ -31,29 +30,30 @@ export default function useVerifyUser() {
       return
     }
 
-    const idToken = await userCred.user.getIdToken()
-    const res = await authApi.verifyUser(idToken)
-
-    if (res.status !== HttpStatusCode.Ok) return
-    const idTokenResult = await userCred.user.getIdTokenResult()
-    //
-    const userData = res.data.data
-    const role = idTokenResult.claims?.role as Role
-    //
-    const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
-    console.log(tokenRes, 'tokenRes')
-    const email = tokenRes.email
-    const firstName = tokenRes.firstName
-    const lastName = tokenRes.lastName
-    const photoUrl = tokenRes.photoUrl
-    setUserCred({ email, firstName, lastName, photoUrl })
-    //
-    setIsAuthenticated(true)
-    if (!role) {
-      navigate({ pathname: path.patient.register })
-    } else {
-      setUser(userData)
-      setRole(role)
+    try {
+      const res = await authApi.verifyUser()
+      const idTokenResult = await userCred.user.getIdTokenResult()
+      //
+      const userData = res.data.data
+      const role = idTokenResult.claims?.role as Role
+      //
+      const tokenRes: GoogleTokenResponse = (userCred as UserCredentialExtended)?._tokenResponse
+      console.log(tokenRes, 'tokenRes')
+      const email = tokenRes.email
+      const firstName = tokenRes.firstName
+      const lastName = tokenRes.lastName
+      const photoUrl = tokenRes.photoUrl
+      setUserCred({ email, firstName, lastName, photoUrl })
+      //
+      setIsAuthenticated(true)
+      if (!role) {
+        navigate({ pathname: path.patient.register })
+      } else {
+        setUser(userData)
+        setRole(role)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
