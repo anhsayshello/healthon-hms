@@ -23,7 +23,6 @@ class Http {
         const appCheckTokenResponse = await getToken(appCheck, false)
         config.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
 
-        // await useAuthStore.persist.rehydrate()
         const idToken = await auth.currentUser?.getIdToken()
         if (idToken) {
           config.headers.Authorization = `Bearer ${idToken}`
