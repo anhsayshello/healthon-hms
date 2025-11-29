@@ -4,18 +4,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export default function useUpsertPatient(type: 'create' | 'update') {
-  const { setUser, setRole } = useAuthStore()
   const queryClient = useQueryClient()
+  const refreshAuth = useAuthStore((state) => state.refreshAuth)
 
   const { isPending, mutate } = useMutation({
     mutationKey: ['patient', 'upsert'],
     mutationFn: patientApi.upsertPatient,
-    onSuccess: async (data) => {
-      const role = data.data.role
-      setRole(role)
-      setUser(data.data.data)
-      await queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
-      toast.success(`${type === 'create' ? 'Patient created successfully' : 'Patient updated successfully'}`)
+    onSuccess: async () => {
+      await refreshAuth()
+      queryClient.invalidateQueries({ queryKey: ['patient', 'information'] })
+      // if (type === 'create') fireConfetti()
+      toast.success(`${type === 'create' ? 'Welcome to healthon' : 'Patient updated successfully'}`)
     }
   })
 
