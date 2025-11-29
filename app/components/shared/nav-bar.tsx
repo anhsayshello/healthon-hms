@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { ChevronDownIcon, Sun, Moon, LogOut, Menu } from 'lucide-react'
+import { ChevronDownIcon, LogOut, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 import {
@@ -11,24 +10,24 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { useThemeStore } from '@/stores/useThemeStore'
 import { useSidebar } from '../ui/sidebar'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { useUserCredential } from '@/stores/useUserCredentialStore'
 import ProfileAvatar from './profile-avatar'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
-import useSignOut from '@/hooks/auth/useSignOut'
 import useRole from '@/hooks/useRole'
+import { useUserCredentialStore } from '@/stores/useUserCredentialStore'
+import ThemeSwitcher from './theme-switcher'
 
 // User Menu Component
 const UserMenu = () => {
   const { isPatient } = useRole()
-  const { handleSignOut } = useSignOut()
   const navigate = useNavigate()
+  const logOut = useAuthStore((state) => state.logOut)
   const user = useAuthStore((state) => state.user)
-  const userCred = useUserCredential((state) => state.userCred)
+  const role = useAuthStore((state) => state.role)
+  const userCred = useUserCredentialStore((state) => state.userCred)
   const isMobile = useIsMobile()
 
   return (
@@ -53,13 +52,18 @@ const UserMenu = () => {
             <p className='text-[13px] leading-none text-muted-foreground'>{user?.email ?? userCred?.email}</p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate({ pathname: path.dashboard })}>Dashboard</DropdownMenuItem>
+
+        {role && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate({ pathname: path.dashboard })}>Dashboard</DropdownMenuItem>
+          </>
+        )}
         {isPatient && (
           <DropdownMenuItem onClick={() => navigate({ pathname: path.patient.profile })}>Profile</DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut} className='flex items-end gap-2.5'>
+        <DropdownMenuItem onClick={logOut} className='flex items-end gap-2.5'>
           <LogOut />
           <span>Log out</span>
         </DropdownMenuItem>
@@ -70,23 +74,6 @@ const UserMenu = () => {
 
 export default function Navbar() {
   const isMobile = useIsMobile()
-  const { theme, setTheme } = useThemeStore()
-
-  useEffect(() => {
-    const root = window.document.documentElement
-
-    root.classList.remove('light', 'dark')
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-
-      root.classList.add(systemTheme)
-      return
-    }
-
-    root.classList.add(theme)
-  }, [theme])
-
   const { setOpenMobile } = useSidebar()
 
   return (
@@ -115,20 +102,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className='flex items-center gap-2'>
           {/* Theme toggle */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='icon'>
-                <Sun className='h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
-                <Moon className='absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
-                <span className='sr-only'>Toggle</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ThemeSwitcher />
           {/* User menu */}
           <UserMenu />
         </div>
