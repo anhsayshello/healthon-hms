@@ -17,7 +17,7 @@ import { RainbowButton } from '../ui/rainbow-button'
 import { InteractiveHoverButton } from '../ui/interactive-hover-button'
 import { Safari } from '../ui/safari'
 import ThemeSwitcher from '../shared/theme-switcher'
-import abc from '../../public/abc.jpg'
+import recordAppointments from '../../assets/record-appointments.jpg'
 
 export default function HeroSectionOne() {
   return (
@@ -87,7 +87,7 @@ export default function HeroSectionOne() {
           }}
           className='relative z-10 mt-20 rounded-3xl border border-neutral-200 bg-neutral-100 p-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900'
         >
-          <Safari url='http://healthon.vercel.app/record/appointments' imageSrc={abc} />
+          <Safari url='http://healthon.vercel.app/record/appointments' imageSrc={recordAppointments} />
         </motion.div>
       </div>
     </div>
