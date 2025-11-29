@@ -4,8 +4,6 @@ import config from '@/constants/config'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { getToken } from 'firebase/app-check'
 import { appCheck, auth } from '@/lib/firebase/client'
-import { signOut } from 'firebase/auth'
-import { useUserCredential } from '@/stores/useUserCredentialStore'
 import handleApiError from '@/helpers/handleApiError'
 
 class Http {
@@ -20,12 +18,14 @@ class Http {
     })
     this.instance.interceptors.request.use(
       async (config) => {
-        const appCheckTokenResponse = await getToken(appCheck, false)
-        config.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
+        if (appCheck) {
+          const appCheckTokenResponse = await getToken(appCheck, false)
+          config.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
 
-        const idToken = await auth.currentUser?.getIdToken()
-        if (idToken) {
-          config.headers.Authorization = `Bearer ${idToken}`
+          const idToken = await auth.currentUser?.getIdToken()
+          if (idToken) {
+            config.headers.Authorization = `Bearer ${idToken}`
+          }
         }
         return config
       },
@@ -59,9 +59,7 @@ class Http {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
               handleApiError(error)
-              await signOut(auth)
-              useAuthStore.getState().clearAuth()
-              useUserCredential.getState().clearUserCred()
+              useAuthStore.getState().logOut()
             }
           }
         }
