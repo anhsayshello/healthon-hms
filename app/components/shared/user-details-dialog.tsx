@@ -54,6 +54,9 @@ export default function UserDetailsDialog({ isPending, user, role, children }: P
                 <p className='text-sm text-muted-foreground'>{user?.email}</p>
               </div>
             </div>
+            {/* <Button variant={'link'} onClick={() => navigate({ pathname: `/profile/${user.uid}` })}>
+              go to profile
+            </Button> */}
             <Separator />
 
             {/* Basic Information */}
