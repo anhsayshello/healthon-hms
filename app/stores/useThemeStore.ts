@@ -1,7 +1,7 @@
 import { persist } from 'zustand/middleware'
 import { create } from 'zustand'
 
-type ThemeType = 'dark' | 'light' | 'system' | 'sunset'
+type ThemeType = 'dark' | 'light' | 'system' | 'cyber'
 
 type Theme = {
   theme: ThemeType
