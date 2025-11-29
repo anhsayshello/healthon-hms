@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
+import { initializeAppCheck, ReCaptchaV3Provider, type AppCheck } from 'firebase/app-check'
 import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
@@ -13,14 +13,22 @@ const firebaseConfig = {
 }
 const app = initializeApp(firebaseConfig)
 
-export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY),
-  isTokenAutoRefreshEnabled: true
-})
-
+let appCheck: AppCheck | undefined
+if (typeof window !== 'undefined') {
+  try {
+    appCheck = initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider(import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY),
+      isTokenAutoRefreshEnabled: true
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
 export const actionCodeSettings = {
   url: 'https://healthon.vercel.app/sign-in',
+  // url: 'http://localhost:5173/sign-in',
   handleCodeInApp: true
 }
 
 export const auth = getAuth(app)
+export { appCheck }
