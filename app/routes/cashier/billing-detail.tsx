@@ -62,7 +62,6 @@ export default function PaymentDetail() {
         }
       )
     }
-    console.log(data)
   }
 
   if (isLoadingPayment) {

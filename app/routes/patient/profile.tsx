@@ -1,5 +1,5 @@
 import type { Route } from './+types/profile'
-import { UpdatePatient } from './new-patient'
+import { UpdatePatient } from './patient-profile-form'
 import usePatientProfile from '@/hooks/patient/usePatientProfile'
 
 export function meta({}: Route.MetaArgs) {

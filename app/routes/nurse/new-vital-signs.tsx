@@ -148,7 +148,7 @@ export default function NewVitalSigns({ appointment_id, patientFirstName, patien
         </form>
         <DialogFooter className='mt-2'>
           <CancelButton />
-          <Button form='form-add-vital-signs' disabled={isPending}>
+          <Button className='cursor-pointer' form='form-add-vital-signs' disabled={isPending}>
             {isPending && <Spinner />}
             <span>Save</span>
           </Button>
