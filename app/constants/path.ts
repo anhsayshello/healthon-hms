@@ -7,11 +7,13 @@ const path = {
 
   dashboard: '/dashboard',
   notifications: '/notifications',
+  profile: '/profile/:profileId',
 
   admin: {
     auditLogs: '/admin/audit-logs',
     settings: '/admin/settings',
-    users: '/admin/users'
+    users: '/admin/users',
+    medication: '/medications'
   },
   record: {
     doctors: '/record/doctors',
@@ -31,7 +33,6 @@ const path = {
     services: '/lab/services'
   },
   cashier: {
-    medication: '/medications',
     billings: '/billings',
     billingDetail: '/billings/:billingId',
     receiptDetail: '/receipts/:receiptId',
