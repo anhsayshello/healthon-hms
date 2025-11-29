@@ -13,7 +13,11 @@ export default [
 
   layout('./layouts/protected-layout.tsx', [
     route(path.dashboard, 'routes/dashboard.tsx'),
+    route(path.profile, 'routes/profile.tsx'),
     route(path.admin.users, 'routes/admin/firebase-user-management.tsx'),
+    route(path.admin.medication, 'routes/admin/medication-list.tsx'),
+    route(path.lab.services, 'routes/admin/lab-services.tsx'),
+
     route(path.patient.profile, 'routes/patient/profile.tsx'),
 
     route(path.record.appointments, 'routes/appointments.tsx'),
@@ -26,13 +30,11 @@ export default [
 
     route(path.lab.requests, 'routes/lab/lab-requests.tsx'),
     route(path.lab.tests, 'routes/lab/lab-tests.tsx'),
-    route(path.lab.services, 'routes/lab/lab-services.tsx'),
 
     route(path.cashier.billings, 'routes/cashier/billing-records.tsx'),
     route(path.cashier.billingDetail, 'routes/cashier/billing-detail.tsx'),
     route(path.cashier.receiptDetail, 'routes/cashier/receipt-detail.tsx'),
     route(path.cashier.receiptOverview, 'routes/cashier/receipt-records.tsx'),
-    route(path.cashier.medication, 'routes/cashier/medication-list.tsx'),
 
     route(path.notifications, 'routes/notifications.tsx')
   ]),
