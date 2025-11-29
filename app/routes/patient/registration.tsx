@@ -1,5 +1,5 @@
 import type { Route } from './+types/registration'
-import { CreateNewPatient } from './new-patient'
+import { CreateNewPatient } from './patient-profile-form'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Patient Registration' }, { name: 'description', content: 'Welcome to React Router!' }]
