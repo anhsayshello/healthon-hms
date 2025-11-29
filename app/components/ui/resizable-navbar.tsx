@@ -192,9 +192,9 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNa
 
 export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
   return isOpen ? (
-    <X className='text-black dark:text-white' onClick={onClick} />
+    <X className='text-black dark:text-white cyber:text-foreground' onClick={onClick} />
   ) : (
-    <Menu className='text-black dark:text-white' onClick={onClick} />
+    <Menu className='text-black dark:text-white cyber:text-foreground' onClick={onClick} />
   )
 }
 
