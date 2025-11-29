@@ -6,12 +6,13 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/lib/firebase/client'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
-import useVerifyUser from './useVerifyUser'
+
 import { SignUpFormSchema } from '@/lib/schemas/auth-form'
+import { useUserCredentialStore } from '@/stores/useUserCredentialStore'
 
 export default function useCreateUserWithEmailAndPassword() {
   const [isPending, setIsPending] = useState(false)
-  const verifyUser = useVerifyUser()
+  const setUserCred = useUserCredentialStore((state) => state.setUserCred)
 
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
     resolver: zodResolver(SignUpFormSchema),
@@ -26,7 +27,7 @@ export default function useCreateUserWithEmailAndPassword() {
     setIsPending(true)
     try {
       const userCred = await createUserWithEmailAndPassword(auth, data.email, data.password)
-      verifyUser(userCred)
+      setUserCred(userCred)
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code

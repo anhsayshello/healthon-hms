@@ -2,12 +2,10 @@ import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { FirebaseError } from 'firebase/app'
-import useVerifyUser from './useVerifyUser'
 import { auth } from '@/lib/firebase/client'
 
 export default function useHandleMagicLinkRedirect() {
   const [isVerifying, setVerifying] = useState(false)
-  const verifyUser = useVerifyUser()
 
   const handleMagicLinkRedirect = useCallback(async () => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -19,9 +17,8 @@ export default function useHandleMagicLinkRedirect() {
         return
       }
       try {
-        const userCred = await signInWithEmailLink(auth, email, window.location.href)
+        await signInWithEmailLink(auth, email, window.location.href)
         window.localStorage.removeItem('emailForSignIn')
-        verifyUser(userCred)
       } catch (error) {
         if (error instanceof FirebaseError) {
           const errorCode = error.code

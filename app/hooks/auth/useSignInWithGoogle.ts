@@ -1,13 +1,13 @@
 import { auth } from '@/lib/firebase/client'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useCallback, useState } from 'react'
-import useVerifyUser from './useVerifyUser'
 import { FirebaseError } from 'firebase/app'
 import { toast } from 'sonner'
+import { useUserCredentialStore } from '@/stores/useUserCredentialStore'
 
 export default function useSignInWithGoogle() {
   const [isPending, setIsPending] = useState(false)
-  const verifyUser = useVerifyUser()
+  const setUserCred = useUserCredentialStore((state) => state.setUserCred)
 
   const signInWithGoogle = useCallback(async () => {
     try {
@@ -17,7 +17,7 @@ export default function useSignInWithGoogle() {
         prompt: 'select_account'
       })
       const userCred = await signInWithPopup(auth, provider)
-      verifyUser(userCred)
+      setUserCred(userCred)
     } catch (error) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code
