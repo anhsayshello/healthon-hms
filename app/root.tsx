@@ -1,9 +1,12 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from 'react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import type { Route } from './+types/root'
 import './app.css'
 import { Toaster } from '@/components/ui/sonner'
+import { useAuthStore } from './stores/useAuthStore'
+import { useEffect } from 'react'
+import FullScreenLoader from './components/shared/full-loader-screen'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -44,6 +47,23 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export default function App() {
+  const { initializeAuth, isInitialized } = useAuthStore()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Gọi hàm subscribe và nhận lại hàm unsubscribe
+    const unsubscribe = initializeAuth(navigate)
+
+    // Cleanup function: React sẽ chạy hàm này khi component unmount
+    return () => unsubscribe()
+  }, [initializeAuth])
+
+  // QUAN TRỌNG: Nếu chưa khởi tạo xong auth, không render Outlet
+  // Điều này ngăn chặn việc Redirect sai hoặc hiện trang Login nháy lên
+  if (!isInitialized) {
+    return <FullScreenLoader />
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
