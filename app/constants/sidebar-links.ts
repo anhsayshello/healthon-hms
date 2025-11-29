@@ -109,14 +109,14 @@ export const SIDEBAR_LINKS = [
       {
         name: 'Lab Services',
         path: path.lab.services,
-        access: [RoleEnum.LAB_TECHNICIAN],
+        access: [RoleEnum.ADMIN],
         icon: Cross,
         tooltip: 'lab services'
       },
       {
         name: 'Medications',
-        path: path.cashier.medication,
-        access: [RoleEnum.CASHIER],
+        path: path.admin.medication,
+        access: [RoleEnum.ADMIN],
         icon: Syringe,
         tooltip: 'medications'
       },
