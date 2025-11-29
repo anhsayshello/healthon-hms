@@ -14,6 +14,7 @@ import useStaffStatistic from '@/hooks/staff/useStaffStatistic'
 
 export default function StaffDashboard() {
   const user = useAuthStore((state) => state.user)
+  const role = useAuthStore((state) => state.role)
   const {
     totalPatients,
     totalDoctors,
@@ -69,7 +70,7 @@ export default function StaffDashboard() {
       <CardWrapper>
         <div className='flex items-center justify-between'>
           <div className='text-lg xl:text-2xl font-semibold'>
-            Welcome Admin {user?.first_name} {user?.last_name}
+            Welcome <span className='capitalize'>{role?.toLowerCase()}</span> {user?.first_name} {user?.last_name}
           </div>
           <div className='space-x-2 space-y-2'>
             <Button variant='outline' size='sm' className='text-sm'>
