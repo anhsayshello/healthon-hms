@@ -4,12 +4,12 @@ import useRole from '../useRole'
 import medicationApi from '@/apis/medication.api'
 
 export default function useMedications(params: SearchQueryParams) {
-  const { isCashier, isDoctor } = useRole()
+  const { isAdmin, isDoctor } = useRole()
 
   const { data, isPending } = useQuery({
     queryKey: ['medications', params],
     queryFn: () => medicationApi.getMedications(params),
-    enabled: isDoctor || isCashier
+    enabled: isDoctor || isAdmin
   })
   const dataMedications = data?.data.data ?? []
   const currentPage = data?.data.currentPage ?? 1
