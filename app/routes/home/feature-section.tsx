@@ -1,7 +1,7 @@
 import CardSwap, { Card } from '@/components/features/react-bits/CardSwap'
 import { Safari } from '@/components/ui/safari'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
-import { PointerHighlight } from 'components/ui/pointer-highlight'
+import { PointerHighlight } from '@/components/ui/pointer-highlight'
 import { motion } from 'motion/react'
 
 export default function FeatureSection() {
