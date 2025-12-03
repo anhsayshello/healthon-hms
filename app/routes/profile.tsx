@@ -1,13 +1,13 @@
 import useUserDetail from '@/hooks/admin/useUserDetail'
 import type { Route } from './+types/profile'
-import ProfileCard from '@/components/react-bits/ProfileCard'
+import ProfileCard from '@/components/features/react-bits/ProfileCard'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Profile' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 export default function Profile() {
-  const { data, isPending } = useUserDetail()
+  const { data } = useUserDetail()
 
   return (
     <div className='flex items-center justify-center'>

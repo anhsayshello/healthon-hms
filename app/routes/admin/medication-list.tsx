@@ -15,7 +15,7 @@ import useMedications from '@/hooks/medication/useMedications'
 import type { Medication } from '@/types/medication.type'
 import { useState } from 'react'
 import { formatDateTime } from '@/helpers/formatDateTime'
-import NewMedication from '../../components/cashier/new-medication'
+import NewMedication from '../../components/features/cashier/new-medication'
 import formatNumber from '@/helpers/formatNumber'
 import { useIsMobile } from '@/hooks/use-mobile'
 

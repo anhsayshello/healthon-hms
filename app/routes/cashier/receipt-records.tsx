@@ -12,7 +12,7 @@ import { formatDateTime } from '@/helpers/formatDateTime'
 import formatNumber from '@/helpers/formatNumber'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import useReceiptById from '@/hooks/cashier/useReceiptById'
-import Receipt from '@/components/cashier/receipt'
+import Receipt from '@/components/features/cashier/receipt'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 export function meta({}: Route.MetaArgs) {

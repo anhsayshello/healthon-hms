@@ -4,7 +4,7 @@ import { Spinner } from '@/components/ui/spinner'
 import useReceiptById from '@/hooks/cashier/useReceiptById'
 import { useParams } from 'react-router'
 
-import Receipt from '@/components/cashier/receipt'
+import Receipt from '@/components/features/cashier/receipt'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Receipt Detail' }, { name: 'description', content: 'Welcome to React Router!' }]

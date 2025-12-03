@@ -1,5 +1,5 @@
 import AppSidebar from '@/components/shared/app-side-bar'
-import Navbar from '@/components/shared/nav-bar'
+import Navbar from '@/components/shared/app-navbar'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import path from '@/constants/path'
 import { useAuthStore } from '@/stores/useAuthStore'

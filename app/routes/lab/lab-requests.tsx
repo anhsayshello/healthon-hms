@@ -11,9 +11,9 @@ import { LabTestStatusEnum, type LabTest } from '@/types/lab.type'
 import useLabTestRequests from '@/hooks/lab/useLabTestRequests'
 import { formatDateTime } from '@/helpers/formatDateTime'
 import UserInfo from '@/components/shared/user-info'
-import LabTestStatusIndicator from '@/components/lab/lab-status-indicator'
-import StartLabTest from '@/components/lab/start-lab-test'
-import FinishLabTest from '@/components/lab/finish-lab-test'
+import LabTestStatusIndicator from '@/components/features/lab/lab-status-indicator'
+import StartLabTest from '@/components/features/lab/start-lab-test'
+import FinishLabTest from '@/components/features/lab/finish-lab-test'
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'Lab Requests' }, { name: 'description', content: 'Welcome to React Router!' }]

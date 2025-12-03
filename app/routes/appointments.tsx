@@ -1,6 +1,6 @@
 import type { Route } from './+types/appointments'
 
-import AppointmentRecords from '@/components/appointments/appointment-records'
+import AppointmentRecords from '@/components/features/appointments/appointment-records'
 import AppPagination from '@/components/shared/app-pagination'
 import useDoctorAppointments from '@/hooks/doctor/useDoctorAppointments'
 import usePatientAppointments from '@/hooks/patient/usePatientAppointments'

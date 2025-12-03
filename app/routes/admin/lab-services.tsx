@@ -9,7 +9,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 
 import useLabServices from '@/hooks/lab/useLabServices'
 import type { Service } from '@/types/lab.type'
-import NewLabService from '@/components/lab/new-lab-service'
+import NewLabService from '@/components/features/lab/new-lab-service'
 import formatDate from '@/helpers/formatDate'
 import formatNumber from '@/helpers/formatNumber'
 

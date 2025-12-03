@@ -1,5 +1,5 @@
 import type { Route } from '../auth/+types/email-verification'
-import HomeBackButton from '@/components/auth/home-back-button'
+import HomeBackButton from '@/components/features/auth/home-back-button'
 import { Button } from '../../components/ui/button'
 import path from '@/constants/path'
 import { useNavigate } from 'react-router'

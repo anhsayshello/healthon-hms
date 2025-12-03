@@ -9,12 +9,12 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 import type { LabTest } from '@/types/lab.type'
 import useLabTests from '@/hooks/lab/useLabTests'
-import LabTestStatusIndicator from '@/components/lab/lab-status-indicator'
+import LabTestStatusIndicator from '@/components/features/lab/lab-status-indicator'
 import UserInfo from '@/components/shared/user-info'
 import { formatDateTime } from '@/helpers/formatDateTime'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useState } from 'react'
-import LabTestDetail from '../../components/lab/lab-test-detail'
+import LabTestDetail from '../../components/features/lab/lab-test-detail'
 import type { Patient } from '@/types/patient.type'
 
 export function meta({}: Route.MetaArgs) {

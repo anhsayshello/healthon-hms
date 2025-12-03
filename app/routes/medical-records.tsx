@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router'
 import path from '@/constants/path'
 import { ScanEye } from 'lucide-react'
-import AppointmentStatusIndicator from '@/components/appointments/appointment-status-indicator'
+import AppointmentStatusIndicator from '@/components/features/appointments/appointment-status-indicator'
 import usePatientMedicalRecords from '@/hooks/medical-record/usePatientMedicalRecords'
 
 export function meta({}: Route.MetaArgs) {
