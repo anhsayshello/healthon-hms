@@ -5,8 +5,10 @@ import type { Route } from './+types/root'
 import './app.css'
 import { Toaster } from '@/components/ui/sonner'
 import { useAuthStore } from './stores/useAuthStore'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import FullScreenLoader from './components/shared/full-loader-screen'
+import i18n from './i18n'
+import { I18nextProvider } from 'react-i18next'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -66,7 +68,11 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <I18nextProvider i18n={i18n}>
+        <Suspense fallback={<FullScreenLoader />}>
+          <Outlet />
+        </Suspense>
+      </I18nextProvider>
     </QueryClientProvider>
   )
 }

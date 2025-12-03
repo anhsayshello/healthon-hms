@@ -1,0 +1,6 @@
+{
+  "admin_role": "Full system access with all administrative privileges",
+  "nurse_role": "Healthcare provider with patient care responsibilities",
+  "lab_technician_role": "Laboratory test and results management",
+  "cashier_role": "Financial transactions and billing operations"
+}

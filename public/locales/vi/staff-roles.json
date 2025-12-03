@@ -1,0 +1,6 @@
+{
+  "admin_role": "Toàn quyền truy cập hệ thống với mọi quyền quản trị viên",
+  "nurse_role": "Nhân viên y tế phụ trách chăm sóc người bệnh",
+  "lab_technician_role": "Quản lý xét nghiệm và kết quả xét nghiệm",
+  "cashier_role": "Quản lý giao dịch thanh toán và hóa đơn"
+}
